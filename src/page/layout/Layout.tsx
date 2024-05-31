@@ -8,7 +8,7 @@ const Layout: React.FC<Props> = ({ children }) => {
             <div>
                 <NavigationBar/>
             </div>
-            <div className='min-h-[80vh] pb-10'>
+            <div className='min-h-[80vh]'>
                 {children}
             </div>
             <div>

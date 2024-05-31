@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 const JobCard: React.FC<JobCardProps> = ({ JobName, CompanyName, Image }) => {
     return (
-        <Link to={'/detail'} className='border-2 rounded-md py-6'>
+        <Link to={'/job-detail'} className='border-2 rounded-md py-6'>
             <div className='flex justify-center my-6'>
                 <img src={Temp}/>
             </div>

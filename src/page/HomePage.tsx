@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from './layout/Layout';
 import { Input } from "@/components/ui/input"
 import JobCard from './component/JobCard'
+import CompanyCard from './component/CompanyCard';
 
 const HomePage: React.FC = () => {
     return (
@@ -41,11 +42,11 @@ const HomePage: React.FC = () => {
 
                     
                     <div className='grid grid-cols-5 mt-6 gap-6'>
-                        <JobCard JobName={"Sofware Engineer"} CompanyName={"PT Ford Jakarta"} Image={"asd"}/>
-                        <JobCard JobName={"Sofware Engineer"} CompanyName={"PT Ford Jakarta"} Image={"asd"}/>
-                        <JobCard JobName={"Sofware Engineer"} CompanyName={"PT Ford Jakarta"} Image={"asd"}/>
-                        <JobCard JobName={"Sofware Engineer"} CompanyName={"PT Ford Jakarta"} Image={"asd"}/>
-                        <JobCard JobName={"Sofware Engineer"} CompanyName={"PT Ford Jakarta"} Image={"asd"}/>
+                        <CompanyCard CompanyName={"PT Ford Jakarta"} Image={"asd"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
+                        <CompanyCard CompanyName={"PT Ford Jakarta"} Image={"asd"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
+                        <CompanyCard CompanyName={"PT Ford Jakarta"} Image={"asd"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
+                        <CompanyCard CompanyName={"PT Ford Jakarta"} Image={"asd"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
+                        <CompanyCard CompanyName={"PT Ford Jakarta"} Image={"asd"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
                     </div>
                 </div>
             </div>

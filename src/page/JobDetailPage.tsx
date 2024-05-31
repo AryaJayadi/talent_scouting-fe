@@ -13,7 +13,7 @@ import {
 function JobDetailPage() {
     return (
         <Layout>
-            <div className='mt-6 mx-[20vw]'>
+            <div className='mt-6 py-10 mx-[20vw]'>
                 <div className='flex'>
                     <div className='w-1/2 flex justify-center'><img src={Temp} className='h-full transition hover:scale-110'/></div>
                     <div className='w-1/2'>
@@ -30,8 +30,8 @@ function JobDetailPage() {
                         </div>
 
                         <div className='flex mt-4'>
-                            <Button className='mr-4'>Apply Now</Button>
-                            <Button>View Company</Button>
+                            <Button className='mr-4 transition hover:scale-105'>Apply Now</Button>
+                            <Button className='transition hover:scale-105'>View Company</Button>
                         </div>
                     </div>
                 </div>
@@ -61,17 +61,17 @@ function JobDetailPage() {
                     <div className='text-[20px] font-medium mb-2'>Requirement</div>
 
                     <div>
-                        <Accordion type="single" collapsible>
+                        <Accordion type="single" collapsible className='text-lg'>
                             <AccordionItem value="item-1">
                                 <AccordionTrigger>HTML</AccordionTrigger>
-                                <AccordionContent>
+                                <AccordionContent className='text-md'>
                                     Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet
                                 </AccordionContent>
                             </AccordionItem>
 
                             <AccordionItem value="item-2">
                                 <AccordionTrigger>CSS</AccordionTrigger>
-                                <AccordionContent>
+                                <AccordionContent className='text-md'>
                                     Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet
                                 </AccordionContent>
                             </AccordionItem>
@@ -79,7 +79,7 @@ function JobDetailPage() {
 
                             <AccordionItem value="item-3">
                                 <AccordionTrigger>Javascript</AccordionTrigger>
-                                <AccordionContent>
+                                <AccordionContent className='text-md'>
                                     Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet
                                 </AccordionContent>
                             </AccordionItem>
