@@ -7,7 +7,7 @@ const JobCard: React.FC<JobCardProps> = ({ JobName, CompanyName, Image }) => {
     return (
         <Link to={'/job-detail'} className='border-2 rounded-md py-6'>
             <div className='flex justify-center my-6'>
-                <img src={Temp}/>
+                <img src={Temp} width={100}/>
             </div>
             <div className='text-center text-[18px]'>{JobName}</div>
             <div className='text-center'>{CompanyName}</div>

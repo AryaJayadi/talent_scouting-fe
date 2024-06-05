@@ -8,7 +8,18 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "@/components/ui/accordion"
-  
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 
 function JobDetailPage() {
     return (
@@ -30,7 +41,35 @@ function JobDetailPage() {
                         </div>
 
                         <div className='flex mt-4'>
-                            <Button className='mr-4 transition hover:scale-105'>Apply Now</Button>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button className='mr-4 transition hover:scale-105'>Fast Apply</Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle className='text-center'>Apply for Software Engineer at PT Ford Jakarta</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            <div className='my-6'>
+                                                <div>Messages</div>
+                                                <div>
+                                                    <textarea className='w-full border-2 rounded-md'></textarea>
+                                                </div>
+
+                                                <div className='text-[red] mt-2'>
+                                                    <div className='font-semibold'>Notes:</div>
+                                                    <div>After you apply to this company your profile will be seen by company. You can not update your message after you apply</div>
+                                                </div>
+                                            </div>
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction>Apply Now</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                            
                             <Button className='transition hover:scale-105'>View Company</Button>
                         </div>
                     </div>
