@@ -25,9 +25,9 @@ function JobDetailPage() {
     return (
         <Layout>
             <div className='mt-6 py-10 mx-[20vw]'>
-                <div className='flex'>
-                    <div className='w-1/2 flex justify-center'><img src={Temp} className='h-full transition hover:scale-110'/></div>
-                    <div className='w-1/2'>
+                <div className='flex max-md:block'>
+                    <div className='w-1/2 flex justify-center items-center bg-[#F0F0F0] mr-12 '><img src={Temp} className='h-full transition hover:scale-110'/></div>
+                    <div className='w-1/2 max-sm:w-full'>
                         <div>
                             <div className='text-[red] font-medium'>00:00:00 Left</div>
                             <div className='font-bold text-[32px]'>Software Engineer</div>
@@ -52,7 +52,7 @@ function JobDetailPage() {
                                             <div className='my-6'>
                                                 <div>Messages</div>
                                                 <div>
-                                                    <textarea className='w-full border-2 rounded-md'></textarea>
+                                                    <textarea className='w-full border-2 rounded-md p-2 mt-2'></textarea>
                                                 </div>
 
                                                 <div className='text-[red] mt-2'>
@@ -85,7 +85,7 @@ function JobDetailPage() {
                 </div>
 
                 <div className='mt-6'>
-                    <div className='text-[20px] font-medium mb-2'>Responsibilities</div>
+                    <div className='text-[20px] font-medium mb-2'>Requirements</div>
 
                     <ul>
                         <li>Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet</li>
@@ -97,7 +97,7 @@ function JobDetailPage() {
                 </div>
 
                 <div className='mt-6'>
-                    <div className='text-[20px] font-medium mb-2'>Requirement</div>
+                    <div className='text-[20px] font-medium mb-2'>Skills and Tools</div>
 
                     <div>
                         <Accordion type="single" collapsible className='text-lg'>

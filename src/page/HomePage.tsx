@@ -37,7 +37,7 @@ const HomePage: React.FC = () => {
 
 
                 <div className='my-[50px]'>
-                    <div className='text-[24px] font-medium mb-2 text-center'>Explore Job</div>
+                    <div className='text-[24px] font-medium mb-2 text-center'>Popular Job</div>
                     <div>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae praesentium, dolore tempore accusantium ea voluptatem exercitationem quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque reiciendis voluptatem, alias quasi aperiam.
                     </div>
@@ -53,14 +53,13 @@ const HomePage: React.FC = () => {
                 </div>
 
                 <div className='my-[70px]'>
-                    <div className='text-[24px] font-medium mb-2 text-center'>Explore Company</div>
+                    <div className='text-[24px] font-medium mb-2 text-center'>Top Companies for Software Developers</div>
                     <div>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae praesentium, dolore tempore accusantium ea voluptatem exercitationem quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque reiciendis voluptatem, alias quasi aperiam.
                     </div>
 
                     
                     <div className='grid grid-cols-3 mt-6 gap-4 mx-28'>
-                        <CompanyCard CompanyName={"PT Ford Jakarta"} Image={"asd"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
                         <CompanyCard CompanyName={"PT Ford Jakarta"} Image={"asd"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
                         <CompanyCard CompanyName={"PT Ford Jakarta"} Image={"asd"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
                         <CompanyCard CompanyName={"PT Ford Jakarta"} Image={"asd"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
