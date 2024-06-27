@@ -15,6 +15,9 @@ function NavigationBar() {
                 <Link className='mx-[30px] text-[18px] font-medium' to={'/browse-job'}>Job</Link>
                 <Link className='mx-[30px] text-[18px] font-medium' to={'/browse-company'}>Company</Link>
                 <Link className='mx-[30px] text-[18px] font-medium' to={'/profile'}>Profile</Link>
+                
+                <Link className='mx-[30px] text-[18px] font-medium' to={'/company/home'}>Company</Link>
+                <Link className='mx-[30px] text-[18px] font-medium' to={'/company/vacancy'}>Company Vacancy</Link>
             </div>
 
             <div className='ml-auto'>

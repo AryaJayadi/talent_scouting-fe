@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from './layout/Layout';
 import { Input } from "@/components/ui/input"
 import JobCard from './component/JobCard'
 import JobRecommendationCard from './component/JobRecommendationCard'
 import CompanyCard from './component/CompanyCard';
-import '../css/animation.css';
-import '../js/animation.js';
+import 'aos/dist/aos.css';
+import AOS from "aos"
 
 const HomePage: React.FC = () => {
+
+    useEffect(() => {
+        AOS.init({duration: 500})
+    }, []);
+
     return (
         <Layout>
             <div className='mx-[60px]'>
-                <div className='bg-[#120272] p-[24px] mt-[30px] rounded-md'>
+                <div className='bg-[#120272] p-[24px] mt-[30px] rounded-md' data-aos="fade-up" data-aos-once="true">
                     <div className='text-white text-[32px]'>Welcome Back Rico!!</div>
                     <div className='text-white mt-[10px]'>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae praesentium, dolore tempore accusantium ea voluptatem exercitationem quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque reiciendis voluptatem, alias quasi aperiam.
@@ -22,7 +27,7 @@ const HomePage: React.FC = () => {
                     </div>
                 </div>
 
-                <div className='my-[50px]'>
+                <div className='my-[50px]' data-aos="fade-up" data-aos-once="true">
                     <div className='text-[24px] font-medium mb-2 text-center'>Job Recommendation</div>
 
                     <div>
@@ -38,7 +43,7 @@ const HomePage: React.FC = () => {
                 </div>
 
 
-                <div className='my-[50px]'>
+                <div className='my-[50px]' data-aos="fade-up" data-aos-once="true">
                     <div className='text-[24px] font-medium mb-2 text-center'>Popular Job</div>
                     <div>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae praesentium, dolore tempore accusantium ea voluptatem exercitationem quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque reiciendis voluptatem, alias quasi aperiam.
@@ -54,7 +59,7 @@ const HomePage: React.FC = () => {
                     </div>
                 </div>
 
-                <div className='my-[70px]'>
+                <div className='my-[70px]' data-aos="fade-up" data-aos-once="true">
                     <div className='text-[24px] font-medium mb-2 text-center'>Top Companies for Software Developers</div>
                     <div>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae praesentium, dolore tempore accusantium ea voluptatem exercitationem quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque reiciendis voluptatem, alias quasi aperiam.
