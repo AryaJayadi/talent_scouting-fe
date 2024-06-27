@@ -5,6 +5,7 @@ import JobDetailPage from './page/JobDetailPage';
 import CompanyDetailPage from './page/CompanyDetailPage';
 import BrowseCompanyPage from './page/BrowseCompanyPage';
 import BrowseJobPage from './page/BrowseJobPage';
+import CompanyHomePage from './page/CompanyHomePage';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route>
             <Route path="/" element={<LoginPage/>} />
             <Route path="/home" element={<HomePage/>} />
+            <Route path="/home/company" element={<CompanyHomePage/>} />
             <Route path="/job-detail" element={<JobDetailPage/>} />
             <Route path="/company-detail" element={<CompanyDetailPage/>} />
             <Route path="/browse-company" element={<BrowseCompanyPage/>} />

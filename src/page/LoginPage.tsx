@@ -14,7 +14,7 @@ function LoginPage() {
             nav('/home');
         }
         else if (username === "company" && password === "company") {
-            nav('/home');
+            nav('/home/company');
         }
     }
 

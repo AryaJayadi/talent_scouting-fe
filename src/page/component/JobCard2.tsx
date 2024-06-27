@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 
 function JobCard2() {
     return (
-        <div className='border-2 border-[#BEBEBE] px-4 py-4 shadow-xl w-full'>
+        <div className='border-2 border-[#BEBEBE] px-4 py-4 shadow-md w-full'>
             <div>
                 {/* <div className='flex justify-between items-center'>
                     <div className='flex items-center'>

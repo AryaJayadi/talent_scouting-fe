@@ -26,13 +26,11 @@ function BrowseJobPage() {
 
                     <div className='w-3/4 ml-10'>
                         <div>
-                            <JobCard2/>
-                            <JobCard2/>
-                            <JobCard2/>
-                            <JobCard2/>
-                            <JobCard2/>
-                            <JobCard2/>
-                            <JobCard2/>
+                            <div className='mb-6'><JobCard2/></div>
+                            <div className='mb-6'><JobCard2/></div>
+                            <div className='mb-6'><JobCard2/></div>
+                            <div className='mb-6'><JobCard2/></div>
+                            <div className='mb-6'><JobCard2/></div>
                         </div>
                     </div>
                 </div>

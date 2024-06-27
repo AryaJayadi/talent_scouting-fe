@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input"
 import JobCard from './component/JobCard'
 import JobRecommendationCard from './component/JobRecommendationCard'
 import CompanyCard from './component/CompanyCard';
+import '../css/animation.css';
+import '../js/animation.js';
 
 const HomePage: React.FC = () => {
     return (
