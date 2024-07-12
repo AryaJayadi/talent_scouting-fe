@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from './layout/Layout';
-import JobCard2 from './component/JobCard2'
+import CompanyVacancy from './component/CompanyVacancy'
 
 function BrowseJobPage() {
     return (
@@ -19,18 +19,20 @@ function BrowseJobPage() {
                 </div>
 
                 <div className='flex mt-10 w-full relative'>
-                    <div className='w-1/4 bg-[#F0F0F0] h-[60vh] rounded-sm p-4 sticky top-16'>
+                    <div className='w-1/4 bg-[#F0F0F0] h-[60vh] rounded-sm p-4 sticky top-20'>
                         <div className='font-bold'>Filters</div>
                     </div>
 
 
                     <div className='w-3/4 ml-10'>
                         <div>
-                            <div className='mb-6'><JobCard2/></div>
-                            <div className='mb-6'><JobCard2/></div>
-                            <div className='mb-6'><JobCard2/></div>
-                            <div className='mb-6'><JobCard2/></div>
-                            <div className='mb-6'><JobCard2/></div>
+                            <CompanyVacancy StopTime={new Date()} Title={"Front End Developer"} Description={"Lorem"} ApplierCount={5}/>
+                            <CompanyVacancy StopTime={new Date()} Title={"Front End Developer"} Description={"Lorem"} ApplierCount={5}/>
+                            <CompanyVacancy StopTime={new Date()} Title={"Front End Developer"} Description={"Lorem"} ApplierCount={5}/>
+                            <CompanyVacancy StopTime={new Date()} Title={"Front End Developer"} Description={"Lorem"} ApplierCount={5}/>
+                            <CompanyVacancy StopTime={new Date()} Title={"Front End Developer"} Description={"Lorem"} ApplierCount={5}/>
+                            <CompanyVacancy StopTime={new Date()} Title={"Front End Developer"} Description={"Lorem"} ApplierCount={5}/>
+                        
                         </div>
                     </div>
                 </div>

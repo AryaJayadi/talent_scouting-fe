@@ -6,7 +6,7 @@ import { CompanyVacancyProps } from '../props/CompanyVacancyProps'
 
 const CompanyVacancy: React.FC<CompanyVacancyProps> = ({StopTime, Title, Description, ApplierCount}) => {
     return (
-        <div className='border-2 border-[#BEBEBE] px-4 py-4 shadow-md w-full rounded-xl my-8 '>
+        <div className='border-2 border-[#BEBEBE] px-4 py-4 shadow-md w-full rounded-xl mb-8 '>
             <div className='flex justify-between items-center'>
                 <div className='mr-8'>
                     <div className='text-[red] font-semibold'>00:00:00 Time Left</div>
@@ -26,7 +26,7 @@ const CompanyVacancy: React.FC<CompanyVacancyProps> = ({StopTime, Title, Descrip
                         <Link to={'/company-detail'}><Button className='transition hover:scale-105'>View Company</Button></Link>
                     </div>
                     <div>
-                        <Link to={'/company-detail'}><Button className='mt-2 transition hover:scale-105'>View Company</Button></Link>
+                        <Link to={'/job-detail'}><Button className='mt-2 transition hover:scale-105'>View Detail</Button></Link>
                     </div>
                 </div>
             </div>

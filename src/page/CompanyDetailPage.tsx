@@ -1,5 +1,6 @@
 import React from 'react'
 import Layout from './layout/Layout';
+import JobCard2 from './component/JobCard2'
 import Temp from '../assets/logo_header.png'
 
 function CompanyDetailPage() {
@@ -40,7 +41,9 @@ function CompanyDetailPage() {
                     </div>
 
                     <div className='mt-4'>
-                        There is no vacancy
+                        <JobCard2/>
+                        <JobCard2/>
+                        <JobCard2/>
                     </div>
                 </div>
             </div>
