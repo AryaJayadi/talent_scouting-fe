@@ -15,7 +15,7 @@ const JobCard: React.FC<CompanyCardProps> = ({ CompanyName, Image, CompanyLocati
                     </div>
 
                     <div>
-                        <img src={Temp} width={100}/>
+                        <img src={Image} className='object-cover object-center w-[100px] h-[80px]'/>
                     </div>
                 </div>
 

@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom'
 
 const JobCard: React.FC<JobCardProps> = ({ JobName, CompanyName, Image }) => {
     return (
-        <Link to={'/job-detail'} className='border-2 rounded-md py-6'>
+        <Link to={'/job-detail'} className='border-2 rounded-md py-6 px-2'>
             <div className='flex justify-center my-6'>
-                <img src={Temp} width={100}/>
+                <img src={Image} className='w-[200px] h-[100px] object-cover object-center'/>
             </div>
-            <div className='text-center text-[18px]'>{JobName}</div>
+            <div className='text-center text-[16px] font-semibold'>{JobName}</div>
             <div className='text-center'>{CompanyName}</div>
         </Link>
     )
