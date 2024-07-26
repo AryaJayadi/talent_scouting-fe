@@ -8,6 +8,7 @@ import BrowseJobPage from './page/BrowseJobPage';
 import CompanyHomePage from './page/CompanyHomePage';
 import CompanyVacancyPage from './page/CompanyVacancyPage';
 import NewVacancyPage from './page/NewVacancyPage';
+import StudentProfilePage from './page/StudentProfilePage';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/company-detail" element={<CompanyDetailPage/>} />
             <Route path="/browse-company" element={<BrowseCompanyPage/>} />
             <Route path="/browse-job" element={<BrowseJobPage/>} />
+            <Route path="/profile" element={<StudentProfilePage/>} />
 
             <Route path="/company/home" element={<CompanyHomePage/>} />
             <Route path="/company/vacancy" element={<CompanyVacancyPage/>} />

@@ -2,33 +2,29 @@ import React from 'react'
 import Temp from './../../assets/logo_binus.png'
 import { Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
+import { CompanyVacancyProps } from '../props/CompanyVacancyProps'
 
-function JobCard2() {
+const JobCard2: React.FC<CompanyVacancyProps> = ({StopTime, Title, Description, ApplierCount}) => {
     return (
-        <div className='border-2 border-[#BEBEBE] px-4 py-4 shadow-md w-full'>
-            <div>
-                {/* <div className='flex justify-between items-center'>
-                    <div className='flex items-center'>
-                        <div className='mr-6'>
-                            <div className='text-[18px] font-semibold'>{CompanyName}</div>
-                            <div className='text-[#838383]'>{CompanyLocation}</div>
-                        </div>
+        <div className='border-2 border-[#BEBEBE] px-4 py-4 shadow-md w-full rounded-xl mb-8 '>
+            <div className='flex justify-between items-center'>
+                <div className='mr-8'>
+                    <div className='text-[red] font-semibold'>00:00:00 Time Left</div>
+                    <div className='text-[24px] font-semibold mb-2'>{Title}</div>
+                    <div className='mb-4'>
+                        Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
+                        Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
+                     </div>
 
-                        
-                        <div>
-                            <div className='bg-[#90F2AC] text-[#0E6700] py-[1px] px-[4px] text-[14px] text-center rounded-xl'>{VacancyCount.toString()} Jobs</div>  
-                        </div>
+                    <div className='font-semibold'>
+                        {ApplierCount.toString()} people apply to this job vacancy
                     </div>
-
+                </div>
+                
+                <div className='ml-8'>
                     <div>
-                        <img src={Temp} width={100}/>
+                        <Link to={'/job-detail'}><Button className='mt-2 transition w-[120px] hover:scale-105'>View Detail</Button></Link>
                     </div>
-                </div> */}
-
-                <div className='my-4'>Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet</div>
-
-                <div className='flex justify-center'>
-                    <Link to={'/company-detail'}><Button className='mt-4 transition hover:scale-105'>View Company</Button></Link>
                 </div>
             </div>
         </div>

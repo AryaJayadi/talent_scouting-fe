@@ -23,10 +23,10 @@ const CompanyVacancy: React.FC<CompanyVacancyProps> = ({StopTime, Title, Descrip
                 
                 <div className='ml-8'>
                     <div>
-                        <Link to={'/company-detail'}><Button className='transition hover:scale-105'>View Company</Button></Link>
+                        <Link to={'/company-detail'}><Button className='transition w-[120px] hover:scale-105'>View Company</Button></Link>
                     </div>
                     <div>
-                        <Link to={'/job-detail'}><Button className='mt-2 transition hover:scale-105'>View Detail</Button></Link>
+                        <Link to={'/job-detail'}><Button className='mt-2 transition w-[120px] hover:scale-105'>View Detail</Button></Link>
                     </div>
                 </div>
             </div>
