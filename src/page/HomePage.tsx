@@ -6,8 +6,11 @@ import JobRecommendationCard from './component/JobRecommendationCard'
 import CompanyCard from './component/CompanyCard';
 import 'aos/dist/aos.css';
 import AOS from "aos"
+import Marquee from "react-fast-marquee";
 
 const HomePage: React.FC = () => {
+
+    
 
     useEffect(() => {
         AOS.init({duration: 500})
@@ -16,9 +19,9 @@ const HomePage: React.FC = () => {
     return (
         <Layout>
             <div className='mx-[60px]'>
-                <div className='bg-[#120272] p-[24px] mt-[30px] rounded-md' data-aos="fade-up" data-aos-once="true">
-                    <div className='text-white text-[32px]'>Welcome Back Rico!!</div>
-                    <div className='text-white mt-[10px]'>
+                <div className='bg-[#cff1ff] p-[24px] mt-[30px] rounded-lg' data-aos="fade-up" data-aos-once="true">
+                    <div className='text-[32px]'>Welcome Back Rico!!</div>
+                    <div className='mt-[10px]'>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae praesentium, dolore tempore accusantium ea voluptatem exercitationem quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque reiciendis voluptatem, alias quasi aperiam.
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae praesentium, dolore tempore accusantium ea voluptatem exercitationem quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque reiciendis voluptatem, alias quasi aperiam.
                     </div>
@@ -26,6 +29,31 @@ const HomePage: React.FC = () => {
                         <Input placeholder={'Let\'s find a job for you'}/>
                     </div>
                 </div>
+
+
+                {/* <div className='my-[50px] flex'>
+                    <div className='w-1/2'>
+                        <img src={"https://logodix.com/logo/81176.jpg"} className='w-[40vw] h-[25vw]'/>
+                    </div>
+
+                    <div className='w-1/2'>
+                        <div className='text-[24px] font-semibold mb-4'>
+                            Test Test Test
+                        </div>
+                        <div>
+                            <div className='mb-4'>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, voluptas. Vitae dolore dolorum placeat! Similique neque sint ad dolore, vitae iusto ipsum quis dicta accusamus harum? Provident iusto excepturi qui!
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, voluptas. Vitae dolore dolorum placeat! Similique neque sint ad dolore, vitae iusto ipsum quis dicta accusamus harum? Provident iusto excepturi qui!
+                            
+                            </div>
+                            <div>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, voluptas. Vitae dolore dolorum placeat! Similique neque sint ad dolore, vitae iusto ipsum quis dicta accusamus harum? Provident iusto excepturi qui!
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, voluptas. Vitae dolore dolorum placeat! Similique neque sint ad dolore, vitae iusto ipsum quis dicta accusamus harum? Provident iusto excepturi qui!
+                            </div>
+                        </div>
+                    </div>
+                </div> */}
+
 
                 <div className='my-[50px]' data-aos="fade-up" data-aos-once="true">
                     <div className='text-[24px] font-medium mb-2 text-center'>Job Recommendation</div>
@@ -40,6 +68,18 @@ const HomePage: React.FC = () => {
                         <JobRecommendationCard JobName={"AI Engineer"} Index={3}/>
                         <JobRecommendationCard JobName={"Full Stack Developer"} Index={4}/>
                     </div>
+                </div>
+
+                
+                <div className='mb-[100px] mt-20' data-aos="fade-up">
+                    <Marquee speed={30}>
+                        <img src={"https://logodix.com/logo/81176.jpg"} className='h-[200px] mx-4'/>
+                        <img src={"https://logodownload.org/wp-content/uploads/2014/09/nvidia-logo-0.png"} className='h-[200px] mx-4'/>
+                        <img src={"https://img.freepik.com/free-vector/hand-drawn-cactus-logo-template_23-2149398900.jpg?w=2000&t=st=1661990015~exp=1661990615~hmac=466aebeda6573c752489cdbfe5c11ef1cbebf1ff984e8f62018952f83d9639f6"} className='h-[200px] mx-4'/>
+                        <img src={"https://img.freepik.com/free-vector/hand-drawn-cactus-logo-template_23-2149398900.jpg?w=2000&t=st=1661990015~exp=1661990615~hmac=466aebeda6573c752489cdbfe5c11ef1cbebf1ff984e8f62018952f83d9639f6"} className='h-[200px] mx-4'/>
+                        <img src={"https://logodix.com/logo/81176.jpg"} className='h-[200px] mx-4'/>
+                        <img src={"https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"} className='h-[200px] mx-4'/>
+                    </Marquee>
                 </div>
 
 
@@ -65,7 +105,7 @@ const HomePage: React.FC = () => {
                     </div>
 
                     
-                    <div className='grid grid-cols-3 mt-6 gap-4 mx-28'>
+                    <div className='grid grid-cols-3 mt-6 gap-10 mx-'>
                         <CompanyCard CompanyName={"PT Binus University"} Image={"https://th.bing.com/th/id/OIP.orlY04-klLAbJn4WU-IqQwHaEK?rs=1&pid=ImgDetMain"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
                         <CompanyCard CompanyName={"PT BCA"} Image={"https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"} CompanyLocation={"Jakarta"} VacancyCount={10}/>
                         <CompanyCard CompanyName={"PT Unilever"} Image={"https://logodix.com/logo/81176.jpg"} CompanyLocation={"Jakarta"} VacancyCount={10}/>

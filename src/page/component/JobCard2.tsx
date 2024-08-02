@@ -6,7 +6,7 @@ import { CompanyVacancyProps } from '../props/CompanyVacancyProps'
 
 const JobCard2: React.FC<CompanyVacancyProps> = ({StopTime, Title, Description, ApplierCount}) => {
     return (
-        <div className='border-2 border-[#BEBEBE] px-4 py-4 shadow-md w-full rounded-xl mb-8 '>
+        <div className='border-2 p-6 shadow-md w-full rounded-xl mb-8 '>
             <div className='flex justify-between items-center'>
                 <div className='mr-8'>
                     <div className='text-[red] font-semibold'>00:00:00 Time Left</div>

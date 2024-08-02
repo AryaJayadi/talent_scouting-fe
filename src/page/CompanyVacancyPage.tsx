@@ -10,7 +10,7 @@ function CompanyVacancyPage() {
         <div className='mx-[70px]'>
             <div className='text-[28px] mt-4 text-center font-semibold'>Your Vacancy</div>
 
-            <div>
+            <div className='my-6'>
                 <Link to={"/company/new-vacancy"}><Button>+ New Vacancy</Button></Link>
             </div>
 

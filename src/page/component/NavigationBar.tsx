@@ -14,7 +14,9 @@ function NavigationBar() {
             </div>
 
             <div>
-                <Link className={`mx-[30px] text-[18px] font-medium ${location.pathname === '/home' ? 'underline underline-offset-8' : ''}`} to={'/home'}>Home</Link>
+                <Link className={`mx-[30px] text-[18px] font-medium ${location.pathname === '/home' ? 'underline underline-offset-8' : ''}`} to={'/home'}>
+                    Home
+                </Link>
                 <Link className={`mx-[30px] text-[18px] font-medium ${location.pathname === '/browse-job' ? 'underline underline-offset-8' : ''}`} to={'/browse-job'}>Job</Link>
                 <Link className={`mx-[30px] text-[18px] font-medium ${location.pathname === '/browse-company' ? 'underline underline-offset-8' : ''}`} to={'/browse-company'}>Company</Link>
                 <Link className={`mx-[30px] text-[18px] font-medium ${location.pathname === '/profile' ? 'underline underline-offset-8' : ''}`} to={'/profile'}>Profile</Link>

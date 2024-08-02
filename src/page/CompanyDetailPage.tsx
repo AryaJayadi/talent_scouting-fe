@@ -51,11 +51,11 @@ function CompanyDetailPage() {
                         </div> */}
                     </div>
 
-                    <div className='mt-8'>
+                    <div className='mt-10'>
                         <div className='text-[28px] font-bold'>Job Vacancy at PT Ford Jakarta</div>
                     </div>
 
-                    <div className='mt-4'>
+                    <div className='mt-6'>
                         <JobCard2 StopTime={new Date()} Title={"Front End Developer"} Description={"Lorem"} ApplierCount={5}/>
                         <JobCard2 StopTime={new Date()} Title={"Front End Developer"} Description={"Lorem"} ApplierCount={5}/>
                         <JobCard2 StopTime={new Date()} Title={"Front End Developer"} Description={"Lorem"} ApplierCount={5}/>

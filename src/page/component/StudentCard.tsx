@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 const StudentCard: React.FC<StudentCardProps> = ({ StudentName, Image }) => {
     return (
-        <Link to={'/job-detail'} className='border-2 rounded-md py-6 px-4 w-[15vw] h-[18vw]'>
+        <Link to={'/job-detail'} className='border-2 rounded-md py-6 px-4 w-[12vw] h-[15vw]'>
             <div className='flex justify-center mb-6'>
                 <img src={Image} className='w-[200px] h-[120px] object-cover object-center'/>
             </div>

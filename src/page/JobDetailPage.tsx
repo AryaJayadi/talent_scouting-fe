@@ -24,7 +24,7 @@ import {
 function JobDetailPage() {
     return (
         <Layout>
-            <div className='mt-6 py-10 mx-[20vw]'>
+            <div className='mt-6 pt-10 pb-20 mx-[20vw]'>
                 <div className='flex max-md:block'>
                     <div className='w-1/2 flex justify-center items-center bg-[#F0F0F0] mr-12 '><img src={Temp} className='h-full transition hover:scale-110'/></div>
                     <div className='w-1/2 max-sm:w-full'>
@@ -84,8 +84,8 @@ function JobDetailPage() {
                     </div>
                 </div>
 
-                <div className='mt-6'>
-                    <div className='text-[20px] font-medium mb-2'>Requirements</div>
+                <div className='mt-10'>
+                    <div className='text-[24px] font-medium mb-4 font-semibold'>Requirements</div>
 
                     <ul>
                         <li>Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet</li>
@@ -96,8 +96,8 @@ function JobDetailPage() {
                     </ul>
                 </div>
 
-                <div className='mt-6'>
-                    <div className='text-[20px] font-medium mb-2'>Skills and Tools</div>
+                <div className='mt-10'>
+                    <div className='text-[24px] font-medium mb-4 font-semibold'>Skills and Tools</div>
 
                     <div>
                         <Accordion type="single" collapsible className='text-lg'>
