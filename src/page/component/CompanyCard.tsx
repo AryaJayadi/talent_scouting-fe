@@ -13,9 +13,9 @@ const JobCard: React.FC<CompanyCardProps> = ({ CompanyName, Image, CompanyLocati
         textOverflow: 'ellipsis',
     };
     return (
-        <div className='border-2 px-8 pb-10 shadow-md rounded-xl w-full'>
+        <div className='border-2 px-8 pb-10 pt-4 shadow-md rounded-xl w-full'>
             <div>
-                <div className='h-[28vh]'>
+                <div className='min-h-[28vh]'>
                     <div className='flex justify-between items-center h-[12vh]'>
                         <div className='flex items-center'>
                             <div className='mr-6'>
@@ -23,8 +23,8 @@ const JobCard: React.FC<CompanyCardProps> = ({ CompanyName, Image, CompanyLocati
                             </div>
 
                             <div>
-                                <div className='text-[24px] font-semibold'>{CompanyName}</div>
-                                <div className='text-[#838383]'>{CompanyLocation}</div>
+                                <div className='text-[1.5vw] font-semibold w-full' style={{overflow:'hidden', textOverflow:'ellipsis', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 1}}>{CompanyName}</div>
+                                <div className='text-[#838383]' style={{overflow:'hidden', textOverflow:'ellipsis'}}>{CompanyLocation}</div>
                             </div>
                         </div>
 
@@ -48,7 +48,7 @@ const JobCard: React.FC<CompanyCardProps> = ({ CompanyName, Image, CompanyLocati
 
                 <div className='flex justify-between mt-4'>
                     <div className='text-[#0E6700] text-center items-center flex'>
-                        <div className='text-[18px] bg-[#b2ffb2] px-3 py-1 rounded-lg'>{VacancyCount.toString()} Jobs Available</div>
+                        <div className='text-[1vw] bg-[#b2ffb2] px-3 py-1 rounded-lg'>{VacancyCount.toString()} Jobs Available</div>
                     </div>
                     <Link to={'/company-detail'}><Button className='transition hover:scale-105'>View Company</Button></Link>
                 </div>
