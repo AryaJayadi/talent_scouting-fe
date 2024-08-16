@@ -25,18 +25,24 @@ const StudentCard: React.FC<StudentCardProps> = ({ StudentName, Image }) => {
 
       <div className="text-[14px] my-2">
         <div className="mb-1 text-center">Preferred position:</div>
-        <div className="flex flex-wrap gap-2 justify-center">
+        <div
+          className="flex flex-wrap gap-2 justify-center"
+          //   style={{
+          //     display: "-webkit-box",
+          //     WebkitLineClamp: 1,
+          //     WebkitBoxOrient: "vertical",
+          //     overflow: "hidden",
+          //     textOverflow: "ellipsis",
+          //   }}
+        >
           <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-            Badge
+            Front End Developer
           </span>
           <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-            Badge
+            AI Engineer
           </span>
           <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-            Badge
-          </span>
-          <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-            Badge
+            Back End Developer
           </span>
         </div>
       </div>

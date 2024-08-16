@@ -23,14 +23,11 @@ const HomePage: React.FC = () => {
         >
           <div className="text-[32px]">Welcome Back Rico!!</div>
           <div className="mt-[10px]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            praesentium, dolore tempore accusantium ea voluptatem exercitationem
-            quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque
-            reiciendis voluptatem, alias quasi aperiam. Lorem ipsum dolor sit
-            amet consectetur adipisicing elit. Molestiae praesentium, dolore
-            tempore accusantium ea voluptatem exercitationem quae voluptatibus
-            quaerat magnam, blanditiis beatae quia. Et itaque reiciendis
-            voluptatem, alias quasi aperiam.
+            We're excited to help you find your next opportunity! Start your job
+            search today by browsing our latest vacancies or updating your
+            profile to attract the best employers. Whether you're looking to
+            advance your career or explore new paths, we're here to support you
+            every step of the way.
           </div>
           <div className="mt-[30px] w-[30%]">
             <Input placeholder={"Let's find a job for you"} />
@@ -65,11 +62,12 @@ const HomePage: React.FC = () => {
             Job Recommendation
           </div>
 
-          <div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            praesentium, dolore tempore accusantium ea voluptatem exercitationem
-            quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque
-            reiciendis voluptatem, alias quasi aperiam.
+          <div className="mt-4 mb-8">
+            Based on your profile and recent activity, we've handpicked some
+            exciting job opportunities that match your skills and career goals.
+            Explore these tailored recommendations and take the next step
+            towards your dream job. Keep your profile updated to receive more
+            accurate suggestions!
           </div>
 
           <div className="flex justify-between mt-6">
@@ -80,7 +78,11 @@ const HomePage: React.FC = () => {
           </div>
         </div>
 
-        <div className="mb-[100px] mt-20" data-aos="fade-up">
+        <div
+          className="mb-[100px] mt-20"
+          data-aos="fade-up"
+          data-aos-once="true"
+        >
           <Marquee speed={30}>
             <img
               src={"https://logodix.com/logo/81176.jpg"}
@@ -122,10 +124,11 @@ const HomePage: React.FC = () => {
             Popular Job
           </div>
           <div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            praesentium, dolore tempore accusantium ea voluptatem exercitationem
-            quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque
-            reiciendis voluptatem, alias quasi aperiam.
+            These positions are trending among job seekers for their competitive
+            salaries, growth opportunities, and dynamic work environments.
+            Whether you're looking to advance your career or find a role that
+            matches your passion, these popular jobs are in high demand. Don't
+            miss your chance to apply!
           </div>
 
           <div className="grid grid-cols-5 mt-6 gap-10">
@@ -170,10 +173,10 @@ const HomePage: React.FC = () => {
             Top Companies for Software Developers
           </div>
           <div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            praesentium, dolore tempore accusantium ea voluptatem exercitationem
-            quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque
-            reiciendis voluptatem, alias quasi aperiam.
+            These companies are known for their exciting projects, advanced
+            technologies, and great work environments. If you're looking to grow
+            your career as a software developer, these are the places to be.
+            Check out the opportunities they offer!
           </div>
 
           <div className="grid grid-cols-3 mt-6 gap-10 mx-">

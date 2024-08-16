@@ -17,12 +17,11 @@ function BrowseStudentPage() {
           </div>
 
           <div className="mt-4">
-            Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum
-            dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
-            Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum
-            dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
-            Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum
-            dolor sit amet Lorem ipsum dolor sit amet
+            Meet over 1000 top graduates from Bina Nusantara University, known
+            for their strong skills and academic excellence. These graduates are
+            ready to bring fresh ideas and expertise to the workforce. Connect
+            with the best talent and discover how they can contribute to your
+            organization.
           </div>
         </div>
         <div className="flex mt-10 w-full relative">

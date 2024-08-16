@@ -21,14 +21,12 @@ function CompanyHomePage() {
         >
           <div className="text-white text-[32px]">Welcome Back Rico!!</div>
           <div className="text-white mt-[10px]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            praesentium, dolore tempore accusantium ea voluptatem exercitationem
-            quae voluptatibus quaerat magnam, blanditiis beatae quia. Et itaque
-            reiciendis voluptatem, alias quasi aperiam. Lorem ipsum dolor sit
-            amet consectetur adipisicing elit. Molestiae praesentium, dolore
-            tempore accusantium ea voluptatem exercitationem quae voluptatibus
-            quaerat magnam, blanditiis beatae quia. Et itaque reiciendis
-            voluptatem, alias quasi aperiam.
+            We're thrilled to have you back on our platform! As a valued company
+            stakeholder, you have access to a talented pool of students eager to
+            make their mark in the industry. Take advantage of our tools to find
+            the right candidates and post your job openings. Together, let's
+            build the future by connecting bright minds with the right
+            opportunities.
           </div>
           <div className="mt-[30px] w-[30%]">
             <Input placeholder={"Let's find a job for you"} />

@@ -26,14 +26,12 @@ const JobCard2: React.FC<CompanyVacancyProps> = ({
               textOverflow: "ellipsis",
             }}
           >
-            Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum
-            dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
-            Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum
-            dolor sit amet
-          </div>
-
-          <div className="font-semibold">
-            {ApplierCount.toString()} people apply to this job vacancy
+            We're thrilled to have you back on our platform! As a valued company
+            stakeholder, you have access to a talented pool of students eager to
+            make their mark in the industry. Take advantage of our tools to find
+            the right candidates and post your job openings. Together, let's
+            build the future by connecting bright minds with the right
+            opportunities.
           </div>
         </div>
 
@@ -46,6 +44,9 @@ const JobCard2: React.FC<CompanyVacancyProps> = ({
             </Link>
           </div>
         </div>
+      </div>
+      <div className="font-semibold">
+        {ApplierCount.toString()} people apply to this job vacancy
       </div>
     </div>
   );
