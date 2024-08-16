@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "./layout/Layout";
 import { Input } from "@/components/ui/input";
 import JobCard from "./component/JobCard";
@@ -7,10 +7,25 @@ import CompanyCard from "./component/CompanyCard";
 import "aos/dist/aos.css";
 import AOS from "aos";
 import Marquee from "react-fast-marquee";
+import { CompanyCardProps } from "./props/CompanyCardProps";
+import axios from "axios";
 
 const HomePage: React.FC = () => {
+
+  const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
+
   useEffect(() => {
+    async function getAllCompany() {
+      try {
+        // console.log(process.env);
+        const response = await axios.get("http://localhost:8080/getAllCompany")
+        setCompanies(response.data);
+      } catch (error) {
+        console.log(error)
+      }
+    }
     AOS.init({ duration: 500 });
+    getAllCompany();
   }, []);
 
   return (
@@ -180,15 +195,30 @@ const HomePage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-3 mt-6 gap-10 mx-">
-            <CompanyCard
+
+              {
+                companies.map((company: CompanyCardProps, idx: number) => {
+                  console.log(company)
+                  return <CompanyCard
+                    id={company.id}
+                    name={company.name}
+                    logoUrl={company.logoUrl}
+                    location={company.location}
+                    VacancyCount={10}
+                    description={company.description}
+                    key={idx}
+                  />
+                })
+              }
+            {/* <CompanyCard
               CompanyName={"PT Binus University"}
               Image={
                 "https://th.bing.com/th/id/OIP.orlY04-klLAbJn4WU-IqQwHaEK?rs=1&pid=ImgDetMain"
               }
               CompanyLocation={"Jakarta"}
               VacancyCount={10}
-            />
-            <CompanyCard
+            /> */}
+            {/* <CompanyCard
               CompanyName={"PT BCA"}
               Image={
                 "https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"
@@ -225,7 +255,7 @@ const HomePage: React.FC = () => {
               }
               CompanyLocation={"Jakarta"}
               VacancyCount={10}
-            />
+            /> */}
           </div>
         </div>
       </div>

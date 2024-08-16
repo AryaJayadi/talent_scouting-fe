@@ -4,7 +4,7 @@ import Temp from './../../assets/logo_binus.png'
 import { Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 
-const JobCard: React.FC<CompanyCardProps> = ({ CompanyName, Image, CompanyLocation, VacancyCount }) => {
+const JobCard: React.FC<CompanyCardProps> = ({ name, logoUrl, location, description, VacancyCount }) => {
     const truncateMultilineStyle = {
         display: '-webkit-box',
         WebkitLineClamp: 3,
@@ -19,12 +19,12 @@ const JobCard: React.FC<CompanyCardProps> = ({ CompanyName, Image, CompanyLocati
                     <div className='flex justify-between items-center h-[12vh]'>
                         <div className='flex items-center'>
                             <div className='mr-6'>
-                                <img src={Image} className='w-[80px]'/>
+                                <img src={logoUrl} className='w-[80px]'/>
                             </div>
 
                             <div>
-                                <div className='text-[1.5vw] font-semibold w-full' style={{overflow:'hidden', textOverflow:'ellipsis', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 1}}>{CompanyName}</div>
-                                <div className='text-[#838383]' style={{overflow:'hidden', textOverflow:'ellipsis'}}>{CompanyLocation}</div>
+                                <div className='text-[1.5vw] font-semibold w-full' style={{overflow:'hidden', textOverflow:'ellipsis', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 1}}>{name}</div>
+                                <div className='text-[#838383]' style={{overflow:'hidden', textOverflow:'ellipsis'}}>{location}</div>
                             </div>
                         </div>
 
@@ -35,12 +35,7 @@ const JobCard: React.FC<CompanyCardProps> = ({ CompanyName, Image, CompanyLocati
                     </div>
 
                     <div className='my-4' style={{display:'-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow:'hidden', textOverflow:'ellipsis'}}>
-                        Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet 
-                        Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
-                        Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet 
-                        Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
-                        Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet 
-                        Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
+                        {description}
                     </div>
                     
                 </div>
@@ -48,7 +43,7 @@ const JobCard: React.FC<CompanyCardProps> = ({ CompanyName, Image, CompanyLocati
 
                 <div className='flex justify-between mt-4'>
                     <div className='text-[#0E6700] text-center items-center flex'>
-                        <div className='text-[1vw] bg-[#b2ffb2] px-3 py-1 rounded-lg'>{VacancyCount.toString()} Jobs Available</div>
+                        <div className='text-[1vw] bg-[#b2ffb2] px-3 py-1 rounded-lg'>{VacancyCount?.toString()} Jobs Available</div>
                     </div>
                     <Link to={'/company-detail'}><Button className='transition hover:scale-105'>View Company</Button></Link>
                 </div>
