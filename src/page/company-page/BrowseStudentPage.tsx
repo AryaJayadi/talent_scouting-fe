@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import Layout from "./layout/Layout";
+import Layout from "../layout/Layout";
 import "aos/dist/aos.css";
 import AOS from "aos";
-import StudentCard from "./component/StudentCard";
+import StudentCard from "../component/StudentCard";
 
 function BrowseStudentPage() {
   useEffect(() => {

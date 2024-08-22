@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
-import Layout from "./layout/Layout";
+import Layout from "../layout/Layout";
 import { Input } from "@/components/ui/input";
-import JobCard from "./component/JobCard";
-import JobRecommendationCard from "./component/JobRecommendationCard";
-import CompanyCard from "./component/CompanyCard";
+import JobCard from "../component/JobCard";
+import JobRecommendationCard from "../component/JobRecommendationCard";
+import CompanyCard from "../component/CompanyCard";
 import "aos/dist/aos.css";
 import AOS from "aos";
 import Marquee from "react-fast-marquee";
-import { CompanyCardProps } from "./props/CompanyCardProps";
+import { CompanyCardProps } from "../props/CompanyCardProps";
 import axios from "axios";
 
 const HomePage: React.FC = () => {
-
   const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
 
   useEffect(() => {
     async function getAllCompany() {
       try {
         // console.log(process.env);
-        const response = await axios.get("http://localhost:8080/getAllCompany")
+        const response = await axios.get("http://localhost:8080/getAllCompany");
         setCompanies(response.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
     AOS.init({ duration: 500 });
@@ -195,21 +194,20 @@ const HomePage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-3 mt-6 gap-10 mx-">
-
-              {
-                companies.map((company: CompanyCardProps, idx: number) => {
-                  console.log(company)
-                  return <CompanyCard
-                    id={company.id}
-                    name={company.name}
-                    logoUrl={company.logoUrl}
-                    location={company.location}
-                    VacancyCount={10}
-                    description={company.description}
-                    key={idx}
-                  />
-                })
-              }
+            {companies.map((company: CompanyCardProps, idx: number) => {
+              console.log(company);
+              return (
+                <CompanyCard
+                  id={company.id}
+                  name={company.name}
+                  logoUrl={company.logoUrl}
+                  location={company.location}
+                  VacancyCount={10}
+                  description={company.description}
+                  key={idx}
+                />
+              );
+            })}
             {/* <CompanyCard
               CompanyName={"PT Binus University"}
               Image={

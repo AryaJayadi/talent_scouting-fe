@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import Layout from "./layout/Layout";
+import Layout from "../layout/Layout";
 import { Input } from "@/components/ui/input";
-import VacancyPreviewCard from "./component/VacancyPreviewCard";
-import JobCard2 from "./component/JobCard2";
-import StudentCard from "./component/StudentCard";
+import VacancyPreviewCard from "../component/VacancyPreviewCard";
+import JobCard2 from "../component/JobCard2";
+import StudentCard from "../component/StudentCard";
 import "aos/dist/aos.css";
 import AOS from "aos";
 

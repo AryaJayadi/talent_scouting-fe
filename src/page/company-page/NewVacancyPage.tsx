@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Layout from "./layout/Layout";
+import Layout from "../layout/Layout";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {

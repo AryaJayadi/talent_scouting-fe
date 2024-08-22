@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
-import Layout from "./layout/Layout";
-import CompanyCard from "./component/CompanyCard";
+import Layout from "../layout/Layout";
+import CompanyCard from "../component/CompanyCard";
 import "aos/dist/aos.css";
 import AOS from "aos";
 import axios from "axios";
-import { CompanyCardProps } from "./props/CompanyCardProps";
-import { env } from "node:process"
+import { CompanyCardProps } from "../props/CompanyCardProps";
+import { env } from "node:process";
 
 function BrowseCompanyPage() {
-
   const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
 
   useEffect(() => {
     async function getAllCompany() {
       try {
         // console.log(process.env);
-        
-        const response = await axios.get("http://localhost:8080/getAllCompany")
+
+        const response = await axios.get("http://localhost:8080/getAllCompany");
         setCompanies(response.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
     AOS.init({ duration: 500 });
@@ -50,10 +49,10 @@ function BrowseCompanyPage() {
 
           <div className="w-3/4 ml-10" data-aos="fade-left">
             <div className="grid grid-cols-2 gap-2">
-              {
-                companies.map((company: CompanyCardProps, idx: number) => {
-                  console.log(company)
-                  return <CompanyCard
+              {companies.map((company: CompanyCardProps, idx: number) => {
+                console.log(company);
+                return (
+                  <CompanyCard
                     id={company.id}
                     name={company.name}
                     logoUrl={company.logoUrl}
@@ -62,9 +61,9 @@ function BrowseCompanyPage() {
                     description={company.description}
                     key={idx}
                   />
-                })
-              }
-              
+                );
+              })}
+
               {/* <CompanyCard
                 CompanyName={"PT Ford Jakarta"}
                 Image={

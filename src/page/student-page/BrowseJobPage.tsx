@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import Layout from "./layout/Layout";
-import CompanyVacancy from "./component/CompanyVacancy";
+import Layout from "../layout/Layout";
+import CompanyVacancy from "../component/CompanyVacancy";
 import "aos/dist/aos.css";
 import AOS from "aos";
 
