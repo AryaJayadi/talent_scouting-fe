@@ -307,7 +307,12 @@ function NewVacancyPage() {
             </div>
 
             <div className="flex justify-center my-10">
-              <Button onClick={addSectionInput}>+ Add New Section</Button>
+              <Button
+                className="font-semibold bg-[#4d8fb3] hover:bg-[#357ea4]"
+                onClick={addSectionInput}
+              >
+                + Add New Section
+              </Button>
             </div>
 
             <div className="flex justify-center">

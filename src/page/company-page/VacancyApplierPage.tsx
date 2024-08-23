@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "../layout/Layout";
 import ApplierRow from "../component/ApplierRow";
 import Image from "../../assets/logo_binus.png";
+import { Button } from "@/components/ui/button";
 
 function VacancyApplierPage() {
   return (
@@ -24,12 +25,18 @@ function VacancyApplierPage() {
               <div>Jakarta Barat</div>
               <div>Full Time</div>
               <div>Rp 5.000.000 - Rp 10.000.000</div>
+              <div className="mt-2">
+                <Button>Student Preview</Button>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="mt-10">
-          <div className="text-[24px] mb-4">Applier</div>
+          <div className="text-[24px] mb-2 text-center">Job Applier</div>
+          <div className="text-center mb-4">
+            You need to approve or reject all of applier before XX January 2024
+          </div>
 
           <div>
             <ApplierRow />
