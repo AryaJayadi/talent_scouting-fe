@@ -1,26 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../layout/Layout";
-import Image from "../../assets/logo_binus.png";
+import Image from "../../assets/Student.jpg";
 import JobRecommendationCard from "../component/JobRecommendationCard";
 import CVTemplate from "../component/CVTemplate";
+import { useParams } from "react-router-dom";
+import { StudentCardProps } from "../props/StudentCardProps";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { capitalizeName } from "../util/Utility.tsx";
 
 function StudentProfilePage() {
+  const { studentId } = useParams();
+  const [student, setStudent] = useState<StudentCardProps>();
+
+  useEffect(() => {
+    async function getStudentById() {
+      try {
+        const response = await axios.get(
+          import.meta.env.VITE_API + "getStudentById?studentId=" + studentId
+        );
+        setStudent(response.data);
+      } catch (error) {}
+    }
+    getStudentById();
+  }, []);
+
   return (
     <Layout>
       <div className="mx-[20vw] pt-10 flex justify-center pb-20">
         <div>
           <div className="flex items-center justify-center">
-            <div className="border-[1px] rounded-[50%] w-[200px] h-[200px]">
+            <div className="rounded-[50%] w-[40%] h-[200px] flex justify-end">
               <img
-                src={Image}
-                className="w-full h-full object-cover object-center rounded-[50%]"
+                src={student?.picture_url}
+                className="w-[200px] h-[200px] border-[1px] object-cover object-center rounded-[50%]"
               />
             </div>
-            <div className="ml-16">
-              <div className="text-[3rem] font-semibold">Rico Gunawan</div>
-              <div className="text-[1.2rem]">2501961786</div>
-              <div className="text-[1.2rem]">Computer Science</div>
+            <div className="ml-16 w-[60%]">
+              <div className="text-[3rem] font-semibold">
+                {student ? student.name : capitalizeName(Cookies.get("name"))}
+              </div>
+              <div className="text-[1.2rem]">{student?.nim}</div>
+              <div className="text-[1.2rem]">{student?.major}</div>
               <div className="text-[1.2rem]">GPA: 3.9</div>
+              <div className="mt-2 flex gap-2">
+                <img
+                  className="w-[30px] h-[30px] rounded-[50%]"
+                  src={
+                    "https://th.bing.com/th/id/OIP.-ZirgQE5pr8e7htQWowJIgHaHa?rs=1&pid=ImgDetMain"
+                  }
+                />
+                <img
+                  className="w-[30px] h-[30px] rounded-[50%]"
+                  src={
+                    "https://th.bing.com/th/id/OIP.-ZirgQE5pr8e7htQWowJIgHaHa?rs=1&pid=ImgDetMain"
+                  }
+                />
+              </div>
             </div>
           </div>
 

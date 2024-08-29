@@ -29,13 +29,19 @@ export interface SectionProps {
 }
 
 function NewVacancyPage() {
+  const [jobPosition, setJobPosition] = useState<string>("");
+  const [jobDescription, setJobDescription] = useState<string>("");
+  const [jobLocation, setJobLocation] = useState<string>("");
+  const [salaryStart, setSalaryStart] = useState<number>();
+  const [salaryEnd, setSalaryEnd] = useState<number>();
+  const [workTimeType, setWorkTimeType] = useState<string>();
+  const [jobType, setJobType] = useState<string>();
   const [requirements, setRequirements] = useState<RequirementProps[]>([
     {
       idx: 0,
       requirement: "",
     },
   ]);
-
   const [skills, setSkills] = useState<SkillProps[]>([
     {
       idx: 0,
@@ -43,8 +49,11 @@ function NewVacancyPage() {
       skillDescription: "",
     },
   ]);
-
   const [sections, setSections] = useState<SectionProps[]>([]);
+
+  const handlePublish = () => {
+    const body = {};
+  };
 
   const [idx, setIdx] = useState<number>(1);
   const [skillIdx, setSkillIdx] = useState<number>(1);
@@ -113,6 +122,7 @@ function NewVacancyPage() {
               <Input
                 className="mt-2 border-[#b1b1b1]"
                 placeholder="Job Position"
+                onChange={(e) => setJobPosition(e.target.value)}
               />
             </div>
 
@@ -121,6 +131,7 @@ function NewVacancyPage() {
               <Textarea
                 className="mt-2 border-[#b1b1b1]"
                 placeholder="Job Description"
+                onChange={(e) => setJobDescription(e.target.value)}
               />
             </div>
 
@@ -129,6 +140,7 @@ function NewVacancyPage() {
               <Input
                 className="mt-2 border-[#b1b1b1]"
                 placeholder="Job Location"
+                onChange={(e) => setJobLocation(e.target.value)}
               />
             </div>
 
@@ -138,6 +150,7 @@ function NewVacancyPage() {
                 <Input
                   className="mt-2 border-[#b1b1b1] w-full"
                   placeholder="Start Range"
+                  onChange={(e) => setSalaryStart(parseInt(e.target.value))}
                 />
               </div>
 
@@ -149,6 +162,7 @@ function NewVacancyPage() {
                 <Input
                   className="mt-6 border-[#b1b1b1] w-full"
                   placeholder="End Range"
+                  onChange={(e) => setSalaryEnd(parseInt(e.target.value))}
                 />
               </div>
             </div>
@@ -156,7 +170,7 @@ function NewVacancyPage() {
               <div className="mb-2">
                 <label className="font-medium">Work Time Type</label>
               </div>
-              <Select>
+              <Select onValueChange={(value) => setWorkTimeType(value)}>
                 <SelectTrigger className="border-[#b1b1b1]">
                   <SelectValue placeholder="Work Time Type" />
                 </SelectTrigger>
@@ -171,7 +185,7 @@ function NewVacancyPage() {
               <div className="mb-2">
                 <label className="font-medium">Job Type</label>
               </div>
-              <Select>
+              <Select onValueChange={(value) => setJobType(value)}>
                 <SelectTrigger className="border-[#b1b1b1]">
                   <SelectValue placeholder="Job Type" />
                 </SelectTrigger>
@@ -316,7 +330,7 @@ function NewVacancyPage() {
             </div>
 
             <div className="flex justify-center">
-              <Button>Publish</Button>
+              <Button onClick={handlePublish}>Publish</Button>
             </div>
           </div>
         </div>

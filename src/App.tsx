@@ -9,7 +9,8 @@ import BrowseJobPage from "./page/student-page/BrowseJobPage";
 import CompanyHomePage from "./page/company-page/CompanyHomePage";
 import CompanyVacancyPage from "./page/company-page/CompanyVacancyPage";
 import NewVacancyPage from "./page/company-page/NewVacancyPage";
-import StudentProfilePage from "./page/company-page/StudentProfilePage";
+import StudentProfilePage from "./page/student-page/StudentProfilePage";
+import StudentRequestPage from "./page/student-page/StudentRequestPage";
 import BrowseStudentPage from "./page/company-page/BrowseStudentPage";
 
 function App() {
@@ -18,13 +19,19 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route>
-            <Route path="/" element={<LoginPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/job-detail" element={<JobDetailPage />} />
-            <Route path="/company-detail" element={<CompanyDetailPage />} />
+            <Route path="/company/:companyId" element={<CompanyDetailPage />} />
             <Route path="/browse-company" element={<BrowseCompanyPage />} />
             <Route path="/browse-job" element={<BrowseJobPage />} />
-            <Route path="/profile" element={<StudentProfilePage />} />
+            <Route path="/student-profile" element={<StudentProfilePage />} />
+            <Route
+              path="/student-profile/:studentId"
+              element={<StudentProfilePage />}
+            />
+            <Route path="/student/requests" element={<StudentRequestPage />} />
+
             <Route path="/vacancy-applier" element={<VacancyApplierPage />} />
 
             <Route path="/company/home" element={<CompanyHomePage />} />

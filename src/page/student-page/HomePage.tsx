@@ -12,17 +12,35 @@ import axios from "axios";
 
 const HomePage: React.FC = () => {
   const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
+  const [companyLoading, setCompanyLoading] = useState(false);
 
   useEffect(() => {
     async function getAllCompany() {
+      setCompanyLoading(true);
       try {
-        // console.log(process.env);
-        const response = await axios.get("http://localhost:8080/getAllCompany");
+        const response = await axios.get(
+          import.meta.env.VITE_API + "company/getAll"
+        );
         setCompanies(response.data);
       } catch (error) {
         console.log(error);
       }
+      setCompanyLoading(false);
     }
+
+    // async function getAllJob() {
+    //   setCompanyLoading(true);
+    //   try {
+    //     const response = await axios.get(
+    //       import.meta.env.VITE_API + "company/getAll"
+    //     );
+    //     setCompanies(response.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    //   setCompanyLoading(false);
+    // }
+
     AOS.init({ duration: 500 });
     getAllCompany();
   }, []);
@@ -47,29 +65,6 @@ const HomePage: React.FC = () => {
             <Input placeholder={"Let's find a job for you"} />
           </div>
         </div>
-
-        {/* <div className='my-[50px] flex'>
-                    <div className='w-1/2'>
-                        <img src={"https://logodix.com/logo/81176.jpg"} className='w-[40vw] h-[25vw]'/>
-                    </div>
-
-                    <div className='w-1/2'>
-                        <div className='text-[24px] font-semibold mb-4'>
-                            Test Test Test
-                        </div>
-                        <div>
-                            <div className='mb-4'>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, voluptas. Vitae dolore dolorum placeat! Similique neque sint ad dolore, vitae iusto ipsum quis dicta accusamus harum? Provident iusto excepturi qui!
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, voluptas. Vitae dolore dolorum placeat! Similique neque sint ad dolore, vitae iusto ipsum quis dicta accusamus harum? Provident iusto excepturi qui!
-                            
-                            </div>
-                            <div>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, voluptas. Vitae dolore dolorum placeat! Similique neque sint ad dolore, vitae iusto ipsum quis dicta accusamus harum? Provident iusto excepturi qui!
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, voluptas. Vitae dolore dolorum placeat! Similique neque sint ad dolore, vitae iusto ipsum quis dicta accusamus harum? Provident iusto excepturi qui!
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
 
         <div className="my-[50px]" data-aos="fade-up" data-aos-once="true">
           <div className="text-[24px] font-medium mb-2 text-center">
@@ -193,68 +188,35 @@ const HomePage: React.FC = () => {
             Check out the opportunities they offer!
           </div>
 
-          <div className="grid grid-cols-3 mt-6 gap-10 mx-">
-            {companies.map((company: CompanyCardProps, idx: number) => {
-              console.log(company);
-              return (
-                <CompanyCard
-                  id={company.id}
-                  name={company.name}
-                  logoUrl={company.logoUrl}
-                  location={company.location}
-                  VacancyCount={10}
-                  description={company.description}
-                  key={idx}
-                />
-              );
-            })}
-            {/* <CompanyCard
-              CompanyName={"PT Binus University"}
-              Image={
-                "https://th.bing.com/th/id/OIP.orlY04-klLAbJn4WU-IqQwHaEK?rs=1&pid=ImgDetMain"
-              }
-              CompanyLocation={"Jakarta"}
-              VacancyCount={10}
-            /> */}
-            {/* <CompanyCard
-              CompanyName={"PT BCA"}
-              Image={
-                "https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"
-              }
-              CompanyLocation={"Jakarta"}
-              VacancyCount={10}
-            />
-            <CompanyCard
-              CompanyName={"PT Unilever"}
-              Image={"https://logodix.com/logo/81176.jpg"}
-              CompanyLocation={"Jakarta"}
-              VacancyCount={10}
-            />
-            <CompanyCard
-              CompanyName={"PT CTI"}
-              Image={
-                "https://computradetech.com/wp-content/uploads/2021/07/New-Logo-CTI-Group-02.png"
-              }
-              CompanyLocation={"Jakarta"}
-              VacancyCount={10}
-            />
-            <CompanyCard
-              CompanyName={"PT NVIDIA"}
-              Image={
-                "https://logodownload.org/wp-content/uploads/2014/09/nvidia-logo-0.png"
-              }
-              CompanyLocation={"Jakarta"}
-              VacancyCount={10}
-            />
-            <CompanyCard
-              CompanyName={"PT Blue Cactus"}
-              Image={
-                "https://img.freepik.com/free-vector/hand-drawn-cactus-logo-template_23-2149398900.jpg?w=2000&t=st=1661990015~exp=1661990615~hmac=466aebeda6573c752489cdbfe5c11ef1cbebf1ff984e8f62018952f83d9639f6"
-              }
-              CompanyLocation={"Jakarta"}
-              VacancyCount={10}
-            /> */}
-          </div>
+          {companyLoading ? (
+            <div className="bg-[black]">
+              <svg
+                className="animate-spin h-5 w-5 mr-3 ..."
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              ></svg>
+            </div>
+          ) : companies.length === 0 ? (
+            <div className="text-center my-[100px]">
+              There is no company. Stay tune
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 mt-6 gap-10 mx-">
+              {companies.map((company: CompanyCardProps, idx: number) => {
+                return (
+                  <CompanyCard
+                    id={company.id}
+                    name={company.name}
+                    logoUrl={company.logoUrl}
+                    location={company.location}
+                    VacancyCount={10}
+                    description={company.description}
+                    key={idx}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </Layout>

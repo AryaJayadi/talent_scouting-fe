@@ -13,9 +13,9 @@ function BrowseCompanyPage() {
   useEffect(() => {
     async function getAllCompany() {
       try {
-        // console.log(process.env);
-
-        const response = await axios.get("http://localhost:8080/getAllCompany");
+        const response = await axios.get(
+          import.meta.env.VITE_API + "company/getAll"
+        );
         setCompanies(response.data);
       } catch (error) {
         console.log(error);

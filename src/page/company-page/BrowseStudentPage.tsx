@@ -1,11 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../layout/Layout";
 import "aos/dist/aos.css";
 import AOS from "aos";
 import StudentCard from "../component/StudentCard";
+import { StudentCardProps } from "../props/StudentCardProps";
+import axios from "axios";
 
 function BrowseStudentPage() {
+  const [students, setStudents] = useState<StudentCardProps[]>([]);
+
   useEffect(() => {
+    async function getStudents() {
+      try {
+        const response = await axios.get(
+          import.meta.env.VITE_API + "getAllStudent"
+        );
+        setStudents(response.data);
+      } catch (error) {}
+    }
+
+    getStudents();
+
     AOS.init({ duration: 500 });
   }, []);
   return (
@@ -34,38 +49,25 @@ function BrowseStudentPage() {
 
           <div className="w-3/4 ml-10" data-aos="fade-up">
             <div className="grid grid-cols-3 gap-10">
-              <StudentCard
-                StudentName={"Josua Golden Umboh"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-              />
-              <StudentCard
-                StudentName={"Josua Golden Umboh"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-              />
-              <StudentCard
-                StudentName={"Josua Golden Umboh"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-              />
-              <StudentCard
-                StudentName={"Josua Golden Umboh"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-              />
-              <StudentCard
-                StudentName={"Josua Golden Umboh"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-              />
-              <StudentCard
-                StudentName={"Josua Golden Umboh"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-              />
-              <StudentCard
-                StudentName={"Josua Golden Umboh"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-              />
-              <StudentCard
-                StudentName={"Josua Golden Umboh"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-              />
+              {students.map((student: StudentCardProps) => {
+                return (
+                  <StudentCard
+                    key={student.id}
+                    id={student.id}
+                    name={student.name}
+                    nim={student.nim}
+                    email={student.email}
+                    phone={student.phone}
+                    major={student.major}
+                    address={student.address}
+                    city={student.city}
+                    state={student.state}
+                    picture_url={student.picture_url}
+                    description={student.description}
+                    personal_url={student.personal_url}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
