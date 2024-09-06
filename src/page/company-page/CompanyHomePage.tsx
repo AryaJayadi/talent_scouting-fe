@@ -4,12 +4,23 @@ import { Input } from "@/components/ui/input";
 import JobCard2 from "../component/JobCard2";
 import StudentCard from "../component/StudentCard";
 import { StudentCardProps } from "../props/StudentCardProps";
+import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps.ts";
 import "aos/dist/aos.css";
 import AOS from "aos";
 import axios from "axios";
+import { useToast } from "@/components/hooks/use-toast";
+import Cookies from "js-cookie";
+import { decrypt } from "../util/Utility.tsx";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 function CompanyHomePage() {
   const [students, setStudents] = useState<StudentCardProps[]>([]);
+  const [vacancies, setVacancies] = useState<
+    CompanyVacancyWithApplyCountProps[]
+  >([]);
+  const { toast } = useToast();
+
   useEffect(() => {
     async function getStudents() {
       try {
@@ -17,11 +28,36 @@ function CompanyHomePage() {
           import.meta.env.VITE_API + "getAllStudent"
         );
         setStudents(response.data);
-      } catch (error) {}
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: "Inform admin immediately!",
+        });
+      }
+    }
+
+    async function getLatestVacancy() {
+      try {
+        const response = await axios.get(
+          import.meta.env.VITE_API +
+            "getLatestJobByCompanyId?companyId=" +
+            parseInt(decrypt(Cookies.get("id")) || "0") +
+            "&latestCount=3"
+        );
+        setVacancies(response.data);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: "Inform admin immediately!",
+        });
+      }
     }
 
     AOS.init({ duration: 500 });
     getStudents();
+    getLatestVacancy();
   }, []);
 
   return (
@@ -51,24 +87,26 @@ function CompanyHomePage() {
           </div>
 
           <div className="flex w-full gap-4">
-            <JobCard2
-              StopTime={new Date()}
-              Title={"asdsa"}
-              Description={"asdsad"}
-              ApplierCount={4}
-            />
-            <JobCard2
-              StopTime={new Date()}
-              Title={"asdsa"}
-              Description={"asdsad"}
-              ApplierCount={4}
-            />
-            <JobCard2
-              StopTime={new Date()}
-              Title={"asdsa"}
-              Description={"asdsad"}
-              ApplierCount={4}
-            />
+            {vacancies.length < 1 ? (
+              <div className="flex flex-col items-center w-full">
+                <div className="my-2">There is no vacancy</div>
+                <Link to="/company/new-vacancy">
+                  <Button>+ Add Vacancy Here</Button>
+                </Link>
+              </div>
+            ) : (
+              vacancies.map((vacancy) => {
+                console.log(vacancy);
+
+                return (
+                  <JobCard2
+                    key={vacancy.jobVacancy.id}
+                    jobVacancy={vacancy.jobVacancy}
+                    jobApplyCount={vacancy.jobApplyCount}
+                  />
+                );
+              })
+            )}
           </div>
         </div>
 
@@ -90,6 +128,7 @@ function CompanyHomePage() {
             {students.map((student: StudentCardProps) => {
               return (
                 <StudentCard
+                  gpa={student.gpa}
                   key={student.id}
                   id={student.id}
                   name={student.name}

@@ -8,11 +8,18 @@ import "aos/dist/aos.css";
 import AOS from "aos";
 import Marquee from "react-fast-marquee";
 import { CompanyCardProps } from "../props/CompanyCardProps";
+import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps";
 import axios from "axios";
+import Spinner from "../component/Spinner";
+import { useToast } from "@/components/hooks/use-toast";
 
 const HomePage: React.FC = () => {
   const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
+  const [vacancies, setVacancies] = useState<
+    CompanyVacancyWithApplyCountProps[]
+  >([]);
   const [companyLoading, setCompanyLoading] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     async function getAllCompany() {
@@ -23,26 +30,36 @@ const HomePage: React.FC = () => {
         );
         setCompanies(response.data);
       } catch (error) {
-        console.log(error);
+        toast({
+          variant: "destructive",
+          title: "Something went wrong!",
+          description: "Inform admin immediately",
+        });
       }
       setCompanyLoading(false);
     }
 
-    // async function getAllJob() {
-    //   setCompanyLoading(true);
-    //   try {
-    //     const response = await axios.get(
-    //       import.meta.env.VITE_API + "company/getAll"
-    //     );
-    //     setCompanies(response.data);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    //   setCompanyLoading(false);
-    // }
+    async function getAllJob() {
+      try {
+        const body = {
+          location: "",
+          workTimeType: "",
+          jobTypeId: "",
+          searchKeyword: "",
+        };
+        const response = await axios.post(
+          import.meta.env.VITE_API + "getJobVacancyWithFilter",
+          body
+        );
+        setVacancies(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
     AOS.init({ duration: 500 });
     getAllCompany();
+    getAllJob();
   }, []);
 
   return (
@@ -62,7 +79,10 @@ const HomePage: React.FC = () => {
             every step of the way.
           </div>
           <div className="mt-[30px] w-[30%]">
-            <Input placeholder={"Let's find a job for you"} />
+            <Input
+              placeholder={"Let's find a job for you"}
+              className="text-black"
+            />
           </div>
         </div>
 
@@ -95,35 +115,47 @@ const HomePage: React.FC = () => {
           <Marquee speed={30}>
             <img
               src={"https://logodix.com/logo/81176.jpg"}
-              className="h-[200px] mx-4"
+              className="h-[150px] mx-4"
             />
             <img
               src={
                 "https://logodownload.org/wp-content/uploads/2014/09/nvidia-logo-0.png"
               }
-              className="h-[200px] mx-4"
+              className="h-[150px] mx-4"
             />
             <img
               src={
                 "https://img.freepik.com/free-vector/hand-drawn-cactus-logo-template_23-2149398900.jpg?w=2000&t=st=1661990015~exp=1661990615~hmac=466aebeda6573c752489cdbfe5c11ef1cbebf1ff984e8f62018952f83d9639f6"
               }
-              className="h-[200px] mx-4"
+              className="h-[150px] mx-4"
             />
             <img
               src={
                 "https://img.freepik.com/free-vector/hand-drawn-cactus-logo-template_23-2149398900.jpg?w=2000&t=st=1661990015~exp=1661990615~hmac=466aebeda6573c752489cdbfe5c11ef1cbebf1ff984e8f62018952f83d9639f6"
               }
-              className="h-[200px] mx-4"
+              className="h-[150px] mx-4"
             />
             <img
               src={"https://logodix.com/logo/81176.jpg"}
-              className="h-[200px] mx-4"
+              className="h-[150px] mx-4"
             />
             <img
               src={
                 "https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"
               }
-              className="h-[200px] mx-4"
+              className="h-[150px] mx-4"
+            />
+            <img
+              src={
+                "https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"
+              }
+              className="h-[150px] mx-4"
+            />
+            <img
+              src={
+                "https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"
+              }
+              className="h-[150px] mx-4"
             />
           </Marquee>
         </div>
@@ -140,41 +172,26 @@ const HomePage: React.FC = () => {
             miss your chance to apply!
           </div>
 
-          <div className="grid grid-cols-5 mt-6 gap-10">
-            <JobCard
-              JobName={"Front End Developer"}
-              CompanyName={"PT Bank Central Asia"}
-              Image={
-                "https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"
-              }
-            />
-            <JobCard
-              JobName={"Back End Developer"}
-              CompanyName={"PT CTI"}
-              Image={
-                "https://computradetech.com/wp-content/uploads/2021/07/New-Logo-CTI-Group-02.png"
-              }
-            />
-            <JobCard
-              JobName={"Full Stack Developer"}
-              CompanyName={"PT Unilever"}
-              Image={"https://logodix.com/logo/81176.jpg"}
-            />
-            <JobCard
-              JobName={"AI Engineer"}
-              CompanyName={"PT NVIDIA"}
-              Image={
-                "https://logodownload.org/wp-content/uploads/2014/09/nvidia-logo-0.png"
-              }
-            />
-            <JobCard
-              JobName={"Back End Developer"}
-              CompanyName={"PT Ford Jakarta"}
-              Image={
-                "https://img.freepik.com/free-vector/hand-drawn-cactus-logo-template_23-2149398900.jpg?w=2000&t=st=1661990015~exp=1661990615~hmac=466aebeda6573c752489cdbfe5c11ef1cbebf1ff984e8f62018952f83d9639f6"
-              }
-            />
-          </div>
+          {vacancies.length < 1 ? (
+            <div className="text-center my-[100px]">
+              There is no vacancy. Stay tune
+            </div>
+          ) : (
+            <div className="grid grid-cols-5 mt-6 gap-10">
+              {vacancies.map((vacancy, idx) => {
+                return idx > 4 ? (
+                  ""
+                ) : (
+                  <JobCard
+                    Id={vacancy.jobVacancy.id}
+                    JobName={vacancy.jobVacancy.jobPosition}
+                    CompanyName={vacancy.jobVacancy.company.name}
+                    Image={vacancy.jobVacancy.company.logoUrl}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <div className="my-[70px]" data-aos="fade-up" data-aos-once="true">
@@ -189,12 +206,8 @@ const HomePage: React.FC = () => {
           </div>
 
           {companyLoading ? (
-            <div className="bg-[black]">
-              <svg
-                className="animate-spin h-5 w-5 mr-3 ..."
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              ></svg>
+            <div className="flex justify-center mt-10">
+              <Spinner />
             </div>
           ) : companies.length === 0 ? (
             <div className="text-center my-[100px]">

@@ -7,7 +7,8 @@ import { useParams } from "react-router-dom";
 import { StudentCardProps } from "../props/StudentCardProps";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { capitalizeName } from "../util/Utility.tsx";
+import { capitalizeName, decrypt } from "../util/Utility.tsx";
+import { Link } from "react-router-dom";
 
 function StudentProfilePage() {
   const { studentId } = useParams();
@@ -38,24 +39,31 @@ function StudentProfilePage() {
             </div>
             <div className="ml-16 w-[60%]">
               <div className="text-[3rem] font-semibold">
-                {student ? student.name : capitalizeName(Cookies.get("name"))}
+                {student
+                  ? student.name
+                  : capitalizeName(decrypt(Cookies.get("name")))}
               </div>
               <div className="text-[1.2rem]">{student?.nim}</div>
               <div className="text-[1.2rem]">{student?.major}</div>
-              <div className="text-[1.2rem]">GPA: 3.9</div>
+              <div className="text-[1.2rem]">GPA: {student?.gpa}</div>
+              <div className="text-[1.2rem]">{student?.email}</div>
               <div className="mt-2 flex gap-2">
-                <img
-                  className="w-[30px] h-[30px] rounded-[50%]"
-                  src={
-                    "https://th.bing.com/th/id/OIP.-ZirgQE5pr8e7htQWowJIgHaHa?rs=1&pid=ImgDetMain"
-                  }
-                />
-                <img
-                  className="w-[30px] h-[30px] rounded-[50%]"
-                  src={
-                    "https://th.bing.com/th/id/OIP.-ZirgQE5pr8e7htQWowJIgHaHa?rs=1&pid=ImgDetMain"
-                  }
-                />
+                <Link to={student?.personal_url || ""} target="_blank">
+                  <img
+                    className="w-[30px] h-[30px] rounded-[50%]"
+                    src={
+                      "https://th.bing.com/th/id/OIP.-ZirgQE5pr8e7htQWowJIgHaHa?rs=1&pid=ImgDetMain"
+                    }
+                  />
+                </Link>
+                <Link to={student?.personal_url || ""} target="_blank">
+                  <img
+                    className="h-[30px] rounded-[50%]"
+                    src={
+                      "https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png"
+                    }
+                  />
+                </Link>
               </div>
             </div>
           </div>

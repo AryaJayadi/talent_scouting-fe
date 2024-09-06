@@ -6,20 +6,41 @@ import AOS from "aos";
 import axios from "axios";
 import { CompanyCardProps } from "../props/CompanyCardProps";
 import { env } from "node:process";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { CheckboxCustom } from "../component/CheckboxCustom";
+import Spinner from "../component/Spinner";
+import { useToast } from "@/components/hooks/use-toast";
 
 function BrowseCompanyPage() {
   const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     async function getAllCompany() {
+      setLoading(true);
       try {
         const response = await axios.get(
           import.meta.env.VITE_API + "company/getAll"
         );
         setCompanies(response.data);
       } catch (error) {
-        console.log(error);
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: "Inform admin immediately!",
+        });
       }
+      setLoading(false);
     }
     AOS.init({ duration: 500 });
     getAllCompany();
@@ -41,66 +62,72 @@ function BrowseCompanyPage() {
 
         <div className="flex mt-10 w-full relative">
           <div
-            className="w-1/4 bg-[#F0F0F0] h-[60vh] rounded-sm p-4 sticky top-16"
+            className="w-1/4 bg-[#F0F0F0] h-full rounded-sm p-4 sticky top-[15%]"
             data-aos="fade-up"
           >
             <div className="font-bold">Filters</div>
+
+            <Input className="my-2" placeholder="Search Company" />
+
+            <div>
+              <Select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Location" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {/* <SelectLabel>Fruits</SelectLabel> */}
+                    <SelectItem value="apple">Computer Science</SelectItem>
+                    <SelectItem value="banana">
+                      Mobile Application Development
+                    </SelectItem>
+                    <SelectItem value="blueberry">Data Science</SelectItem>
+                    <SelectItem value="grapes">Cyber Security</SelectItem>
+                    <SelectItem value="pineapple">
+                      Game Application Development
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="font-bold mt-10">Filter Strong Position</div>
+
+            <div>
+              <CheckboxCustom text={"Front End Developer"} />
+              <CheckboxCustom text={"Back End Developer"} />
+              <CheckboxCustom text={"AI Engineer"} />
+              <CheckboxCustom text={"Mobile Developer"} />
+              <CheckboxCustom text={"Cyber Security"} />
+              <CheckboxCustom text={"Data Analyst"} />
+              <CheckboxCustom text={"Web Developer"} />
+              <CheckboxCustom text={"Game Developer"} />
+            </div>
           </div>
 
           <div className="w-3/4 ml-10" data-aos="fade-left">
-            <div className="grid grid-cols-2 gap-2">
-              {companies.map((company: CompanyCardProps, idx: number) => {
-                console.log(company);
-                return (
-                  <CompanyCard
-                    id={company.id}
-                    name={company.name}
-                    logoUrl={company.logoUrl}
-                    location={company.location}
-                    VacancyCount={10}
-                    description={company.description}
-                    key={idx}
-                  />
-                );
-              })}
-
-              {/* <CompanyCard
-                CompanyName={"PT Ford Jakarta"}
-                Image={
-                  "https://logodownload.org/wp-content/uploads/2014/09/nvidia-logo-0.png"
-                }
-                CompanyLocation={"Jakarta"}
-                VacancyCount={10}
-              />
-              <CompanyCard
-                CompanyName={"PT Ford Jakarta"}
-                Image={
-                  "https://img.freepik.com/free-vector/hand-drawn-cactus-logo-template_23-2149398900.jpg?w=2000&t=st=1661990015~exp=1661990615~hmac=466aebeda6573c752489cdbfe5c11ef1cbebf1ff984e8f62018952f83d9639f6"
-                }
-                CompanyLocation={"Jakarta"}
-                VacancyCount={10}
-              />
-              <CompanyCard
-                CompanyName={"PT Ford Jakarta"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-                CompanyLocation={"Jakarta"}
-                VacancyCount={10}
-              />
-              <CompanyCard
-                CompanyName={"PT Ford Jakarta"}
-                Image={
-                  "https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"
-                }
-                CompanyLocation={"Jakarta"}
-                VacancyCount={10}
-              />
-              <CompanyCard
-                CompanyName={"PT Ford Jakarta"}
-                Image={"https://logodix.com/logo/81176.jpg"}
-                CompanyLocation={"Jakarta"}
-                VacancyCount={10}
-              /> */}
-            </div>
+            {loading ? (
+              <div className="flex justify-center">
+                <Spinner />
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-10">
+                {companies.map((company: CompanyCardProps, idx: number) => {
+                  console.log(company);
+                  return (
+                    <CompanyCard
+                      id={company.id}
+                      name={company.name}
+                      logoUrl={company.logoUrl}
+                      location={company.location}
+                      VacancyCount={10}
+                      description={company.description}
+                      key={idx}
+                    />
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>

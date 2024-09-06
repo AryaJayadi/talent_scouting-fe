@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../layout/Layout";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,10 +10,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { decrypt } from "../util/Utility";
+import Cookies from "js-cookie";
+import { useToast } from "@/components/hooks/use-toast";
+import { CalendarForm } from "../component/CalendarInput";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export interface RequirementProps {
   idx: number;
-  requirement: string;
+  responsibilityDetail: string;
 }
 
 export interface SkillProps {
@@ -24,22 +41,49 @@ export interface SkillProps {
 
 export interface SectionProps {
   idx: number;
-  sectionTitle: string;
-  sectionDescription: string;
+  extrasTitle: string;
+  extrasDescription: string;
+}
+
+export interface DBSkillProps {
+  id: number;
+  skillName: string;
 }
 
 function NewVacancyPage() {
+  const nav = useNavigate();
+  const { toast } = useToast();
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
+
+  const openAlertDialog = () => {
+    setAlertDialogOpen(true);
+  };
+
+  const handleAddSkill = async () => {
+    const body = {
+      skillName: newSkill,
+    };
+
+    await axios.post(import.meta.env.VITE_API + "addNewSkill", body);
+    setUpdate(!update);
+    setAlertDialogOpen(false);
+  };
+
+  const [update, setUpdate] = useState(false);
+  const [newSkill, setNewSkill] = useState("");
+  const [dbSkills, setDbSkills] = useState<DBSkillProps[]>([]);
   const [jobPosition, setJobPosition] = useState<string>("");
   const [jobDescription, setJobDescription] = useState<string>("");
   const [jobLocation, setJobLocation] = useState<string>("");
   const [salaryStart, setSalaryStart] = useState<number>();
   const [salaryEnd, setSalaryEnd] = useState<number>();
-  const [workTimeType, setWorkTimeType] = useState<string>();
-  const [jobType, setJobType] = useState<string>();
-  const [requirements, setRequirements] = useState<RequirementProps[]>([
+  const [workTimeType, setWorkTimeType] = useState<string>("");
+  const [jobType, setJobType] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [responsibilities, setResponsibility] = useState<RequirementProps[]>([
     {
       idx: 0,
-      requirement: "",
+      responsibilityDetail: "",
     },
   ]);
   const [skills, setSkills] = useState<SkillProps[]>([
@@ -51,29 +95,65 @@ function NewVacancyPage() {
   ]);
   const [sections, setSections] = useState<SectionProps[]>([]);
 
-  const handlePublish = () => {
-    const body = {};
-  };
-
   const [idx, setIdx] = useState<number>(1);
   const [skillIdx, setSkillIdx] = useState<number>(1);
   const [sectionIdx, setSectionIdx] = useState<number>(0);
 
   const addInput = () => {
-    setRequirements([...requirements, { idx: idx, requirement: "" }]);
+    setResponsibility([
+      ...responsibilities,
+      { idx: idx, responsibilityDetail: "" },
+    ]);
     setIdx(idx + 1);
   };
 
   const removeComponent = (idx: number) => {
-    if (requirements.length >= 2) {
-      setRequirements(requirements.filter((req) => req.idx !== idx));
+    if (responsibilities.length >= 2) {
+      setResponsibility(responsibilities.filter((req) => req.idx !== idx));
     }
   };
 
-  const handleInputChange = (idx: number, value: string) => {
-    setRequirements(
-      requirements.map((req) =>
-        req.idx === idx ? { ...req, requirement: value } : req
+  const handleInputChangeResponsibility = (idx: number, value: string) => {
+    setResponsibility(
+      responsibilities.map((req) =>
+        req.idx === idx ? { ...req, responsibilityDetail: value } : req
+      )
+    );
+  };
+
+  const handleInputChangeSectionDescription = (idx: number, value: string) => {
+    setSections(
+      sections.map((section, index) =>
+        index === idx ? { ...section, extrasDescription: value } : section
+      )
+    );
+  };
+
+  const handleInputChangeSectionTitle = (idx: number, value: string) => {
+    setSections(
+      sections.map((section, index) =>
+        index === idx ? { ...section, extrasTitle: value } : section
+      )
+    );
+  };
+
+  const handleInputChangeSkillTitle = (idx: number, value: string) => {
+    if (value === "+ Other Skill") {
+      openAlertDialog();
+      value = newSkill;
+    }
+
+    setSkills(
+      skills.map((section, index) =>
+        index === idx ? { ...section, skillTitle: value } : section
+      )
+    );
+  };
+
+  const handleInputChangeSkillDescription = (idx: number, value: string) => {
+    setSkills(
+      skills.map((section, index) =>
+        index === idx ? { ...section, skillDescription: value } : section
       )
     );
   };
@@ -97,8 +177,8 @@ function NewVacancyPage() {
       ...sections,
       {
         idx: sectionIdx,
-        sectionTitle: "",
-        sectionDescription: "",
+        extrasTitle: "",
+        extrasDescription: "",
       },
     ]);
     setSectionIdx(sectionIdx + 1);
@@ -107,6 +187,111 @@ function NewVacancyPage() {
   const removeSectionComponent = (idx: number) => {
     setSections(sections.filter((section) => section.idx !== idx));
   };
+
+  const handlePublish = async () => {
+    try {
+      const vacancyBody = {
+        company: {
+          id: parseInt(decrypt(Cookies.get("id")) || "0"),
+        },
+        jobType: {
+          id: parseInt(jobType || "0"),
+        },
+        timeStamp: new Date(),
+        jobPosition: jobPosition,
+        endDateTime: selectedDate,
+        jobDescription: jobDescription,
+        location: jobLocation,
+        salaryRange:
+          "Rp " +
+          new Intl.NumberFormat("id-ID").format(salaryStart || 0)?.toString() +
+          " - Rp " +
+          new Intl.NumberFormat("id-ID").format(salaryEnd || 0)?.toString(),
+        workTimeType: workTimeType,
+      };
+
+      const vacancy = await axios.post(
+        import.meta.env.VITE_API + "addVacancy",
+        vacancyBody
+      );
+      toast({
+        variant: "default",
+        title: "New Vacancy Added!",
+        description: "Your vacancy is published!",
+      });
+
+      console.log(vacancy.data);
+
+      const vacancyId = vacancy.data.id;
+      const extractedSkills = skills.map(
+        ({ skillTitle, skillDescription }) => ({
+          jobVacancySkillPK: {
+            jobVacancyId: vacancyId,
+            skillId: parseInt(skillTitle),
+          },
+          jobVacancy: {
+            id: vacancyId,
+          },
+          skill: {
+            id: parseInt(skillTitle),
+          },
+          skillDetail: skillDescription,
+        })
+      );
+
+      const extractedResponsibility = responsibilities.map(
+        ({ responsibilityDetail }) => ({
+          responsibilityDetail,
+          jobVacancy: {
+            id: vacancyId,
+          },
+        })
+      );
+
+      const extractedSection = sections.map(
+        ({ extrasTitle, extrasDescription }) => ({
+          jobVacancy: {
+            id: vacancyId,
+          },
+          extrasTitle,
+          extrasDescription,
+        })
+      );
+
+      await axios.post(
+        import.meta.env.VITE_API + "addJobResponsibilites",
+        extractedResponsibility
+      );
+
+      await axios.post(
+        import.meta.env.VITE_API + "addExtrasInfo",
+        extractedSection
+      );
+
+      await axios.post(
+        import.meta.env.VITE_API + "addJobVacancySkills",
+        extractedSkills
+      );
+
+      nav("/company/vacancy");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
+    }
+  };
+
+  useEffect(() => {
+    async function getSkill() {
+      const getSkill = await axios.get(
+        import.meta.env.VITE_API + "getAllSkill"
+      );
+      setDbSkills(getSkill.data);
+    }
+    getSkill();
+  }, [update]);
 
   return (
     <Layout>
@@ -177,6 +362,7 @@ function NewVacancyPage() {
                 <SelectContent>
                   <SelectItem value="Full Time">Full Time</SelectItem>
                   <SelectItem value="Part Time">Part Time</SelectItem>
+                  <SelectItem value="Internship">Internship</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -190,24 +376,34 @@ function NewVacancyPage() {
                   <SelectValue placeholder="Job Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">Work From Office</SelectItem>
-                  <SelectItem value="dark">Work From Home</SelectItem>
-                  <SelectItem value="system">Hybrid</SelectItem>
+                  <SelectItem value="1">Work From Office</SelectItem>
+                  <SelectItem value="2">Work From Home</SelectItem>
+                  <SelectItem value="3">Hybrid</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
+            <div className="my-4">
+              <div className="mb-2">
+                <label className="font-medium ">End Date</label>
+              </div>
+              <CalendarForm onDateChange={setSelectedDate} />
+            </div>
+
             <div className="mb-6">
-              <label className="font-medium">Requirements (Min 1)</label>
+              <label className="font-medium">Responsibility (Min 1)</label>
               <div className="h-full">
-                {requirements.map((requirement, idx) => {
+                {responsibilities.map((requirement, idx) => {
                   return (
                     <div className="flex h-full" key={requirement.idx}>
                       <Input
                         className="mt-2 border-[#b1b1b1]"
-                        placeholder="Requirements"
+                        placeholder="Responsibility"
                         onChange={(e) =>
-                          handleInputChange(requirement.idx, e.target.value)
+                          handleInputChangeResponsibility(
+                            requirement.idx,
+                            e.target.value
+                          )
                         }
                       />
                       <div className="h-current flex items-center ml-4 mt-2">
@@ -227,7 +423,7 @@ function NewVacancyPage() {
                   onClick={addInput}
                   className="flex text-[14px] p-2 font-semibold bg-[#4d8fb3] text-white border-0 justify-center items-center rounded-md border-[1px] border-[#b1b1b1] hover:cursor-pointer transition hover:bg-[#357ea4]"
                 >
-                  + Add Requirement
+                  + Add Responsibility
                 </div>
               </div>
             </div>
@@ -262,18 +458,75 @@ function NewVacancyPage() {
                       </div>
                     </div>
 
-                    <Input
-                      className="mt-2 border-[#b1b1b1]"
-                      placeholder="Skill Title"
-                    />
+                    <Select
+                      onValueChange={(skill) => {
+                        handleInputChangeSkillTitle(idx, skill);
+                      }}
+                    >
+                      <SelectTrigger className="border-[#b1b1b1] mt-2 border-[#b1b1b1]">
+                        <SelectValue placeholder="Skill Title" />
+                      </SelectTrigger>
+                      <SelectContent className="overflow-y-auto h-[250px]">
+                        {dbSkills.map((skill) => {
+                          return (
+                            <SelectItem
+                              value={skill.id.toString()}
+                              key={skill.id}
+                            >
+                              {skill.skillName}
+                            </SelectItem>
+                          );
+                        })}
+                        <SelectItem value={"+ Other Skill"}>
+                          + Other Skill
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
 
                     <Textarea
                       className="mt-4 border-[#b1b1b1]"
                       placeholder="Skill Description"
+                      onChange={(e) =>
+                        handleInputChangeSkillDescription(idx, e.target.value)
+                      }
                     ></Textarea>
                   </div>
                 );
               })}
+              <AlertDialog open={alertDialogOpen} key={idx}>
+                <AlertDialogTrigger asChild></AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-center">
+                      Add New Skill Based On Your Requirements
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      <div className="my-6 text-[black]">
+                        <div>Skill</div>
+
+                        <div>
+                          <Input
+                            placeholder="New Skill"
+                            onChange={(e) => setNewSkill(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+
+                  <AlertDialogFooter>
+                    <AlertDialogCancel
+                      onClick={() => setAlertDialogOpen(false)}
+                    >
+                      Cancel
+                    </AlertDialogCancel>
+
+                    <AlertDialogAction onClick={handleAddSkill}>
+                      Add New Skill
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
 
               <div className="w-full flex justify-center mt-6">
                 <div
@@ -301,11 +554,17 @@ function NewVacancyPage() {
                   <Input
                     className="mt-2 border-[#b1b1b1]"
                     placeholder="New Section Title"
+                    onChange={(e) =>
+                      handleInputChangeSectionTitle(idx, e.target.value)
+                    }
                   />
 
                   <Textarea
                     className="mt-4 border-[#b1b1b1]"
                     placeholder="New Section Description"
+                    onChange={(e) =>
+                      handleInputChangeSectionDescription(idx, e.target.value)
+                    }
                   ></Textarea>
                 </div>
               );

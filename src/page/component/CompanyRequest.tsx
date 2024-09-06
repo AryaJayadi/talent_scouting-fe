@@ -7,7 +7,7 @@ function AppliedRequest() {
   return (
     <Link
       to="/"
-      className="flex justify-between items-center py-8 border-b-[1px] border-black"
+      className="flex justify-between items-center py-8 border-b-[1px] border-gray-400 px-8"
     >
       <div className="flex items-center">
         <img src={Temp} />

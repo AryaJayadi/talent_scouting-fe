@@ -12,4 +12,5 @@ export interface StudentCardProps {
     picture_url: string;
     description: string;
     personal_url: string;
+    gpa: number;
 }

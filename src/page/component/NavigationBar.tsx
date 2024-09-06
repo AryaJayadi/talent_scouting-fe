@@ -3,11 +3,12 @@ import LogoBinus from "../../assets/logo_header.png";
 import { Link, useLocation } from "react-router-dom";
 import ProfileHeader from "./../component/ProfileHeader";
 import Cookies from "js-cookie";
+import { decrypt } from "../util/Utility";
 
 function NavigationBar() {
   const location = useLocation();
   const [student, setStudent] = useState(
-    Cookies.get("is_microsoft") == "true" ? true : false
+    decrypt(Cookies.get("is_microsoft")) == "true" ? true : false
   );
 
   return (
@@ -52,16 +53,6 @@ function NavigationBar() {
           </Link>
           <Link
             className={`mx-[30px] text-[18px] font-medium ${
-              location.pathname === "/student-profile"
-                ? "underline underline-offset-8"
-                : ""
-            }`}
-            to={"/student-profile"}
-          >
-            Profile
-          </Link>
-          <Link
-            className={`mx-[30px] text-[18px] font-medium ${
               location.pathname === "/student/requests"
                 ? "underline underline-offset-8"
                 : ""
@@ -103,6 +94,16 @@ function NavigationBar() {
           >
             Students
           </Link>
+          {/* <Link
+            className={`mx-[30px] text-[18px] font-medium ${
+              location.pathname === "/student/requests"
+                ? "underline underline-offset-8"
+                : ""
+            }`}
+            to={"/company/requests"}
+          >
+            Request
+          </Link> */}
         </div>
       )}
 

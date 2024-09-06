@@ -16,6 +16,7 @@ const StudentCard: React.FC<StudentCardProps> = ({
   picture_url,
   description,
   personal_url,
+  gpa,
 }) => {
   return (
     <Link
@@ -31,7 +32,7 @@ const StudentCard: React.FC<StudentCardProps> = ({
       <div className="mb-2">
         <div className="text-center text-[14px] font-semibold">{name}</div>
         <div className="text-center text-[14px]">{major}</div>
-        <div className="text-[14px] text-center">GPA: 3.98</div>
+        <div className="text-[14px] text-center">GPA: {gpa}</div>
       </div>
 
       <div className="text-[14px] my-2">

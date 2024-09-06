@@ -11,7 +11,11 @@ import CompanyVacancyPage from "./page/company-page/CompanyVacancyPage";
 import NewVacancyPage from "./page/company-page/NewVacancyPage";
 import StudentProfilePage from "./page/student-page/StudentProfilePage";
 import StudentRequestPage from "./page/student-page/StudentRequestPage";
+import CompanyRequestPage from "./page/company-page/CompanyRequestPage";
 import BrowseStudentPage from "./page/company-page/BrowseStudentPage";
+import LoggedInRoute from "./page/context/LoggedInRoute";
+import ProtectedRoute from "./page/context/ProtectedRoute";
+import CompanyRoute from "./page/context/CompanyRoute";
 
 function App() {
   return (
@@ -19,27 +23,107 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/job-detail" element={<JobDetailPage />} />
+            <Route
+              path="/login"
+              element={
+                <LoggedInRoute>
+                  <LoginPage />
+                </LoggedInRoute>
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/job-detail/:vacancyId"
+              element={
+                <ProtectedRoute>
+                  <JobDetailPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/company/:companyId" element={<CompanyDetailPage />} />
-            <Route path="/browse-company" element={<BrowseCompanyPage />} />
-            <Route path="/browse-job" element={<BrowseJobPage />} />
+            <Route
+              path="/browse-company"
+              element={
+                <ProtectedRoute>
+                  <BrowseCompanyPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/browse-job"
+              element={
+                <ProtectedRoute>
+                  <BrowseJobPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/student-profile" element={<StudentProfilePage />} />
             <Route
               path="/student-profile/:studentId"
               element={<StudentProfilePage />}
             />
-            <Route path="/student/requests" element={<StudentRequestPage />} />
-
-            <Route path="/vacancy-applier" element={<VacancyApplierPage />} />
-
-            <Route path="/company/home" element={<CompanyHomePage />} />
-            <Route path="/company/vacancy" element={<CompanyVacancyPage />} />
-            <Route path="/company/new-vacancy" element={<NewVacancyPage />} />
+            <Route
+              path="/student/requests"
+              element={
+                <ProtectedRoute>
+                  <StudentRequestPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/vacancy-applier/:vacancyId"
+              element={
+                <CompanyRoute>
+                  <VacancyApplierPage />
+                </CompanyRoute>
+              }
+            />
+            <Route
+              path="/company/home"
+              element={
+                <CompanyRoute>
+                  <CompanyHomePage />
+                </CompanyRoute>
+              }
+            />
+            <Route
+              path="/company/vacancy"
+              element={
+                <CompanyRoute>
+                  <CompanyVacancyPage />
+                </CompanyRoute>
+              }
+            />
+            <Route
+              path="/company/new-vacancy"
+              element={
+                <CompanyRoute>
+                  <NewVacancyPage />
+                </CompanyRoute>
+              }
+            />
             <Route
               path="/company/browse-student"
-              element={<BrowseStudentPage />}
+              element={
+                <CompanyRoute>
+                  <BrowseStudentPage />
+                </CompanyRoute>
+              }
+            />
+            <Route
+              path="/company/requests"
+              element={
+                <CompanyRoute>
+                  <CompanyRequestPage />
+                </CompanyRoute>
+              }
             />
           </Route>
         </Routes>

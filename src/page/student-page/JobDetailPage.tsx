@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../layout/Layout";
 import Temp from "../../assets/logo_header.png";
 import { Button } from "@/components/ui/button";
@@ -19,26 +19,120 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useParams } from "react-router-dom";
+import { VacancyDetailResponse } from "../props/CompanyVacancyProps";
+import axios from "axios";
+import { useToast } from "@/components/hooks/use-toast";
+import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import { decrypt } from "../util/Utility.tsx";
+import { useNavigate } from "react-router-dom";
 
 function JobDetailPage() {
+  const nav = useNavigate();
+  const { vacancyId } = useParams();
+  const { toast } = useToast();
+  const [vacancy, setVacancy] = useState<VacancyDetailResponse>();
+  const [notes, setNotes] = useState("");
+
+  useEffect(() => {
+    async function getVacancyById() {
+      try {
+        const vacancyResponse = await axios.get(
+          import.meta.env.VITE_API +
+            "getJobVacancyById?jobVacancyId=" +
+            vacancyId
+        );
+
+        setVacancy(vacancyResponse.data);
+        console.log(vacancyResponse.data);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: "Inform admin immediately!",
+        });
+      }
+    }
+    getVacancyById();
+  }, []);
+
+  async function handleApply() {
+    try {
+      const body = {
+        jobApplyPK: {
+          jobVacancyId: vacancyId,
+          studentId: parseInt(decrypt(Cookies.get("id")) || "0"),
+        },
+        jobVacancy: {
+          id: vacancyId,
+        },
+        student: {
+          id: parseInt(decrypt(Cookies.get("id")) || "0"),
+        },
+        status: "Waiting",
+        notes: notes,
+      };
+
+      const response = await axios.post(
+        import.meta.env.VITE_API + "addJobApply",
+        body
+      );
+      toast({
+        variant: "default",
+        title: "Apply Success!",
+        description:
+          "You have applied to " +
+          vacancy?.jobVacancy.company.name +
+          " as a " +
+          vacancy?.jobVacancy.jobPosition +
+          ". Let's wait for the company approve your request",
+      });
+      nav("/student/requests");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: "Inform admin immediately!",
+      });
+    }
+  }
+
   return (
     <Layout>
       <div className="mt-6 pt-10 pb-20 mx-[20vw]">
         <div className="flex max-md:block">
           <div className="w-1/2 flex justify-center items-center rounded-md bg-[#F0F0F0] mr-12 ">
-            <img src={Temp} className="h-full transition hover:scale-110" />
+            <img
+              src={vacancy?.jobVacancy.company.logoUrl}
+              className="h-[200px] object-cover object-center transition hover:scale-110"
+            />
           </div>
           <div className="w-1/2 max-sm:w-full">
             <div>
-              <div className="text-[red] font-medium">00:00:00 Left</div>
-              <div className="font-bold text-[32px]">Software Engineer</div>
-              <div className="font-bold text-[24px]">PT Ford Jakarta</div>
+              <div className="text-[red] font-semibold">
+                {vacancy?.jobVacancy.endDateTime
+                  ? Math.ceil(
+                      (new Date(vacancy?.jobVacancy.endDateTime).getTime() -
+                        new Date().getTime()) /
+                        (1000 * 60 * 60 * 24)
+                    )
+                  : ""}{" "}
+                Days Left
+              </div>
+              <div className="font-bold text-[32px]">
+                {vacancy?.jobVacancy.jobPosition}
+              </div>
+              <div className="font-bold text-[24px]">
+                {vacancy?.jobVacancy.company.name}
+              </div>
             </div>
 
             <div className="mt-2 font-medium">
-              <div>Jakarta Barat</div>
-              <div>Full Time</div>
-              <div>Rp 5.000.000 - Rp 10.000.000</div>
+              <div>{vacancy?.jobVacancy.location}</div>
+              <div>{vacancy?.jobVacancy.jobType.jobTypeName}</div>
+              <div>{vacancy?.jobVacancy.workTimeType}</div>
+              <div>{vacancy?.jobVacancy.salaryRange}</div>
             </div>
 
             <div className="flex mt-4">
@@ -57,7 +151,10 @@ function JobDetailPage() {
                       <div className="my-6">
                         <div>Messages</div>
                         <div>
-                          <textarea className="w-full border-2 rounded-md p-2 mt-2"></textarea>
+                          <textarea
+                            onChange={(e) => setNotes(e.target.value)}
+                            className="w-full border-2 rounded-md p-2 mt-2"
+                          ></textarea>
                         </div>
 
                         <div className="text-[red] mt-2">
@@ -74,36 +171,27 @@ function JobDetailPage() {
 
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Apply Now</AlertDialogAction>
+                    <AlertDialogAction onClick={handleApply}>
+                      Apply Now
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
 
-              <Button className="transition hover:scale-105">
-                View Company
-              </Button>
+              <Link to={"/company/" + vacancy?.jobVacancy.company.id}>
+                <Button className="transition hover:scale-105">
+                  View Company
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
 
         <div className="mt-6">
-          <div>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloremque
-            debitis, optio repellat minus itaque recusandae veniam distinctio a
-            praesentium similique! Dolorum distinctio ea quibusdam magni
-            pariatur eos corporis numquam veritatis. Lorem ipsum dolor, sit amet
-            consectetur adipisicing elit. Doloremque debitis, optio repellat
-            minus itaque recusandae veniam distinctio a praesentium similique!
-            Dolorum distinctio ea quibusdam magni pariatur eos corporis numquam
-            veritatis. Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Doloremque debitis, optio repellat minus itaque recusandae veniam
-            distinctio a praesentium similique! Dolorum distinctio ea quibusdam
-            magni pariatur eos corporis numquam veritatis. Lorem ipsum dolor,
-            sit amet consectetur adipisicing elit. Doloremque debitis, optio
-            repellat minus itaque recusandae veniam distinctio a praesentium
-            similique! Dolorum distinctio ea quibusdam magni pariatur eos
-            corporis numquam veritatis.
+          <div className="text-[24px] font-medium mb-4 font-semibold">
+            Description
           </div>
+          <div>{vacancy?.jobVacancy.jobDescription}</div>
         </div>
 
         <div className="mt-10">
@@ -112,21 +200,13 @@ function JobDetailPage() {
           </div>
 
           <ul>
-            <li>
-              Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum
-              dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit
-              amet Lorem ipsum dolot sit amet
-            </li>
-            <li>
-              Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum
-              dolot sit amet
-            </li>
-            <li>Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet</li>
-            <li>Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet</li>
-            <li>
-              Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum
-              dolot sit amet
-            </li>
+            {vacancy?.jobResponsibilities.map((responsibility) => {
+              return (
+                <li className="my-2">
+                  - {responsibility.responsibilityDetail}
+                </li>
+              );
+            })}
           </ul>
         </div>
 
@@ -136,39 +216,32 @@ function JobDetailPage() {
           </div>
 
           <div>
-            <Accordion type="single" collapsible className="text-lg">
-              <AccordionItem value="item-1">
-                <AccordionTrigger>HTML</AccordionTrigger>
-                <AccordionContent className="text-md">
-                  Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem
-                  ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum
-                  dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot
-                  sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-2">
-                <AccordionTrigger>CSS</AccordionTrigger>
-                <AccordionContent className="text-md">
-                  Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem
-                  ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum
-                  dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot
-                  sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-3">
-                <AccordionTrigger>Javascript</AccordionTrigger>
-                <AccordionContent className="text-md">
-                  Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem
-                  ipsum dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum
-                  dolot sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot
-                  sit amet Lorem ipsum dolot sit amet Lorem ipsum dolot sit amet
-                </AccordionContent>
-              </AccordionItem>
+            <Accordion type="multiple" className="text-lg">
+              {vacancy?.skills.map((s, idx) => {
+                return (
+                  <AccordionItem value={idx.toString()}>
+                    <AccordionTrigger>{s.skill.skillName}</AccordionTrigger>
+                    <AccordionContent className="text-[15px]">
+                      {s.skillDetail}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
             </Accordion>
           </div>
         </div>
+
+        {vacancy?.extrasInfo.map((extras) => {
+          return (
+            <div className="mt-10">
+              <div className="text-[24px] font-medium mb-4 font-semibold">
+                {extras.extrasTitle}
+              </div>
+
+              <div>{extras.extrasDescription}</div>
+            </div>
+          );
+        })}
       </div>
     </Layout>
   );

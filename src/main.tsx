@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import "../src/index.css";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
+import { AuthProvider } from "./page/context/AuthContext";
 
 const msalConfig = {
   auth: {
@@ -24,8 +25,10 @@ const msalInstance = new PublicClientApplication(msalConfig);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <MsalProvider instance={msalInstance}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <AuthProvider>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </AuthProvider>
   </MsalProvider>
 );

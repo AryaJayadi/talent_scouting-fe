@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../layout/Layout";
-import JobCard2 from "../component/JobCard2";
+import CompanyVacancy2 from "../component/CompanyVacancy2";
 import Temp from "../../assets/logo_header.png";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { CompanyCardProps } from "../props/CompanyCardProps";
+import Spinner from "../component/Spinner";
+import { useToast } from "@/components/hooks/use-toast";
+import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps";
 
 function CompanyDetailPage() {
   const { companyId } = useParams();
+  const [loading, setLoading] = useState(false);
   const [company, setCompany] = useState<CompanyCardProps>();
+  const [vacancies, setVacancies] = useState<
+    CompanyVacancyWithApplyCountProps[]
+  >([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     async function getCompanyById() {
@@ -17,9 +25,36 @@ function CompanyDetailPage() {
           import.meta.env.VITE_API + "company/get?id=" + companyId
         );
         setCompany(response.data);
-      } catch (error) {}
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Failed to get company data",
+          description: "Inform admin immediately!",
+        });
+      }
     }
 
+    async function getVacancyByCompanyId() {
+      setLoading(true);
+      try {
+        const body = {
+          id: companyId,
+        };
+        const response = await axios.post(
+          import.meta.env.VITE_API + "getJobVacanciesByCompanyId",
+          body
+        );
+        setVacancies(response.data);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Failed to get company vacancy data",
+          description: "Inform admin immediately!",
+        });
+      }
+      setLoading(false);
+    }
+    getVacancyByCompanyId();
     getCompanyById();
   }, []);
 
@@ -36,7 +71,7 @@ function CompanyDetailPage() {
         <div className="mt-6 py-6 px-16 rounded-xl shadow-md">
           <div>
             <div className="text-[28px] font-bold">{company?.name}</div>
-            <div className="">{company?.location}</div>
+            <div className="text-gray-600">{company?.location}</div>
           </div>
 
           <div className="mt-4">
@@ -65,24 +100,22 @@ function CompanyDetailPage() {
           </div>
 
           <div className="mt-6">
-            <JobCard2
-              StopTime={new Date()}
-              Title={"Front End Developer"}
-              Description={"Lorem"}
-              ApplierCount={5}
-            />
-            <JobCard2
-              StopTime={new Date()}
-              Title={"Front End Developer"}
-              Description={"Lorem"}
-              ApplierCount={5}
-            />
-            <JobCard2
-              StopTime={new Date()}
-              Title={"Front End Developer"}
-              Description={"Lorem"}
-              ApplierCount={5}
-            />
+            {loading ? (
+              <Spinner />
+            ) : vacancies.length < 1 ? (
+              <div className="text-center text-red-600">
+                There is no vacancy in this company
+              </div>
+            ) : (
+              vacancies.map((vacancy) => {
+                return (
+                  <CompanyVacancy2
+                    jobApplyCount={vacancy.jobApplyCount}
+                    jobVacancy={vacancy.jobVacancy}
+                  />
+                );
+              })
+            )}
           </div>
         </div>
       </div>

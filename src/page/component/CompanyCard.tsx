@@ -74,9 +74,9 @@ const JobCard: React.FC<CompanyCardProps> = ({
 
         <div className="flex justify-between mt-4">
           <div className="text-[#0E6700] text-center items-center flex">
-            <div className="text-[1vw] bg-[#b2ffb2] px-3 py-1 rounded-lg">
+            {/* <div className="text-[16px] bg-[#b2ffb2] px-3 py-1 rounded-lg">
               {VacancyCount?.toString()} Jobs Available
-            </div>
+            </div> */}
           </div>
           <Link to={"/company/" + id}>
             <Button className="transition hover:scale-105">View Company</Button>

@@ -4,7 +4,10 @@ import LogoBinus from "../assets/logo_binus.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMsal } from "@azure/msal-react";
+import axios from "axios";
+import { encrypt } from "./util/Utility";
 import Cookies from "js-cookie";
+import { useAuth } from "./context/AuthContext";
 
 function LoginPage() {
   const nav = useNavigate();
@@ -12,14 +15,34 @@ function LoginPage() {
   const [password, setPassword] = useState<string>("");
   const [companyLogin, setCompanyLogin] = useState(false);
   const { instance, inProgress, accounts } = useMsal();
+  const { login } = useAuth();
 
   async function handleLogin() {
-    Cookies.set("name", username, { expires: 1 / 24 });
-    Cookies.set("email", "", { expires: 1 / 24 });
-    Cookies.set("is_microsoft", "false", { expires: 1 / 24 });
-    if (username === "company" && password === "company") {
-      nav("/company/home");
-    }
+    try {
+      const body = {
+        email: username,
+        password: password,
+      };
+
+      const response = await axios.post(
+        import.meta.env.VITE_API + "company/loginCompany",
+        body
+      );
+      console.log(response.data);
+
+      if (response.data != "") {
+        Cookies.set("name", encrypt(response.data.name), { expires: 1 / 24 });
+        Cookies.set("email", encrypt(response.data.email), { expires: 1 / 24 });
+        Cookies.set("is_microsoft", encrypt("false"), { expires: 1 / 24 });
+        Cookies.set("id", encrypt(response.data.id.toString()), {
+          expires: 1 / 24,
+        });
+        login();
+        nav("/company/home");
+      } else {
+        console.log(response);
+      }
+    } catch (error) {}
   }
 
   //   useEffect(() => {
@@ -39,12 +62,35 @@ function LoginPage() {
           });
 
           if (accounts[0].username.endsWith("@binus.ac.id")) {
-            Cookies.set("token", response.idToken, { expires: 1 / 24 });
+            Cookies.set("token", encrypt(response.idToken), {
+              expires: 1 / 24,
+            });
             if (accounts[0].name) {
-              Cookies.set("name", accounts[0].name, { expires: 1 / 24 });
+              Cookies.set("name", encrypt(accounts[0].name), {
+                expires: 1 / 24,
+              });
             }
-            Cookies.set("email", accounts[0].username, { expires: 1 / 24 });
-            Cookies.set("is_microsoft", "true", { expires: 1 / 24 });
+            Cookies.set("email", encrypt(accounts[0].username), {
+              expires: 1 / 24,
+            });
+            Cookies.set("is_microsoft", encrypt("true"), { expires: 1 / 24 });
+            const student = await axios.get(
+              import.meta.env.VITE_API +
+                "getStudentByEmail?email=" +
+                accounts[0].username
+            );
+
+            // Cookies.set("student", student.data, { expires: 1 / 24 });
+            Cookies.set("id", encrypt(student.data.id.toString()), {
+              expires: 1 / 24,
+            });
+            Cookies.set("gpa", encrypt(student.data.gpa.toString()), {
+              expires: 1 / 24,
+            });
+            Cookies.set("nim", encrypt(student.data.nim.toString()), {
+              expires: 1 / 24,
+            });
+            login();
             nav("/home");
           }
         } catch (error) {

@@ -12,11 +12,14 @@ import { useMsal } from "@azure/msal-react";
 import { capitalizeName } from "../util/Utility.tsx";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { decrypt } from "../util/Utility.tsx";
+import { useAuth } from "../context/AuthContext.tsx";
 
 function ProfileHeader() {
-  const [name, setName] = useState(Cookies.get("name"));
+  const [name, setName] = useState(decrypt(Cookies.get("name")));
   const { instance, accounts } = useMsal();
   const nav = useNavigate();
+  const { logout } = useAuth();
 
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -34,7 +37,16 @@ function ProfileHeader() {
   }, []);
 
   const handleLogout = async () => {
-    if (Cookies.get("is_microsoft") == "true") {
+    if (decrypt(Cookies.get("is_microsoft")) == "true") {
+      Cookies.remove("name");
+      Cookies.remove("email");
+      Cookies.remove("token");
+      Cookies.remove("is_microsoft");
+      Cookies.remove("student");
+      Cookies.remove("id");
+      Cookies.remove("nim");
+      Cookies.remove("gpa");
+      logout();
       await instance.logoutRedirect({
         account: accounts[0],
         postLogoutRedirectUri: import.meta.env.VITE_REDIRECT_URI,
@@ -44,6 +56,7 @@ function ProfileHeader() {
     Cookies.remove("email");
     Cookies.remove("token");
     Cookies.remove("is_microsoft");
+    logout();
 
     nav("/login");
   };
@@ -100,7 +113,14 @@ function ProfileHeader() {
         <DropdownMenuContent>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link to="/student-profile">Profile</Link>
+            <Link
+              to={
+                "/student-profile/" +
+                parseInt(decrypt(Cookies.get("id")) || "0")
+              }
+            >
+              Profile
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <div className="text-[red] font-semibold" onClick={handleLogout}>
