@@ -25,24 +25,30 @@ function LoginPage() {
       };
 
       const response = await axios.post(
-        import.meta.env.VITE_API + "company/loginCompany",
+        import.meta.env.VITE_API + "user/login",
         body
       );
       console.log(response.data);
 
-      if (response.data != "") {
+      if (response) {
         Cookies.set("name", encrypt(response.data.name), { expires: 1 / 24 });
         Cookies.set("email", encrypt(response.data.email), { expires: 1 / 24 });
         Cookies.set("is_microsoft", encrypt("false"), { expires: 1 / 24 });
-        Cookies.set("id", encrypt(response.data.id.toString()), {
-          expires: 1 / 24,
-        });
+        // Cookies.set("id", encrypt(response.data.id.toString()), {
+        //   expires: 1 / 24,
+        // });
+        Cookies.set("token", response.data.accessToken);
+        console.log("asdasd");
+        
         login();
         nav("/company/home");
       } else {
         console.log(response);
       }
-    } catch (error) {}
+    } catch (error: any) {
+
+      console.log(error.message);
+    }
   }
 
   //   useEffect(() => {
@@ -127,7 +133,7 @@ function LoginPage() {
                 <Input
                   className="my-[10px]"
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Username"
+                  placeholder="Email"
                 />
                 <Input
                   className="my-[10px]"

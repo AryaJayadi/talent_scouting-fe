@@ -23,7 +23,7 @@ const CompanyRoute: React.FC<CompanyRouteProps> = ({ children }) => {
           account: accounts[0],
           postLogoutRedirectUri: import.meta.env.VITE_REDIRECT_URI,
         });
-        return <Navigate to="/login" />;
+        return <Navigate to="/" />;
       } else {
         if (decrypt(getRole()) == "true") {
           return <Navigate to="/home" />;
@@ -34,7 +34,7 @@ const CompanyRoute: React.FC<CompanyRouteProps> = ({ children }) => {
     checkAuth();
   }, [getToken, logout]);
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return isAuthenticated ? children : <Navigate to="/" />;
 };
 
 export default CompanyRoute;

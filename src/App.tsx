@@ -24,7 +24,7 @@ function App() {
         <Routes>
           <Route>
             <Route
-              path="/login"
+              path="/"
               element={
                 <LoggedInRoute>
                   <LoginPage />
