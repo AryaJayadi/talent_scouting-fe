@@ -1,3 +1,4 @@
+import { JobVacancy } from '../student-page/HomePage';
 import { CompanyCardProps } from './CompanyCardProps';
 
 export interface CompanyVacancyProps {
@@ -15,20 +16,71 @@ export interface JobTypeProps {
 }
 
 export interface VacancyResponse {
-    company: CompanyCardProps;
-    endDateTime: Date;
-    id: number;
-    jobDescription: string;
-    jobPosition: string;
-    jobType: JobTypeProps;
-    location: string;
-    salaryRange: string;
-    timeStamp: Date;
-    workTimeType: string
+    Id: string,
+    CompanyId: string,
+    Company: {
+        Id: string,
+        UserId: string,
+        Name: string,
+        logourl: string,
+        Description: string,
+        Location: string,
+        CreatedAt: Date,
+        UpdatedAt: Date,
+        DeletedAt: Date,
+        // User: {
+        //     "Id": "00000000-0000-0000-0000-000000000000",
+        //     "Email": "",
+        //     "Password": "",
+        //     "Role": "",
+        //     "CreatedAt": "0001-01-01T00:00:00Z",
+        //     "UpdatedAt": "0001-01-01T00:00:00Z",
+        //     "DeletedAt": null
+        // }
+    },
+    JobTypeId: number,
+    JobType: {
+        Id: number,
+        JobTypeName: string,
+        CreatedAt: Date
+    },
+    TimeStamp: Date,
+    JobPosition: string,
+    EndDateTime: Date,
+    JobDescription: string,
+    Location: string,
+    SalaryRange: string,
+    WorkTimeType: string,
+    JobVacancySkills: {
+            JobVacancyId: string,
+            SkillId: number,
+            Skill: {
+                Id: number,
+                SkillName: string,
+                CreatedAt: Date
+            },
+            SkillDetail: string
+        }[],
+    JobVacancyResponsibilities: {
+            Id: 1,
+            JobVacancyId: string,
+            ResponsibilityDetail: string
+    }[],
+    ExtrasInfos: {
+            Id: number,
+            ExtrasTitle: string,
+            ExtrasDescription: string,
+            JobVacancyId: string
+    }[]
 }
 
 export interface CompanyVacancyWithApplyCountProps {
     jobVacancy: VacancyResponse;
+    jobApplyCount: number;
+}
+
+export interface VacancyProps {
+    jobVacancy: JobVacancy;
     jobApplyCount: number;
 }
 
@@ -39,6 +91,7 @@ export interface VacancyDetailResponse {
     jobResponsibilities: Responsibility[];
     extrasInfo: ExtrasInfo[]
 }
+
 
 export interface ExtrasInfo {
     id: number;

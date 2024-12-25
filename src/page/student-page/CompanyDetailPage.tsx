@@ -7,14 +7,24 @@ import axios from "axios";
 import { CompanyCardProps } from "../props/CompanyCardProps";
 import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
-import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps";
+import { CompanyVacancyWithApplyCountProps, VacancyResponse } from "../props/CompanyVacancyProps";
+
+export interface Company {
+  id: string;
+  name: string;
+  logourl: string;
+  description: string;
+  location: string;
+  email: string;
+}
+
 
 function CompanyDetailPage() {
   const { companyId } = useParams();
   const [loading, setLoading] = useState(false);
-  const [company, setCompany] = useState<CompanyCardProps>();
+  const [company, setCompany] = useState<Company>();
   const [vacancies, setVacancies] = useState<
-    CompanyVacancyWithApplyCountProps[]
+    VacancyResponse[]
   >([]);
   const { toast } = useToast();
 
@@ -22,8 +32,10 @@ function CompanyDetailPage() {
     async function getCompanyById() {
       try {
         const response = await axios.get(
-          import.meta.env.VITE_API + "company/get?id=" + companyId
+          import.meta.env.VITE_API + "company/" + companyId
         );
+        console.log(response);
+        
         setCompany(response.data);
       } catch (error) {
         toast({
@@ -37,12 +49,8 @@ function CompanyDetailPage() {
     async function getVacancyByCompanyId() {
       setLoading(true);
       try {
-        const body = {
-          id: companyId,
-        };
-        const response = await axios.post(
-          import.meta.env.VITE_API + "getJobVacanciesByCompanyId",
-          body
+        const response = await axios.get(
+          import.meta.env.VITE_API + "jobVacancy/getByCompanyId/" + companyId
         );
         setVacancies(response.data);
       } catch (error) {
@@ -63,7 +71,7 @@ function CompanyDetailPage() {
       <div className="w-full px-20 py-10">
         <div className="flex justify-center rounded-xl bg-[#F0F0F0] shadow-md">
           <img
-            src={company?.logoUrl}
+            src={company?.logourl}
             className="h-[400px] transition hover:scale-110"
           />
         </div>
@@ -110,8 +118,9 @@ function CompanyDetailPage() {
               vacancies.map((vacancy) => {
                 return (
                   <CompanyVacancy2
-                    jobApplyCount={vacancy.jobApplyCount}
-                    jobVacancy={vacancy.jobVacancy}
+                    // jobApplyCount={vacancy.jobApplyCount}
+                    jobApplyCount={10}
+                    jobVacancy={vacancy}
                   />
                 );
               })

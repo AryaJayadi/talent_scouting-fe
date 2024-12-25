@@ -3,7 +3,7 @@ import { StudentRequestProps } from "../props/RequestProps.ts";
 
 const AppliedRequest = forwardRef<HTMLDivElement, StudentRequestProps>(
   (
-    { jobVacancy, jobApplyPK, notes, status, student, companyNote, ...props },
+    { jobVacancy, notes, status, companyNote, ...props },
     ref
   ) => {
     return (
@@ -16,7 +16,7 @@ const AppliedRequest = forwardRef<HTMLDivElement, StudentRequestProps>(
           <div className="h-[100px] w-[200px] flex items-center justify-center">
             <img
               className="h-full object-cover object-center"
-              src={jobVacancy.company.logoUrl}
+              src={jobVacancy.company.logourl}
             />
           </div>
           <div className="ml-6">

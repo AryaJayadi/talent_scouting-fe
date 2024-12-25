@@ -16,6 +16,7 @@ import BrowseStudentPage from "./page/company-page/BrowseStudentPage";
 import LoggedInRoute from "./page/context/LoggedInRoute";
 import ProtectedRoute from "./page/context/ProtectedRoute";
 import CompanyRoute from "./page/context/CompanyRoute";
+import CompanyStudentProfilePage from "./page/company-page/StudentProfilePage";
 
 function App() {
   return (
@@ -23,6 +24,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route>
+            <Route
+              path="/login"
+              element={
+                <LoggedInRoute>
+                  <LoginPage />
+                </LoggedInRoute>
+              }
+            />
             <Route
               path="/"
               element={
@@ -68,6 +77,10 @@ function App() {
             <Route
               path="/student-profile/:studentId"
               element={<StudentProfilePage />}
+            />
+            <Route
+              path="/company/student-profile/:studentId"
+              element={<CompanyStudentProfilePage />}
             />
             <Route
               path="/student/requests"

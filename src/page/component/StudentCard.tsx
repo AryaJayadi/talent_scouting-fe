@@ -2,8 +2,9 @@ import React from "react";
 import { StudentCardProps } from "../props/StudentCardProps";
 import Temp from "./../../assets/logo_binus.png";
 import { Link } from "react-router-dom";
+import { Student } from "../company-page/BrowseStudentPage";
 
-const StudentCard: React.FC<StudentCardProps> = ({
+const StudentCard: React.FC<Student> = ({
   id,
   nim,
   name,
@@ -20,7 +21,7 @@ const StudentCard: React.FC<StudentCardProps> = ({
 }) => {
   return (
     <Link
-      to={"/student-profile/" + id}
+      to={"/company/student-profile/" + id}
       className="border-2 rounded-md py-6 px-4 w-[15vw] h-auto "
     >
       <div className="flex justify-center mb-2">

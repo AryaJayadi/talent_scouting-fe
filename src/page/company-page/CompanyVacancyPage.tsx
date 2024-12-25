@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import "aos/dist/aos.css";
 import AOS from "aos";
-import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps";
+import { CompanyVacancyWithApplyCountProps, VacancyResponse } from "../props/CompanyVacancyProps";
 import axios from "axios";
 import { decrypt } from "../util/Utility";
 import Cookies from "js-cookie";
@@ -13,7 +13,7 @@ import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
 
 function CompanyVacancyPage() {
-  const [vacancy, setVacancy] = useState<CompanyVacancyWithApplyCountProps[]>(
+  const [vacancy, setVacancy] = useState<VacancyResponse[]>(
     []
   );
   const [loading, setLoading] = useState(false);
@@ -27,10 +27,15 @@ function CompanyVacancyPage() {
         const body = {
           id: decrypt(Cookies.get("id")),
         };
-
-        const vacancies = await axios.post(
-          import.meta.env.VITE_API + "getJobVacanciesByCompanyId",
-          body
+        console.log(decrypt(Cookies.get("token")));
+        
+        const vacancies = await axios.get(
+          import.meta.env.VITE_API + "jobVacancy/getByCompanyId/" + decrypt(Cookies.get("id")),
+          {
+            headers: {
+              Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+            }
+          }
         );
         setVacancy(vacancies.data);
       } catch (e) {
@@ -69,8 +74,8 @@ function CompanyVacancyPage() {
 
               return (
                 <JobCard2
-                  jobVacancy={v.jobVacancy}
-                  jobApplyCount={v.jobApplyCount}
+                  jobVacancy={v}
+                  jobApplyCount={5}
                 />
               );
             })

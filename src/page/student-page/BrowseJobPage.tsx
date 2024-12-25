@@ -19,12 +19,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import axios from "axios";
 import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
+import { JobVacancy } from "./HomePage";
 
 function BrowseJobPage() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [vacancies, setVacancies] = useState<
-    CompanyVacancyWithApplyCountProps[]
+    JobVacancy[]
   >([]);
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("");
@@ -40,15 +41,15 @@ function BrowseJobPage() {
       setLoading(true);
       try {
         const body = {
-          location: location,
+          Location: location,
           workTimeType: workTimeType,
-          jobTypeId: jobType,
-          searchKeyword: search,
+          JobTypeId: jobType,
+          SearchKeyword: search,
         };
         console.log(body);
 
         const response = await axios.post(
-          import.meta.env.VITE_API + "getJobVacancyWithFilter",
+          import.meta.env.VITE_API + "jobVacancy/getJobVacancyByFilter",
           body
         );
         console.log(response.data);
@@ -182,14 +183,14 @@ function BrowseJobPage() {
                 <div className="flex justify-center">
                   <Spinner />
                 </div>
-              ) : vacancies.length < 1 ? (
+              ) : vacancies === null ? (
                 <div className="text-center">There is no vacancy</div>
               ) : (
-                vacancies.map((vacancy) => {
+                vacancies.map((vacancy: JobVacancy) => {
                   return (
                     <CompanyVacancy
-                      jobVacancy={vacancy.jobVacancy}
-                      jobApplyCount={vacancy.jobApplyCount}
+                      jobVacancy={vacancy}
+                      jobApplyCount={20}
                     />
                   );
                 })

@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const JobCard: React.FC<CompanyCardProps> = ({
-  id,
-  name,
-  logoUrl,
-  location,
-  description,
+  Id,
+  Name,
+  LogoUrl,
+  Location,
+  Description,
   VacancyCount,
 }) => {
   const truncateMultilineStyle = {
@@ -26,7 +26,7 @@ const JobCard: React.FC<CompanyCardProps> = ({
           <div className="flex justify-between items-center h-[12vh]">
             <div className="flex items-center">
               <div className="mr-6">
-                <img src={logoUrl} className="w-[80px]" />
+                <img src={LogoUrl} className="w-[80px]" />
               </div>
 
               <div>
@@ -40,13 +40,13 @@ const JobCard: React.FC<CompanyCardProps> = ({
                     WebkitLineClamp: 1,
                   }}
                 >
-                  {name}
+                  {Name}
                 </div>
                 <div
                   className="text-[#838383]"
                   style={{ overflow: "hidden", textOverflow: "ellipsis" }}
                 >
-                  {location}
+                  {Location}
                 </div>
               </div>
             </div>
@@ -67,7 +67,7 @@ const JobCard: React.FC<CompanyCardProps> = ({
               textOverflow: "ellipsis",
             }}
           >
-            {description}
+            {Description}
           </div>
         </div>
         {/* <div className='bg-[#b2ffb2] text-[#0E6700] w-[150px] text-center rounded-xl'>{VacancyCount.toString()} Jobs Available</div> */}
@@ -78,7 +78,7 @@ const JobCard: React.FC<CompanyCardProps> = ({
               {VacancyCount?.toString()} Jobs Available
             </div> */}
           </div>
-          <Link to={"/company/" + id}>
+          <Link to={"/company/" + Id}>
             <Button className="transition hover:scale-105">View Company</Button>
           </Link>
         </div>

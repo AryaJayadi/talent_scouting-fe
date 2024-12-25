@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import Temp from "./../../assets/logo_binus.png";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps";
+import { CompanyVacancyWithApplyCountProps, VacancyProps } from "../props/CompanyVacancyProps";
 
-const CompanyVacancy: React.FC<CompanyVacancyWithApplyCountProps> = ({
+const CompanyVacancy: React.FC<VacancyProps> = ({
   jobVacancy,
   jobApplyCount,
 }) => {
@@ -25,12 +25,12 @@ const CompanyVacancy: React.FC<CompanyVacancyWithApplyCountProps> = ({
               <div className="text-[24px] font-semibold">
                 {jobVacancy.jobPosition}
               </div>
-              <div className="text-[16px]">at {jobVacancy.company.name}</div>
+              {/* <div className="text-[16px]">at {jobVacancy.company.name}</div> */}
               <div className="text-[16px]">{jobVacancy.salaryRange}</div>
             </div>
 
             <div>
-              <img src={jobVacancy.company.logoUrl} className="h-[55px]" />
+              {/* <img src={jobVacancy.company.logoUrl} className="h-[55px]" /> */}
             </div>
           </div>
           <div
@@ -52,7 +52,7 @@ const CompanyVacancy: React.FC<CompanyVacancyWithApplyCountProps> = ({
 
         <div className="ml-8">
           <div>
-            <Link to={"/company/" + jobVacancy.company.id}>
+            <Link to={"/company/" + jobVacancy.companyId}>
               <Button className="transition w-[120px] hover:scale-105">
                 View Company
               </Button>

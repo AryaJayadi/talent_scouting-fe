@@ -20,23 +20,35 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Link } from "react-router-dom";
+import Aos from "aos";
+import { JobVacancy } from "./HomePage.tsx";
+
+export interface Application {
+  jobVacancyId: string;
+  studentId: string;
+  status: string;
+  notes: string;
+  companyNote: string;
+  createdAt: string; // ISO 8601 formatted date
+  updatedAt: string; // ISO 8601 formatted date
+  job_vacancy: JobVacancy;
+}
+
 
 function StudentRequestPage() {
   const [active, setActive] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [requests, setRequests] = useState<StudentRequestProps[]>([]);
+  const [requests, setRequests] = useState<Application[]>([]);
   const { toast } = useToast();
   useEffect(() => {
     async function getRequestByStudentId() {
       setLoading(true);
       try {
-        const body = {
-          id: decrypt(Cookies.get("id")),
-        };
-        const response = await axios.post(
-          import.meta.env.VITE_API + "getJobApplyByStudentId",
-          body
+        const response = await axios.get(
+          import.meta.env.VITE_API + "jobApply/byStudentId/" + decrypt(Cookies.get("id"))
         );
+        console.log(response.data);
+        
         setRequests(response.data);
       } catch (error) {
         toast({
@@ -48,10 +60,11 @@ function StudentRequestPage() {
       setLoading(false);
     }
     getRequestByStudentId();
+    Aos.init({ duration: 500 });
   }, []);
   return (
     <Layout>
-      <div className="mt-10 mx-[10vw]">
+      <div data-aos="fade-up" data-aos-once="true" className="mt-10 mx-[10vw]">
         <div className="flex gap-10 border-b-[1px] border-black">
           <div
             style={active ? {} : { backgroundColor: "black", color: "white" }}
@@ -82,8 +95,8 @@ function StudentRequestPage() {
                 <div className="flex justify-center">
                   <Spinner />
                 </div>
-              ) : requests.length < 1 ? (
-                <div className="text-center text-red-600">
+              ) : requests === null ? (
+                <div className="text-center text-red-600 mt-10">
                   You have no request
                 </div>
               ) : (
@@ -94,20 +107,19 @@ function StudentRequestPage() {
                     <AlertDialog key={idx}>
                       <AlertDialogTrigger asChild>
                         <AppliedRequest
-                          jobVacancy={req.jobVacancy}
+                          jobVacancy={req.job_vacancy}
                           notes={req.notes}
                           status={req.status}
-                          student={req.student}
-                          jobApplyPK={req.jobApplyPK}
+                          // student={req.student}
                           companyNote={req.companyNote}
                         />
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle className="text-center">
+                          {/* <AlertDialogTitle className="text-center">
                             Request {req.jobVacancy.jobPosition} at{" "}
                             {req.jobVacancy.company.name}
-                          </AlertDialogTitle>
+                          </AlertDialogTitle> */}
                           <AlertDialogDescription>
                             <div className="my-6 text-[black]">
                               <div className="mb-4">
@@ -132,20 +144,19 @@ function StudentRequestPage() {
                               <div className="mt-6 font-semibold">
                                 Company Notes:{" "}
                               </div>
-                              <div className="mt-2">
+                              
                                 {req.status === "Waiting"
-                                  ? "Wait for company"
+                                  ? <div className="mt-2 text-red-400">Wait for company</div>
                                   : req.companyNote === ""
-                                  ? "There is no notes from company"
-                                  : req.companyNote}
-                              </div>
+                                  ? <div className="mt-2">There is no notes from company</div>
+                                  : <div className="mt-2">{req.companyNote}</div>}
                             </div>
                           </AlertDialogDescription>
                         </AlertDialogHeader>
 
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <Link to={"/job-detail/" + req.jobVacancy.id}>
+                          <Link to={"/job-detail/" + req.jobVacancyId}>
                             <AlertDialogAction>
                               See Job Detail
                             </AlertDialogAction>

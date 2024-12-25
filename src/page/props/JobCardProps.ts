@@ -2,6 +2,6 @@
 export interface JobCardProps {
     JobName: String;
     CompanyName: String;
-    Id: number
+    Id: string
     Image: string;
 }

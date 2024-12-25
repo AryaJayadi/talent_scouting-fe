@@ -1,8 +1,8 @@
 export interface CompanyCardProps {
-    id: Number;
-    name: String;
-    logoUrl: string;
-    location: String;
-    description: String;
+    Id: string;
+    Name: string;
+    LogoUrl: string;
+    Location: string;
+    Description: string;
     VacancyCount?: Number;
 }

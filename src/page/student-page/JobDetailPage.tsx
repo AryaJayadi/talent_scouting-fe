@@ -27,12 +27,13 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { decrypt } from "../util/Utility.tsx";
 import { useNavigate } from "react-router-dom";
+import { JobVacancy } from "./HomePage.tsx";
 
 function JobDetailPage() {
   const nav = useNavigate();
   const { vacancyId } = useParams();
   const { toast } = useToast();
-  const [vacancy, setVacancy] = useState<VacancyDetailResponse>();
+  const [vacancy, setVacancy] = useState<JobVacancy>();
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
@@ -40,12 +41,12 @@ function JobDetailPage() {
       try {
         const vacancyResponse = await axios.get(
           import.meta.env.VITE_API +
-            "getJobVacancyById?jobVacancyId=" +
+            "jobVacancy/" +
             vacancyId
         );
 
-        setVacancy(vacancyResponse.data);
         console.log(vacancyResponse.data);
+        setVacancy(vacancyResponse.data);
       } catch (error) {
         toast({
           variant: "destructive",
@@ -60,22 +61,14 @@ function JobDetailPage() {
   async function handleApply() {
     try {
       const body = {
-        jobApplyPK: {
-          jobVacancyId: vacancyId,
-          studentId: parseInt(decrypt(Cookies.get("id")) || "0"),
-        },
-        jobVacancy: {
-          id: vacancyId,
-        },
-        student: {
-          id: parseInt(decrypt(Cookies.get("id")) || "0"),
-        },
+        JobVacancyId: vacancyId,
+        StudentID: decrypt(Cookies.get("id")),
         status: "Waiting",
         notes: notes,
       };
 
       const response = await axios.post(
-        import.meta.env.VITE_API + "addJobApply",
+        import.meta.env.VITE_API + "jobApply/",
         body
       );
       toast({
@@ -83,9 +76,9 @@ function JobDetailPage() {
         title: "Apply Success!",
         description:
           "You have applied to " +
-          vacancy?.jobVacancy.company.name +
+          vacancy?.company.name +
           " as a " +
-          vacancy?.jobVacancy.jobPosition +
+          vacancy?.jobPosition +
           ". Let's wait for the company approve your request",
       });
       nav("/student/requests");
@@ -103,17 +96,17 @@ function JobDetailPage() {
       <div className="mt-6 pt-10 pb-20 mx-[20vw]">
         <div className="flex max-md:block">
           <div className="w-1/2 flex justify-center items-center rounded-md bg-[#F0F0F0] mr-12 ">
-            <img
+            {/* <img
               src={vacancy?.jobVacancy.company.logoUrl}
               className="h-[200px] object-cover object-center transition hover:scale-110"
-            />
+            /> */}
           </div>
           <div className="w-1/2 max-sm:w-full">
             <div>
               <div className="text-[red] font-semibold">
-                {vacancy?.jobVacancy.endDateTime
+                {vacancy?.endDateTime
                   ? Math.ceil(
-                      (new Date(vacancy?.jobVacancy.endDateTime).getTime() -
+                      (new Date(vacancy?.endDateTime).getTime() -
                         new Date().getTime()) /
                         (1000 * 60 * 60 * 24)
                     )
@@ -121,18 +114,18 @@ function JobDetailPage() {
                 Days Left
               </div>
               <div className="font-bold text-[32px]">
-                {vacancy?.jobVacancy.jobPosition}
+                {vacancy?.jobPosition}
               </div>
               <div className="font-bold text-[24px]">
-                {vacancy?.jobVacancy.company.name}
+                {/* {vacancy?.jobVacancy.company.name} */}
               </div>
             </div>
 
             <div className="mt-2 font-medium">
-              <div>{vacancy?.jobVacancy.location}</div>
-              <div>{vacancy?.jobVacancy.jobType.jobTypeName}</div>
-              <div>{vacancy?.jobVacancy.workTimeType}</div>
-              <div>{vacancy?.jobVacancy.salaryRange}</div>
+              <div>{vacancy?.location}</div>
+              <div>{vacancy?.jobType.JobTypeName}</div>
+              <div>{vacancy?.workTimeType}</div>
+              <div>{vacancy?.salaryRange}</div>
             </div>
 
             <div className="flex mt-4">
@@ -178,7 +171,7 @@ function JobDetailPage() {
                 </AlertDialogContent>
               </AlertDialog>
 
-              <Link to={"/company/" + vacancy?.jobVacancy.company.id}>
+              <Link to={"/company/" + vacancy?.companyId}>
                 <Button className="transition hover:scale-105">
                   View Company
                 </Button>
@@ -191,7 +184,7 @@ function JobDetailPage() {
           <div className="text-[24px] font-medium mb-4 font-semibold">
             Description
           </div>
-          <div>{vacancy?.jobVacancy.jobDescription}</div>
+          <div>{vacancy?.jobDescription}</div>
         </div>
 
         <div className="mt-10">
@@ -200,10 +193,10 @@ function JobDetailPage() {
           </div>
 
           <ul>
-            {vacancy?.jobResponsibilities.map((responsibility) => {
+            {vacancy?.jobVacancyResponsibilities.map((responsibility) => {
               return (
                 <li className="my-2">
-                  - {responsibility.responsibilityDetail}
+                  - {responsibility.ResponsibilityDetail}
                 </li>
               );
             })}
@@ -217,12 +210,12 @@ function JobDetailPage() {
 
           <div>
             <Accordion type="multiple" className="text-lg">
-              {vacancy?.skills.map((s, idx) => {
+              {vacancy?.jobVacancySkills.map((s, idx) => {
                 return (
                   <AccordionItem value={idx.toString()}>
-                    <AccordionTrigger>{s.skill.skillName}</AccordionTrigger>
+                    <AccordionTrigger>{s.Skill.SkillName}</AccordionTrigger>
                     <AccordionContent className="text-[15px]">
-                      {s.skillDetail}
+                      {s.SkillDetail}
                     </AccordionContent>
                   </AccordionItem>
                 );
@@ -231,17 +224,23 @@ function JobDetailPage() {
           </div>
         </div>
 
-        {vacancy?.extrasInfo.map((extras) => {
-          return (
-            <div className="mt-10">
-              <div className="text-[24px] font-medium mb-4 font-semibold">
-                {extras.extrasTitle}
+        {
+          vacancy?.extraInfos ?
+          vacancy?.extraInfos.map((extras) => {
+            return (
+              <div className="mt-10">
+                <div className="text-[24px] font-medium mb-4 font-semibold">
+                  {extras.ExtrasTitle}
+                </div>
+  
+                <div>{extras.ExtrasDescription}</div>
               </div>
+            );
+          })
+          :
+          ""
 
-              <div>{extras.extrasDescription}</div>
-            </div>
-          );
-        })}
+        }
       </div>
     </Layout>
   );

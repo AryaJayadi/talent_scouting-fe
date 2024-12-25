@@ -46,8 +46,8 @@ export interface SectionProps {
 }
 
 export interface DBSkillProps {
-  id: number;
-  skillName: string;
+  Id: number;
+  SkillName: string;
 }
 
 function NewVacancyPage() {
@@ -60,13 +60,33 @@ function NewVacancyPage() {
   };
 
   const handleAddSkill = async () => {
-    const body = {
-      skillName: newSkill,
-    };
-
-    await axios.post(import.meta.env.VITE_API + "addNewSkill", body);
-    setUpdate(!update);
-    setAlertDialogOpen(false);
+    
+    try {
+      const body = {
+        skillName: newSkill,
+      };
+  
+      await axios.post(import.meta.env.VITE_API + "skill/addNewSkill", body, {
+        headers: {
+          Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+        }
+      });
+      toast({
+        variant: "default",
+        title: "New Skill Added!",
+        description: "You can use the skill that you inserted!",
+      });
+      setUpdate(!update);
+      setAlertDialogOpen(false);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Add skill error",
+        // description: "You can use the skill that you inserted!",
+      });
+      
+    }
+    
   };
 
   const [update, setUpdate] = useState(false);
@@ -193,7 +213,7 @@ function NewVacancyPage() {
         const extractedSkills = skills.map(
           ({ skillTitle, skillDescription }) => ({
             skill_id: parseInt(skillTitle),
-            skill_ddetail: skillDescription,
+            skill_detail: skillDescription,
           })
         );
 
@@ -211,12 +231,8 @@ function NewVacancyPage() {
         );
 
       const vacancyBody = {
-        company_id: {
-          id: parseInt(decrypt(Cookies.get("id")) || "0"),
-        },
-        job_type: {
-          id: parseInt(jobType || "0"),
-        },
+        company_id: decrypt(Cookies.get("id")),
+        job_type_id: parseInt(jobType || "0"),
         // timeStamp: new Date(),
         job_position: jobPosition,
         end_date_time: selectedDate,
@@ -236,8 +252,13 @@ function NewVacancyPage() {
       
 
       // const vacancy = await axios.post(
-      //   import.meta.env.VITE_API + "addVacancy",
-      //   vacancyBody
+      //   import.meta.env.VITE_API + "jobVacancy/createJobVacancy",
+      //   vacancyBody,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+      //     }
+      //   }
       // );
       toast({
         variant: "default",
@@ -251,6 +272,8 @@ function NewVacancyPage() {
       
       // nav("/company/vacancy");
     } catch (error) {
+      console.log(error);
+      
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -262,8 +285,14 @@ function NewVacancyPage() {
   useEffect(() => {
     async function getSkill() {
       const getSkill = await axios.get(
-        import.meta.env.VITE_API + "getAllSkill"
+        import.meta.env.VITE_API + "skill/getSkill", {
+          headers: {
+            Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+          }
+        }
       );
+      console.log(getSkill.data);
+      
       setDbSkills(getSkill.data);
     }
     getSkill();
@@ -463,10 +492,10 @@ function NewVacancyPage() {
                           {dbSkills.map((skill) => {
                             return (
                               <SelectItem
-                                value={skill.id.toString()}
-                                key={skill.id}
+                                value={skill?.Id.toString()}
+                                key={skill?.Id}
                               >
-                                {skill.skillName}
+                                {skill.SkillName}
                               </SelectItem>
                             );
                           })}

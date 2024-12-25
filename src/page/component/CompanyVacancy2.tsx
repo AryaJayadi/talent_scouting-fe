@@ -16,21 +16,21 @@ const CompanyVacancy: React.FC<CompanyVacancyWithApplyCountProps> = ({
             <div>
               <div className="text-[red] font-semibold">
                 {Math.ceil(
-                  (new Date(jobVacancy.endDateTime).getTime() -
+                  (new Date(jobVacancy.EndDateTime).getTime() -
                     new Date().getTime()) /
                     (1000 * 60 * 60 * 24)
                 )}{" "}
                 Days Left
               </div>
               <div className="text-[24px] font-semibold">
-                {jobVacancy.jobPosition}
+                {jobVacancy.JobPosition}
               </div>
               <div className="text-[16px]">at asd</div>
               {/* <div className="text-[16px]">{Title}</div> */}
             </div>
 
             <div>
-              <img src={jobVacancy.company.logoUrl} className="h-[55px]" />
+              <img src={jobVacancy.Company.LogoUrl} className="h-[55px]" />
             </div>
           </div>
           <div
@@ -43,7 +43,7 @@ const CompanyVacancy: React.FC<CompanyVacancyWithApplyCountProps> = ({
               textOverflow: "ellipsis",
             }}
           >
-            {jobVacancy.jobDescription}
+            {jobVacancy.JobDescription}
           </div>
           <div className="font-semibold">
             {jobApplyCount.toString()} people apply to this job vacancy
@@ -52,7 +52,7 @@ const CompanyVacancy: React.FC<CompanyVacancyWithApplyCountProps> = ({
 
         <div className="ml-8">
           <div>
-            <Link to={"/job-detail/" + jobVacancy.id}>
+            <Link to={"/job-detail/" + jobVacancy.Id}>
               <Button className="mt-2 transition w-[120px] hover:scale-105">
                 View Detail
               </Button>

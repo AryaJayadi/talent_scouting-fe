@@ -117,7 +117,7 @@ function ProfileHeader() {
             <Link
               to={
                 "/student-profile/" +
-                parseInt(decrypt(Cookies.get("id")) || "0")
+                decrypt(Cookies.get("id") || "0")
               }
             >
               Profile

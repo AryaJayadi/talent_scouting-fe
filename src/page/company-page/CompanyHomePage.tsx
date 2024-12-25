@@ -13,19 +13,111 @@ import Cookies from "js-cookie";
 import { decrypt } from "../util/Utility.tsx";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Student } from "./BrowseStudentPage.tsx";
+import { JobVacancy } from "../student-page/HomePage.tsx";
+
+export interface User {
+  Id: string;
+  Email: string;
+  Password: string;
+  Role: string;
+  CreatedAt: string; // ISO 8601 formatted date
+  UpdatedAt: string; // ISO 8601 formatted date
+  DeletedAt: string | null; // ISO 8601 formatted date or null
+}
+
+export interface Company {
+  Id: string;
+  UserId: string;
+  Name: string;
+  LogoUrl: string;
+  Description: string;
+  Location: string;
+  CreatedAt: string; // ISO 8601 formatted date
+  UpdatedAt: string; // ISO 8601 formatted date
+  DeletedAt: string | null; // ISO 8601 formatted date or null
+  User: User;
+}
+
+export interface JobType {
+  Id: number;
+  JobTypeName: string;
+  CreatedAt: string; // ISO 8601 formatted date
+}
+
+export interface Skill {
+  Id: number;
+  SkillName: string;
+  CreatedAt: string; // ISO 8601 formatted date
+}
+
+export interface JobVacancySkill {
+  JobVacancyId: string;
+  SkillId: number;
+  Skill: Skill;
+  SkillDetail: string;
+}
+
+export interface JobVacancyResponsibility {
+  Id: number;
+  JobVacancyId: string;
+  ResponsibilityDetail: string;
+}
+
+export interface ExtraInfo {
+  Id: number;
+  ExtrasTitle: string;
+  ExtrasDescription: string;
+  JobVacancyId: string;
+}
+
+export interface JobVacancy2 {
+  Id: string;
+  CompanyId: string;
+  Company: Company;
+  JobTypeId: number;
+  JobType: JobType;
+  TimeStamp: string; // ISO 8601 formatted date
+  JobPosition: string;
+  EndDateTime: string; // ISO 8601 formatted date
+  JobDescription: string;
+  Location: string;
+  SalaryRange: string;
+  WorkTimeType: string;
+  JobVacancySkills: JobVacancySkill[];
+  JobVacancyResponsibilities: JobVacancyResponsibility[];
+  ExtrasInfos: ExtraInfo[];
+}
+
+export interface Application {
+  jobVacancyId: string;
+  studentId: string;
+  status: string;
+  notes: string;
+  companyNote: string;
+  createdAt: string; // ISO 8601 formatted date
+  updatedAt: string; // ISO 8601 formatted date
+}
 
 function CompanyHomePage() {
-  const [students, setStudents] = useState<StudentCardProps[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [vacancies, setVacancies] = useState<
-    CompanyVacancyWithApplyCountProps[]
+    JobVacancy2[]
   >([]);
   const { toast } = useToast();
 
   useEffect(() => {
     async function getStudents() {
       try {
-        const response = await axios.get(
-          import.meta.env.VITE_API + "getAllStudent"
+        const response = await axios.post(
+          import.meta.env.VITE_API + "student/getStudentByFilter", {
+
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+            }
+          }
         );
         setStudents(response.data);
       } catch (error) {
@@ -41,10 +133,12 @@ function CompanyHomePage() {
       try {
         const response = await axios.get(
           import.meta.env.VITE_API +
-            "getLatestJobByCompanyId?companyId=" +
-            parseInt(decrypt(Cookies.get("id")) || "0") +
-            "&latestCount=3"
+            "jobVacancy/getByCompanyId/" +
+            decrypt(Cookies.get("id")) +
+            "/3"
         );
+        console.log(response.data);
+        
         setVacancies(response.data);
       } catch (error) {
         toast({
@@ -100,9 +194,9 @@ function CompanyHomePage() {
 
                 return (
                   <JobCard2
-                    key={vacancy.jobVacancy.id}
-                    jobVacancy={vacancy.jobVacancy}
-                    jobApplyCount={vacancy.jobApplyCount}
+                    key={vacancy.Id}
+                    jobVacancy={vacancy}
+                    jobApplyCount={2}
                   />
                 );
               })
@@ -125,7 +219,7 @@ function CompanyHomePage() {
           </div>
 
           <div className="grid grid-cols-4 w-full justify-between px-[10vw] gap-10">
-            {students.map((student: StudentCardProps) => {
+            {students.map((student: Student) => {
               return (
                 <StudentCard
                   gpa={student.gpa}

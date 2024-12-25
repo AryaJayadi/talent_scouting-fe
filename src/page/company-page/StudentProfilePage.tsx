@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../layout/Layout";
+import Layout from "../layout/Layout.tsx";
 import Image from "../../assets/Student.jpg";
-import JobRecommendationCard from "../component/JobRecommendationCard";
-import CVTemplate from "../component/CVTemplate";
+import JobRecommendationCard from "../component/JobRecommendationCard.tsx";
+import CVTemplate from "../component/CVTemplate.tsx";
 import { useNavigate, useParams } from "react-router-dom";
-import { StudentCardProps } from "../props/StudentCardProps";
+import { StudentCardProps } from "../props/StudentCardProps.ts";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { capitalizeName, decrypt } from "../util/Utility.tsx";
@@ -26,13 +26,11 @@ import {
 import { toast } from "@/components/hooks/use-toast.ts";
 import { Input } from "@/components/ui/input.tsx";
 
-function StudentProfilePage() {
+function CompanyStudentProfilePage() {
   const nav = useNavigate();
   const { studentId } = useParams();
   const [student, setStudent] = useState<StudentCardProps>();
   const [notes, setNotes] = useState("");
-  const [update, setUpdate] = useState(false);
-  const [personalUrl, setPersonalUrl] = useState("");
 
   useEffect(() => {
     async function getStudentById() {
@@ -41,7 +39,6 @@ function StudentProfilePage() {
           import.meta.env.VITE_API + "student/" + studentId
         );
         console.log(response.data);
-        setPersonalUrl(response.data.personalUrl)
         
         setStudent(response.data);
       } catch (error) {
@@ -50,7 +47,7 @@ function StudentProfilePage() {
       }
     }
     getStudentById();
-  }, [update]);
+  }, []);
 
   const handleReach = async () => {
     try {
@@ -77,41 +74,6 @@ function StudentProfilePage() {
         title: "Something went wrong",
         description: "Inform admin immediately!",
       });
-    }
-  }
-
-  const handleUpdate = async () => {
-    try {
-      const body = {
-        id: studentId,
-        phone: student?.phone,
-        gpa: student?.gpa,
-        major: student?.major,
-        address: student?.address,
-        city: student?.city,
-        state: student?.state,
-        pictureUrl: student?.picture_url,
-        description: student?.description,
-        personalUrl: personalUrl
-      }
-      console.log(body);
-      
-      axios.post(
-        import.meta.env.VITE_API + "student/updateStudentData",
-        body
-      )
-      toast({
-        variant: "default",
-        title: "Personal url updated!",
-        // description: "!",
-      });
-      setUpdate(!update);
-    } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Failed to update personal url',
-        description: error.message
-      })
     }
   }
 
@@ -169,7 +131,7 @@ function StudentProfilePage() {
                           <div className="my-6">
                             <div>Personal Link</div>
                             <div className="mt-2">
-                              <Input value={personalUrl} onChange={(e) => setPersonalUrl(e.target.value)} type="text" placeholder="https://john.doe"/>
+                              <Input type="text" placeholder="https://john.doe"/>
                             </div>
 
                             <div className="text-[red] mt-2">
@@ -186,7 +148,7 @@ function StudentProfilePage() {
 
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleUpdate}>
+                        <AlertDialogAction onClick={handleReach}>
                           Update
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -441,4 +403,4 @@ function StudentProfilePage() {
   );
 }
 
-export default StudentProfilePage;
+export default CompanyStudentProfilePage;

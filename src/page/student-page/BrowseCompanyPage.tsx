@@ -19,9 +19,25 @@ import {
 import { CheckboxCustom } from "../component/CheckboxCustom";
 import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
+import { decrypt } from "../util/Utility";
+import Cookies from "js-cookie";
+
+export interface Company {
+  Id: string;
+  UserId: string;
+  Name: string;
+  LogoUrl: string;
+  Description: string;
+  Location: string;
+  CreatedAt: string; // ISO 8601 formatted date
+  UpdatedAt: string; // ISO 8601 formatted date
+  DeletedAt: string | null; // ISO 8601 formatted date or null
+  // user: User;
+}
+
 
 function BrowseCompanyPage() {
-  const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -30,8 +46,15 @@ function BrowseCompanyPage() {
       setLoading(true);
       try {
         const response = await axios.get(
-          import.meta.env.VITE_API + "company/getAll"
+          import.meta.env.VITE_API + "company/",
+          {
+            headers: {
+              Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+            }
+          }
         );
+        console.log(response.data);
+        
         setCompanies(response.data);
       } catch (error) {
         toast({
@@ -112,16 +135,16 @@ function BrowseCompanyPage() {
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-10">
-                {companies.map((company: CompanyCardProps, idx: number) => {
+                {companies.map((company: Company, idx: number) => {
                   console.log(company);
                   return (
                     <CompanyCard
-                      id={company.id}
-                      name={company.name}
-                      logoUrl={company.logoUrl}
-                      location={company.location}
+                      Id={company.Id}
+                      Name={company.Name}
+                      LogoUrl={company.LogoUrl}
+                      Location={company.Location}
                       VacancyCount={10}
-                      description={company.description}
+                      Description={company.Description}
                       key={idx}
                     />
                   );

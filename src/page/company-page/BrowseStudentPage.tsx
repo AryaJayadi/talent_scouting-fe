@@ -18,17 +18,37 @@ import {
 import { CheckboxCustom } from "../component/CheckboxCustom";
 import Spinner from "../component/Spinner";
 
+export interface Student {
+  id: string
+  nim: string;
+  name: string;
+  phone: string;
+  gpa: number;
+  major: string;
+  address: string;
+  city: string;
+  state: string;
+  picture_url: string;
+  description: string;
+  personal_url: string;
+  email: string;
+}
+
 function BrowseStudentPage() {
-  const [students, setStudents] = useState<StudentCardProps[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getStudents() {
       setLoading(true);
       try {
-        const response = await axios.get(
-          import.meta.env.VITE_API + "getAllStudent"
+        const response = await axios.post(
+          import.meta.env.VITE_API + "student/getStudentByFilter", {
+            
+          }
         );
+        console.log(response.data);
+        
         setStudents(response.data);
       } catch (error) {}
       setLoading(false);
@@ -56,7 +76,7 @@ function BrowseStudentPage() {
         </div>
         <div className="flex mt-10 w-full relative">
           <div
-            className="w-1/4 bg-[#F0F0F0] h-[60vh] rounded-sm p-4 sticky top-[15%]"
+            className="w-1/4 bg-[#F0F0F0] min-h-[60vh] rounded-sm p-4 sticky top-[15%]"
             data-aos="fade-up"
           >
             <div className="font-bold">Filters</div>
@@ -108,7 +128,7 @@ function BrowseStudentPage() {
               <Spinner />
             ) : (
               <div className="grid grid-cols-3 gap-10">
-                {students.map((student: StudentCardProps) => {
+                {students.map((student: Student) => {
                   return (
                     <StudentCard
                       gpa={student.gpa}
