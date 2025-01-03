@@ -22,7 +22,7 @@ export interface VacancyResponse {
         Id: string,
         UserId: string,
         Name: string,
-        logourl: string,
+        LogoUrl: string,
         Description: string,
         Location: string,
         CreatedAt: Date,

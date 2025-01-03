@@ -11,9 +11,10 @@ import { decrypt } from "../util/Utility";
 import Cookies from "js-cookie";
 import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
+import { JobVacancy } from "../student-page/HomePage";
 
 function CompanyVacancyPage() {
-  const [vacancy, setVacancy] = useState<VacancyResponse[]>(
+  const [vacancy, setVacancy] = useState<JobVacancy[]>(
     []
   );
   const [loading, setLoading] = useState(false);
@@ -37,6 +38,8 @@ function CompanyVacancyPage() {
             }
           }
         );
+        console.log(vacancies.data);
+        
         setVacancy(vacancies.data);
       } catch (e) {
         toast({
@@ -75,7 +78,7 @@ function CompanyVacancyPage() {
               return (
                 <JobCard2
                   jobVacancy={v}
-                  jobApplyCount={5}
+                  jobApplyCount={v.jobApplyCount}
                 />
               );
             })

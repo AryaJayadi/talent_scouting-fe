@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import JobCard2 from "../component/JobCard2";
 import StudentCard from "../component/StudentCard";
 import { StudentCardProps } from "../props/StudentCardProps";
-import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps.ts";
+import { CompanyVacancyWithApplyCountProps, VacancyResponse } from "../props/CompanyVacancyProps.ts";
 import "aos/dist/aos.css";
 import AOS from "aos";
 import axios from "axios";
@@ -102,7 +102,7 @@ export interface Application {
 function CompanyHomePage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [vacancies, setVacancies] = useState<
-    JobVacancy2[]
+    JobVacancy[]
   >([]);
   const { toast } = useToast();
 
@@ -119,6 +119,8 @@ function CompanyHomePage() {
             }
           }
         );
+        console.log(response.data);
+        
         setStudents(response.data);
       } catch (error) {
         toast({
@@ -194,9 +196,9 @@ function CompanyHomePage() {
 
                 return (
                   <JobCard2
-                    key={vacancy.Id}
+                    key={vacancy.id}
                     jobVacancy={vacancy}
-                    jobApplyCount={2}
+                    jobApplyCount={vacancy.jobApplyCount}
                   />
                 );
               })
@@ -233,9 +235,9 @@ function CompanyHomePage() {
                   address={student.address}
                   city={student.city}
                   state={student.state}
-                  picture_url={student.picture_url}
+                  pictureUrl={student.pictureUrl}
                   description={student.description}
-                  personal_url={student.personal_url}
+                  personalUrl={student.personalUrl}
                 />
               );
             })}

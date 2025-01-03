@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const JobCard: React.FC<CompanyCardProps> = ({
-  name,
-  logoUrl,
-  location,
-  description,
+  Name,
+  LogoUrl,
+  Location,
+  Description,
   VacancyCount,
 }) => {
   return (
@@ -17,8 +17,8 @@ const JobCard: React.FC<CompanyCardProps> = ({
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <div className="mr-6">
-              <div className="text-[18px] font-semibold">{name}</div>
-              <div className="text-[#838383]">{location}</div>
+              <div className="text-[18px] font-semibold">{Name}</div>
+              <div className="text-[#838383]">{Location}</div>
             </div>
 
             <div>
@@ -29,7 +29,7 @@ const JobCard: React.FC<CompanyCardProps> = ({
           </div>
 
           <div>
-            <img src={logoUrl} width={100} />
+            <img src={LogoUrl} width={100} />
           </div>
         </div>
 

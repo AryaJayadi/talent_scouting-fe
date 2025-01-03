@@ -85,7 +85,7 @@ function BrowseCompanyPage() {
 
         <div className="flex mt-10 w-full relative">
           <div
-            className="w-1/4 bg-[#F0F0F0] h-full rounded-sm p-4 sticky top-[15%]"
+            className="w-1/4 min-h-[40vh] bg-[#F0F0F0] h-full rounded-sm p-4 sticky top-[15%]"
             data-aos="fade-up"
           >
             <div className="font-bold">Filters</div>
@@ -100,21 +100,21 @@ function BrowseCompanyPage() {
                 <SelectContent>
                   <SelectGroup>
                     {/* <SelectLabel>Fruits</SelectLabel> */}
-                    <SelectItem value="apple">Computer Science</SelectItem>
-                    <SelectItem value="banana">
-                      Mobile Application Development
+                    <SelectItem value="Jakarta">Jakarta</SelectItem>
+                    <SelectItem value="Surabaya">
+                      Surabaya
                     </SelectItem>
-                    <SelectItem value="blueberry">Data Science</SelectItem>
-                    <SelectItem value="grapes">Cyber Security</SelectItem>
-                    <SelectItem value="pineapple">
-                      Game Application Development
+                    <SelectItem value="Bandung">Bandung</SelectItem>
+                    <SelectItem value="Medan">Medan</SelectItem>
+                    <SelectItem value="Tangerang">
+                      Tangerang
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="font-bold mt-10">Filter Strong Position</div>
+            {/* <div className="font-bold mt-10">Filter Strong Position</div>
 
             <div>
               <CheckboxCustom text={"Front End Developer"} />
@@ -125,7 +125,7 @@ function BrowseCompanyPage() {
               <CheckboxCustom text={"Data Analyst"} />
               <CheckboxCustom text={"Web Developer"} />
               <CheckboxCustom text={"Game Developer"} />
-            </div>
+            </div> */}
           </div>
 
           <div className="w-3/4 ml-10" data-aos="fade-left">

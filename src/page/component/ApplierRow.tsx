@@ -21,27 +21,25 @@ const ApplierRow: React.FC<
   StudentRequestProps & {
     handleUpdate: () => void;
   }
-> = ({ jobVacancy, notes, status, student, handleUpdate }) => {
+> = ({ job_vacancy, notes, status, student, handleUpdate }) => {
   const { toast } = useToast();
   const [approveNote, setApproveNote] = useState("");
   const [rejectNote, setRejectNote] = useState("");
 
   async function handleApprove() {
     try {
+      
       const body = {
-        jobApplyPK: {
-          jobVacancyId: jobVacancy.id,
-          studentId: student.id,
-        },
-        jobVacancy: jobVacancy,
-        student: student,
+        jobVacancyId: job_vacancy.id,
+        studentId: student.id,
         status: "Approved to Interview",
         companyNote: approveNote,
         notes: notes,
       };
-      await axios.post(import.meta.env.VITE_API + "updateJobApply", body);
+      await axios.post(import.meta.env.VITE_API + "jobApply/updateJobApply", body);
       handleUpdate();
     } catch (error) {
+      console.log(error);
       toast({
         variant: "destructive",
         title: "Something went wrong",
@@ -53,19 +51,17 @@ const ApplierRow: React.FC<
   async function handleReject() {
     try {
       const body = {
-        jobApplyPK: {
-          jobVacancyId: jobVacancy.id,
-          studentId: student.id,
-        },
-        jobVacancy: jobVacancy,
-        student: student,
+        jobVacancyId: job_vacancy.id,
+        studentId: student.id,
         status: "Rejected",
         companyNote: rejectNote,
         notes: notes,
       };
-      await axios.post(import.meta.env.VITE_API + "updateJobApply", body);
+      await axios.post(import.meta.env.VITE_API + "jobApply/updateJobApply", body);
       handleUpdate();
     } catch (error) {
+      console.log(error);
+      
       toast({
         variant: "destructive",
         title: "Something went wrong",
@@ -82,7 +78,7 @@ const ApplierRow: React.FC<
       >
         <div className="mr-8">
           <img
-            src={student.picture_url}
+            src={student.pictureUrl}
             className="rounded-[50%] border-2 w-[125px] h-[125px] object-cover object-center"
           />
         </div>
@@ -115,8 +111,8 @@ const ApplierRow: React.FC<
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-center">
-                      Approve {student.name} to {jobVacancy.company.name} as a{" "}
-                      {jobVacancy.jobPosition} to interview?
+                      Approve {student.name} to {job_vacancy?.company.name} as a{" "}
+                      {job_vacancy?.jobPosition} to interview?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       <div className="my-6">
@@ -161,8 +157,8 @@ const ApplierRow: React.FC<
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-center">
-                      Reject {student.name} to {jobVacancy.company.name} as a{" "}
-                      {jobVacancy.jobPosition} to interview?
+                      Reject {student.name} to {job_vacancy?.company.name} as a{" "}
+                      {job_vacancy?.jobPosition} to interview?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       <div className="my-6">

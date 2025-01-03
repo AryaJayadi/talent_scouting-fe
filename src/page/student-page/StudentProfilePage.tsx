@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../layout/Layout";
-import Image from "../../assets/Student.jpg";
 import JobRecommendationCard from "../component/JobRecommendationCard";
 import CVTemplate from "../component/CVTemplate";
 import { useNavigate, useParams } from "react-router-dom";
@@ -90,7 +89,7 @@ function StudentProfilePage() {
         address: student?.address,
         city: student?.city,
         state: student?.state,
-        pictureUrl: student?.picture_url,
+        pictureUrl: student?.pictureUrl,
         description: student?.description,
         personalUrl: personalUrl
       }
@@ -122,7 +121,7 @@ function StudentProfilePage() {
           <div className="flex items-center justify-center">
             <div className="rounded-[50%] w-[40%] h-[200px] flex justify-end">
               <img
-                src={student?.picture_url}
+                src={student?.pictureUrl}
                 className="w-[200px] h-[200px] border-[1px] object-cover object-center rounded-[50%]"
               />
             </div>

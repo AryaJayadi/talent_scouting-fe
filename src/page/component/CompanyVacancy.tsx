@@ -30,7 +30,7 @@ const CompanyVacancy: React.FC<VacancyProps> = ({
             </div>
 
             <div>
-              {/* <img src={jobVacancy.company.logoUrl} className="h-[55px]" /> */}
+              <img src={jobVacancy.company.logourl} className="h-[55px]" />
             </div>
           </div>
           <div

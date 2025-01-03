@@ -94,6 +94,16 @@ function NavigationBar() {
           >
             Students
           </Link>
+          <Link
+            className={`mx-[30px] text-[18px] font-medium ${
+              location.pathname === "/company/reach-out"
+                ? "underline underline-offset-8"
+                : ""
+            } `}
+            to={"/company/reach-out"}
+          >
+            History
+          </Link>
           {/* <Link
             className={`mx-[30px] text-[18px] font-medium ${
               location.pathname === "/student/requests"

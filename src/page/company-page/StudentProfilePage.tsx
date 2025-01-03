@@ -69,6 +69,8 @@ function CompanyStudentProfilePage() {
       });
       nav('/company/home');
     } catch (error) {
+      console.log(error);
+      
       toast({
         variant: "destructive",
         title: "Something went wrong",
@@ -84,7 +86,7 @@ function CompanyStudentProfilePage() {
           <div className="flex items-center justify-center">
             <div className="rounded-[50%] w-[40%] h-[200px] flex justify-end">
               <img
-                src={student?.picture_url}
+                src={student?.pictureUrl}
                 className="w-[200px] h-[200px] border-[1px] object-cover object-center rounded-[50%]"
               />
             </div>

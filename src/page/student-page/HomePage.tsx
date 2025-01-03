@@ -8,7 +8,7 @@ import "aos/dist/aos.css";
 import AOS from "aos";
 import Marquee from "react-fast-marquee";
 import { CompanyCardProps } from "../props/CompanyCardProps";
-import { CompanyVacancyWithApplyCountProps, VacancyResponse } from "../props/CompanyVacancyProps";
+// import { CompanyVacancyWithApplyCountProps, VacancyResponse } from "../props/CompanyVacancyProps";
 import axios from "axios";
 import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
@@ -63,6 +63,7 @@ export interface JobVacancy {
   jobVacancySkills: JobVacancySkill[];
   jobVacancyResponsibilities: JobVacancyResponsibility[];
   extraInfos: ExtraInfo[];
+  jobApplyCount: number
 }
 
 export interface Company {
@@ -95,6 +96,8 @@ const HomePage: React.FC = () => {
             }
           }
         );
+        console.log(response.data);
+        
         
         setCompanies(response.data);
       } catch (error) {
@@ -123,7 +126,7 @@ const HomePage: React.FC = () => {
             }
           }
         );
-        // console.log(response);
+        console.log(response.data);
         
         setVacancies(response.data);
       } catch (error) {
@@ -246,7 +249,7 @@ const HomePage: React.FC = () => {
             miss your chance to apply!
           </div>
 
-          {vacancies.length < 1 ? (
+          {vacancies == null ? (
             <div className="text-center my-[100px]">
               There is no vacancy. Stay tune
             </div>

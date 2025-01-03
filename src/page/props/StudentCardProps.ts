@@ -9,7 +9,7 @@ export interface StudentCardProps {
     address: string;
     city: string;
     state: string;
-    picture_url: string;
+    pictureUrl: string;
     description: string;
     personalUrl: string;
     gpa: number;

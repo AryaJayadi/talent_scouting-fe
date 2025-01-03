@@ -14,9 +14,9 @@ const StudentCard: React.FC<Student> = ({
   address,
   city,
   state,
-  picture_url,
+  pictureUrl,
   description,
-  personal_url,
+  personalUrl,
   gpa,
 }) => {
   return (
@@ -26,7 +26,7 @@ const StudentCard: React.FC<Student> = ({
     >
       <div className="flex justify-center mb-2">
         <img
-          src={picture_url}
+          src={pictureUrl}
           className="w-[80px] rounded-[50%] h-[80px] object-cover object-center"
         />
       </div>

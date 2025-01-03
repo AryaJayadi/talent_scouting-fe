@@ -251,15 +251,15 @@ function NewVacancyPage() {
       console.log(vacancyBody);
       
 
-      // const vacancy = await axios.post(
-      //   import.meta.env.VITE_API + "jobVacancy/createJobVacancy",
-      //   vacancyBody,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
-      //     }
-      //   }
-      // );
+      const vacancy = await axios.post(
+        import.meta.env.VITE_API + "jobVacancy/createJobVacancy",
+        vacancyBody,
+        {
+          headers: {
+            Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+          }
+        }
+      );
       toast({
         variant: "default",
         title: "New Vacancy Added!",
@@ -270,7 +270,7 @@ function NewVacancyPage() {
 
       
       
-      // nav("/company/vacancy");
+      nav("/company/vacancy");
     } catch (error) {
       console.log(error);
       

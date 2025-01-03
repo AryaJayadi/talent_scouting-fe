@@ -134,10 +134,10 @@ function VacancyApplierPage() {
 
                 return (
                   <ApplierRow
-                    jobVacancy={app.jobVacancy}
+                    job_vacancy={app.job_vacancy}
                     notes={app.notes}
                     status={app.status}
-                    // student={app.student}
+                    student={app.student}
                     // jobApplyPK={app.jobApplyPK}
                     key={idx}
                     companyNote={app.companyNote}

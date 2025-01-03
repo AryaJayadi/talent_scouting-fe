@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Layout from "../layout/Layout";
 import AppliedRequest from "../component/AppliedRequest";
-import CompanyRequest from "../component/CompanyRequest";
 import axios from "axios";
 import { useToast } from "@/components/hooks/use-toast";
 import Cookies from "js-cookie";
 import { decrypt } from "../util/Utility.tsx";
 import Spinner from "../component/Spinner";
-import { StudentRequestProps } from "../props/RequestProps.ts";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,18 +14,26 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Link } from "react-router-dom";
 import Aos from "aos";
 import { JobVacancy } from "./HomePage.tsx";
+import { ReachOutResponse } from "../company-page/CompanyReachoutPage.tsx";
+import AppliedRequestStudent from "../component/CompanyRequestStudent.tsx";
 
 export interface Application {
   jobVacancyId: string;
   studentId: string;
   status: string;
   notes: string;
+  student: {
+    id: string;
+    gpa: number;
+    name: string
+    pictureUrl: string
+    major: string
+};
   companyNote: string;
   createdAt: string; // ISO 8601 formatted date
   updatedAt: string; // ISO 8601 formatted date
@@ -39,6 +45,7 @@ function StudentRequestPage() {
   const [active, setActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [requests, setRequests] = useState<Application[]>([]);
+  const [reach, setReach] = useState<ReachOutResponse[]>([]);
   const { toast } = useToast();
   useEffect(() => {
     async function getRequestByStudentId() {
@@ -59,6 +66,27 @@ function StudentRequestPage() {
       }
       setLoading(false);
     }
+
+    async function getReachByStudentId() {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          import.meta.env.VITE_API + "reachOut/byStudentId/" + decrypt(Cookies.get("id"))
+        );
+        console.log(response.data);
+        
+        setReach(response.data)
+        
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: "Inform admin immediately!",
+        });
+      }
+      setLoading(false);
+    }
+    getReachByStudentId()
     getRequestByStudentId();
     Aos.init({ duration: 500 });
   }, []);
@@ -85,9 +113,20 @@ function StudentRequestPage() {
         <div>
           {active ? (
             <div>
-              <CompanyRequest />
-              <CompanyRequest />
-              <CompanyRequest />
+              {
+                reach.map((r) => {
+                  return <AppliedRequestStudent 
+                    description={r.company.description} 
+                    email={r.company.email} 
+                    id={r.company.id} 
+                    location={r.company.location} 
+                    logoUrl={r.company.logoUrl} 
+                    name={r.company.name} 
+                    key={r.company.id}
+                    message={r.message}
+                  />
+                })
+              }
             </div>
           ) : (
             <div>
@@ -107,10 +146,10 @@ function StudentRequestPage() {
                     <AlertDialog key={idx}>
                       <AlertDialogTrigger asChild>
                         <AppliedRequest
-                          jobVacancy={req.job_vacancy}
+                          job_vacancy={req.job_vacancy}
                           notes={req.notes}
                           status={req.status}
-                          // student={req.student}
+                          student={req.student}
                           companyNote={req.companyNote}
                         />
                       </AlertDialogTrigger>

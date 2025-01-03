@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../layout/Layout";
-import Temp from "../../assets/logo_header.png";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -20,7 +19,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useParams } from "react-router-dom";
-import { VacancyDetailResponse } from "../props/CompanyVacancyProps";
 import axios from "axios";
 import { useToast } from "@/components/hooks/use-toast";
 import { Link } from "react-router-dom";
@@ -96,10 +94,10 @@ function JobDetailPage() {
       <div className="mt-6 pt-10 pb-20 mx-[20vw]">
         <div className="flex max-md:block">
           <div className="w-1/2 flex justify-center items-center rounded-md bg-[#F0F0F0] mr-12 ">
-            {/* <img
-              src={vacancy?.jobVacancy.company.logoUrl}
+            <img
+              src={vacancy?.company.logourl}
               className="h-[200px] object-cover object-center transition hover:scale-110"
-            /> */}
+            />
           </div>
           <div className="w-1/2 max-sm:w-full">
             <div>
@@ -117,7 +115,7 @@ function JobDetailPage() {
                 {vacancy?.jobPosition}
               </div>
               <div className="font-bold text-[24px]">
-                {/* {vacancy?.jobVacancy.company.name} */}
+                {vacancy?.company.name}
               </div>
             </div>
 
@@ -138,7 +136,7 @@ function JobDetailPage() {
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-center">
-                      Apply for Software Engineer at PT Ford Jakarta
+                      Apply for {vacancy?.jobPosition} at PT Bank Central Asia
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       <div className="my-6">

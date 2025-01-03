@@ -11,12 +11,12 @@ import CompanyVacancyPage from "./page/company-page/CompanyVacancyPage";
 import NewVacancyPage from "./page/company-page/NewVacancyPage";
 import StudentProfilePage from "./page/student-page/StudentProfilePage";
 import StudentRequestPage from "./page/student-page/StudentRequestPage";
-import CompanyRequestPage from "./page/company-page/CompanyRequestPage";
 import BrowseStudentPage from "./page/company-page/BrowseStudentPage";
 import LoggedInRoute from "./page/context/LoggedInRoute";
 import ProtectedRoute from "./page/context/ProtectedRoute";
 import CompanyRoute from "./page/context/CompanyRoute";
 import CompanyStudentProfilePage from "./page/company-page/StudentProfilePage";
+import CompanyReachoutPage from "./page/company-page/CompanyReachoutPage";
 
 function App() {
   return (
@@ -131,10 +131,10 @@ function App() {
               }
             />
             <Route
-              path="/company/requests"
+              path="/company/reach-out"
               element={
                 <CompanyRoute>
-                  <CompanyRequestPage />
+                  <CompanyReachoutPage />
                 </CompanyRoute>
               }
             />
