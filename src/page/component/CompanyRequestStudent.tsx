@@ -2,35 +2,39 @@ import React from "react";
 import Temp from "./../../assets/logo_binus.png";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Company } from "../company-page/CompanyReachoutPage";
 
-function AppliedRequest({
+function AppliedRequestStudent({
     id,
     name,
-    gpa,
-    pictureUrl,
-    major,
+    logoUrl,
+    description,
+    location,
+    email,
     message
   }:
   {
-    id: string,
-    name: string,
-    gpa: number,
-    pictureUrl: string,
-    major: string,
+    id: string;
+    name: string;
+    logoUrl: string;
+    description: string;
+    location: string;
+    email: string;
     message: string
   }
 ) {
   return (
     <Link
-      to={"/company/student-profile/" + id}
+      to={"/company/" + id}
       className="flex justify-between items-center py-8 border-b-[1px] border-gray-400 px-8"
     >
       <div className="flex items-center">
-        <img src={pictureUrl} width={150} height={150} />
+        <img src={logoUrl} className="object-cover object-center" width={150} height={150} />
         <div className="ml-6">
           <div className="text-xl font-semibold">{name}</div>
-          <div>{major}</div>
-          <div>GPA: {gpa}</div>
+          <div>{location}</div>
+          <div>{email}</div>
+
           <div className="mt-4">Message: </div>
           <div>{message}a</div>
         </div>
@@ -44,4 +48,4 @@ function AppliedRequest({
   );
 }
 
-export default AppliedRequest;
+export default AppliedRequestStudent;

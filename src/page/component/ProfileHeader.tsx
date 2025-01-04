@@ -37,6 +37,7 @@ function ProfileHeader() {
   }, []);
 
   const handleLogout = async () => {
+    Cookies.remove("token");
     if (decrypt(Cookies.get("is_microsoft")) == "true") {
       Cookies.remove("name");
       Cookies.remove("email");
@@ -58,7 +59,7 @@ function ProfileHeader() {
     Cookies.remove("is_microsoft");
     logout();
 
-    nav("/login");
+    nav("/");
   };
 
   const formattedDate = currentTime.toLocaleString("en-US", {
@@ -116,7 +117,7 @@ function ProfileHeader() {
             <Link
               to={
                 "/student-profile/" +
-                parseInt(decrypt(Cookies.get("id")) || "0")
+                decrypt(Cookies.get("id") || "0")
               }
             >
               Profile

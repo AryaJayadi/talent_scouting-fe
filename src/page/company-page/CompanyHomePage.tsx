@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import JobCard2 from "../component/JobCard2";
 import StudentCard from "../component/StudentCard";
 import { StudentCardProps } from "../props/StudentCardProps";
-import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps.ts";
+import { CompanyVacancyWithApplyCountProps, VacancyResponse } from "../props/CompanyVacancyProps.ts";
 import "aos/dist/aos.css";
 import AOS from "aos";
 import axios from "axios";
@@ -13,20 +13,114 @@ import Cookies from "js-cookie";
 import { decrypt } from "../util/Utility.tsx";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Student } from "./BrowseStudentPage.tsx";
+import { JobVacancy } from "../student-page/HomePage.tsx";
+
+export interface User {
+  Id: string;
+  Email: string;
+  Password: string;
+  Role: string;
+  CreatedAt: string; // ISO 8601 formatted date
+  UpdatedAt: string; // ISO 8601 formatted date
+  DeletedAt: string | null; // ISO 8601 formatted date or null
+}
+
+export interface Company {
+  Id: string;
+  UserId: string;
+  Name: string;
+  LogoUrl: string;
+  Description: string;
+  Location: string;
+  CreatedAt: string; // ISO 8601 formatted date
+  UpdatedAt: string; // ISO 8601 formatted date
+  DeletedAt: string | null; // ISO 8601 formatted date or null
+  User: User;
+}
+
+export interface JobType {
+  Id: number;
+  JobTypeName: string;
+  CreatedAt: string; // ISO 8601 formatted date
+}
+
+export interface Skill {
+  Id: number;
+  SkillName: string;
+  CreatedAt: string; // ISO 8601 formatted date
+}
+
+export interface JobVacancySkill {
+  JobVacancyId: string;
+  SkillId: number;
+  Skill: Skill;
+  SkillDetail: string;
+}
+
+export interface JobVacancyResponsibility {
+  Id: number;
+  JobVacancyId: string;
+  ResponsibilityDetail: string;
+}
+
+export interface ExtraInfo {
+  Id: number;
+  ExtrasTitle: string;
+  ExtrasDescription: string;
+  JobVacancyId: string;
+}
+
+export interface JobVacancy2 {
+  Id: string;
+  CompanyId: string;
+  Company: Company;
+  JobTypeId: number;
+  JobType: JobType;
+  TimeStamp: string; // ISO 8601 formatted date
+  JobPosition: string;
+  EndDateTime: string; // ISO 8601 formatted date
+  JobDescription: string;
+  Location: string;
+  SalaryRange: string;
+  WorkTimeType: string;
+  JobVacancySkills: JobVacancySkill[];
+  JobVacancyResponsibilities: JobVacancyResponsibility[];
+  ExtrasInfos: ExtraInfo[];
+}
+
+export interface Application {
+  jobVacancyId: string;
+  studentId: string;
+  status: string;
+  notes: string;
+  companyNote: string;
+  createdAt: string; // ISO 8601 formatted date
+  updatedAt: string; // ISO 8601 formatted date
+}
 
 function CompanyHomePage() {
-  const [students, setStudents] = useState<StudentCardProps[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [vacancies, setVacancies] = useState<
-    CompanyVacancyWithApplyCountProps[]
+    JobVacancy[]
   >([]);
   const { toast } = useToast();
 
   useEffect(() => {
     async function getStudents() {
       try {
-        const response = await axios.get(
-          import.meta.env.VITE_API + "getAllStudent"
+        const response = await axios.post(
+          import.meta.env.VITE_API + "student/getStudentByFilter", {
+
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+            }
+          }
         );
+        console.log(response.data);
+        
         setStudents(response.data);
       } catch (error) {
         toast({
@@ -41,10 +135,12 @@ function CompanyHomePage() {
       try {
         const response = await axios.get(
           import.meta.env.VITE_API +
-            "getLatestJobByCompanyId?companyId=" +
-            parseInt(decrypt(Cookies.get("id")) || "0") +
-            "&latestCount=3"
+            "jobVacancy/getByCompanyId/" +
+            decrypt(Cookies.get("id")) +
+            "/3"
         );
+        console.log(response.data);
+        
         setVacancies(response.data);
       } catch (error) {
         toast({
@@ -100,8 +196,8 @@ function CompanyHomePage() {
 
                 return (
                   <JobCard2
-                    key={vacancy.jobVacancy.id}
-                    jobVacancy={vacancy.jobVacancy}
+                    key={vacancy.id}
+                    jobVacancy={vacancy}
                     jobApplyCount={vacancy.jobApplyCount}
                   />
                 );
@@ -125,7 +221,7 @@ function CompanyHomePage() {
           </div>
 
           <div className="grid grid-cols-4 w-full justify-between px-[10vw] gap-10">
-            {students.map((student: StudentCardProps) => {
+            {students.map((student: Student) => {
               return (
                 <StudentCard
                   gpa={student.gpa}
@@ -139,9 +235,9 @@ function CompanyHomePage() {
                   address={student.address}
                   city={student.city}
                   state={student.state}
-                  picture_url={student.picture_url}
+                  pictureUrl={student.pictureUrl}
                   description={student.description}
-                  personal_url={student.personal_url}
+                  personalUrl={student.personalUrl}
                 />
               );
             })}

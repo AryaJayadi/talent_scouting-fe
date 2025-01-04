@@ -1,6 +1,6 @@
 
 export interface StudentCardProps {
-    id: number;
+    id: string;
     nim: string;
     name: string;
     email: string;
@@ -9,8 +9,8 @@ export interface StudentCardProps {
     address: string;
     city: string;
     state: string;
-    picture_url: string;
+    pictureUrl: string;
     description: string;
-    personal_url: string;
+    personalUrl: string;
     gpa: number;
 }

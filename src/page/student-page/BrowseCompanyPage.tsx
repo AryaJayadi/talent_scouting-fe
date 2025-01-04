@@ -19,9 +19,25 @@ import {
 import { CheckboxCustom } from "../component/CheckboxCustom";
 import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
+import { decrypt } from "../util/Utility";
+import Cookies from "js-cookie";
+
+export interface Company {
+  Id: string;
+  UserId: string;
+  Name: string;
+  LogoUrl: string;
+  Description: string;
+  Location: string;
+  CreatedAt: string; // ISO 8601 formatted date
+  UpdatedAt: string; // ISO 8601 formatted date
+  DeletedAt: string | null; // ISO 8601 formatted date or null
+  // user: User;
+}
+
 
 function BrowseCompanyPage() {
-  const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -30,8 +46,15 @@ function BrowseCompanyPage() {
       setLoading(true);
       try {
         const response = await axios.get(
-          import.meta.env.VITE_API + "company/getAll"
+          import.meta.env.VITE_API + "company/",
+          {
+            headers: {
+              Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+            }
+          }
         );
+        console.log(response.data);
+        
         setCompanies(response.data);
       } catch (error) {
         toast({
@@ -62,7 +85,7 @@ function BrowseCompanyPage() {
 
         <div className="flex mt-10 w-full relative">
           <div
-            className="w-1/4 bg-[#F0F0F0] h-full rounded-sm p-4 sticky top-[15%]"
+            className="w-1/4 min-h-[40vh] bg-[#F0F0F0] h-full rounded-sm p-4 sticky top-[15%]"
             data-aos="fade-up"
           >
             <div className="font-bold">Filters</div>
@@ -77,21 +100,21 @@ function BrowseCompanyPage() {
                 <SelectContent>
                   <SelectGroup>
                     {/* <SelectLabel>Fruits</SelectLabel> */}
-                    <SelectItem value="apple">Computer Science</SelectItem>
-                    <SelectItem value="banana">
-                      Mobile Application Development
+                    <SelectItem value="Jakarta">Jakarta</SelectItem>
+                    <SelectItem value="Surabaya">
+                      Surabaya
                     </SelectItem>
-                    <SelectItem value="blueberry">Data Science</SelectItem>
-                    <SelectItem value="grapes">Cyber Security</SelectItem>
-                    <SelectItem value="pineapple">
-                      Game Application Development
+                    <SelectItem value="Bandung">Bandung</SelectItem>
+                    <SelectItem value="Medan">Medan</SelectItem>
+                    <SelectItem value="Tangerang">
+                      Tangerang
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="font-bold mt-10">Filter Strong Position</div>
+            {/* <div className="font-bold mt-10">Filter Strong Position</div>
 
             <div>
               <CheckboxCustom text={"Front End Developer"} />
@@ -102,7 +125,7 @@ function BrowseCompanyPage() {
               <CheckboxCustom text={"Data Analyst"} />
               <CheckboxCustom text={"Web Developer"} />
               <CheckboxCustom text={"Game Developer"} />
-            </div>
+            </div> */}
           </div>
 
           <div className="w-3/4 ml-10" data-aos="fade-left">
@@ -112,16 +135,16 @@ function BrowseCompanyPage() {
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-10">
-                {companies.map((company: CompanyCardProps, idx: number) => {
+                {companies.map((company: Company, idx: number) => {
                   console.log(company);
                   return (
                     <CompanyCard
-                      id={company.id}
-                      name={company.name}
-                      logoUrl={company.logoUrl}
-                      location={company.location}
+                      Id={company.Id}
+                      Name={company.Name}
+                      LogoUrl={company.LogoUrl}
+                      Location={company.Location}
                       VacancyCount={10}
-                      description={company.description}
+                      Description={company.Description}
                       key={idx}
                     />
                   );

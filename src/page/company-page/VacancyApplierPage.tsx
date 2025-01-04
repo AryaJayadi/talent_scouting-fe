@@ -9,13 +9,14 @@ import { StudentRequestProps } from "../props/RequestProps";
 import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
 import { VacancyDetailResponse } from "../props/CompanyVacancyProps";
+import { JobVacancy } from "../student-page/HomePage";
 
 function VacancyApplierPage() {
   const { toast } = useToast();
   const { vacancyId } = useParams();
   const [loading, setLoading] = useState(false);
   const [applier, setApplier] = useState<StudentRequestProps[]>([]);
-  const [vacancy, setVacancy] = useState<VacancyDetailResponse>();
+  const [vacancy, setVacancy] = useState<JobVacancy>();
   const [update, setUpdate] = useState(false);
 
   function handleUpdate() {
@@ -28,9 +29,11 @@ function VacancyApplierPage() {
       try {
         const vacancy = await axios.get(
           import.meta.env.VITE_API +
-            "getJobApplyByVacancyId?jobVacancyId=" +
+            "jobApply/byVacancyId/" +
             vacancyId
         );
+        console.log(vacancy.data);
+        
         setApplier(vacancy.data);
       } catch (error) {
         toast({
@@ -46,9 +49,11 @@ function VacancyApplierPage() {
       try {
         const vacancy = await axios.get(
           import.meta.env.VITE_API +
-            "getJobVacancyById?jobVacancyId=" +
+            "jobVacancy/" +
             vacancyId
         );
+        console.log(vacancy.data);
+        
         setVacancy(vacancy.data);
       } catch (error) {
         toast({
@@ -69,16 +74,16 @@ function VacancyApplierPage() {
         <div className="flex max-md:block">
           <div className="w-1/2 flex justify-center items-center rounded-md p-4 bg-[#F0F0F0] mr-12 ">
             <img
-              src={vacancy?.jobVacancy.company.logoUrl}
+              src={vacancy?.company.logourl}
               className="h-[200px] transition hover:scale-110"
             />
           </div>
           <div className="w-1/2 max-sm:w-full">
             <div>
               <div className="text-[red] font-semibold">
-                {vacancy?.jobVacancy.endDateTime
+                {vacancy?.endDateTime
                   ? Math.ceil(
-                      (new Date(vacancy?.jobVacancy.endDateTime).getTime() -
+                      (new Date(vacancy?.endDateTime).getTime() -
                         new Date().getTime()) /
                         (1000 * 60 * 60 * 24)
                     )
@@ -86,18 +91,18 @@ function VacancyApplierPage() {
                 Days Left
               </div>
               <div className="font-bold text-[32px]">
-                {vacancy?.jobVacancy.jobPosition}
+                {vacancy?.jobPosition}
               </div>
               <div className="font-bold text-[24px]">
-                {vacancy?.jobVacancy.company.name}
+                {vacancy?.company.name}
               </div>
             </div>
 
             <div className="mt-2 font-medium">
-              <div>{vacancy?.jobVacancy.location}</div>
-              <div>{vacancy?.jobVacancy.jobType.jobTypeName}</div>
-              <div>{vacancy?.jobVacancy.workTimeType}</div>
-              <div>{vacancy?.jobVacancy.salaryRange}</div>
+              <div>{vacancy?.location}</div>
+              <div>{vacancy?.jobType.JobTypeName}</div>
+              <div>{vacancy?.workTimeType}</div>
+              <div>{vacancy?.salaryRange}</div>
               {/* <div className="mt-2">
                 <Button>Student Preview</Button>
               </div> */}
@@ -110,14 +115,14 @@ function VacancyApplierPage() {
           <div className="text-center mb-4">
             You need to approve or reject all of applier before{" "}
             <b>
-              {vacancy?.jobVacancy.endDateTime
-                ? new Date(vacancy?.jobVacancy.endDateTime).toDateString()
+              {vacancy?.endDateTime
+                ? new Date(vacancy?.endDateTime).toDateString()
                 : ""}
             </b>
           </div>
 
           <div>
-            {applier.length < 1 ? (
+            {applier === null ? (
               <div className="text-red-500 text-center mt-10">
                 There is no applier right now
               </div>
@@ -129,11 +134,11 @@ function VacancyApplierPage() {
 
                 return (
                   <ApplierRow
-                    jobVacancy={app.jobVacancy}
+                    job_vacancy={app.job_vacancy}
                     notes={app.notes}
                     status={app.status}
                     student={app.student}
-                    jobApplyPK={app.jobApplyPK}
+                    // jobApplyPK={app.jobApplyPK}
                     key={idx}
                     companyNote={app.companyNote}
                     handleUpdate={handleUpdate}

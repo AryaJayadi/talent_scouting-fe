@@ -8,17 +8,80 @@ import "aos/dist/aos.css";
 import AOS from "aos";
 import Marquee from "react-fast-marquee";
 import { CompanyCardProps } from "../props/CompanyCardProps";
-import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps";
+// import { CompanyVacancyWithApplyCountProps, VacancyResponse } from "../props/CompanyVacancyProps";
 import axios from "axios";
 import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { decrypt } from "../util/Utility";
+import Cookies from "js-cookie";
+
+export interface JobType {
+  Id: number;
+  JobTypeName: string;
+  CreatedAt: string; // ISO 8601 formatted date
+}
+
+export interface Skill {
+  Id: number;
+  SkillName: string;
+  CreatedAt: string; // ISO 8601 formatted date
+}
+
+export interface JobVacancySkill {
+  JobVacancyId: string;
+  SkillId: number;
+  Skill: Skill;
+  SkillDetail: string;
+}
+
+export interface JobVacancyResponsibility {
+  Id: number;
+  JobVacancyId: string;
+  ResponsibilityDetail: string;
+}
+
+export interface ExtraInfo {
+  Id: number;
+  ExtrasTitle: string;
+  ExtrasDescription: string;
+  JobVacancyId: string;
+}
+
+export interface JobVacancy {
+  id: string;
+  companyId: string;
+  company: Company;
+  jobTypeId: number;
+  jobType: JobType;
+  timeStamp: string; // ISO 8601 formatted date
+  jobPosition: string;
+  endDateTime: string; // ISO 8601 formatted date
+  jobDescription: string;
+  location: string;
+  salaryRange: string;
+  workTimeType: string;
+  jobVacancySkills: JobVacancySkill[];
+  jobVacancyResponsibilities: JobVacancyResponsibility[];
+  extraInfos: ExtraInfo[];
+  jobApplyCount: number
+}
+
+export interface Company {
+  id: string,
+  name: string,
+  logourl: string,
+  description: string,
+  location: string,
+  email: string
+}
+
 
 const HomePage: React.FC = () => {
   const nav = useNavigate();
   const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
   const [vacancies, setVacancies] = useState<
-    CompanyVacancyWithApplyCountProps[]
+    JobVacancy[]
   >([]);
   const [companyLoading, setCompanyLoading] = useState(false);
   const { toast } = useToast();
@@ -28,8 +91,16 @@ const HomePage: React.FC = () => {
       setCompanyLoading(true);
       try {
         const response = await axios.get(
-          import.meta.env.VITE_API + "company/getAll"
+          import.meta.env.VITE_API + "company/",
+          {
+            headers: {
+              Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+            }
+          }
         );
+        console.log(response.data);
+        
+        
         setCompanies(response.data);
       } catch (error) {
         toast({
@@ -49,10 +120,16 @@ const HomePage: React.FC = () => {
           jobTypeId: "",
           searchKeyword: "",
         };
-        const response = await axios.post(
-          import.meta.env.VITE_API + "getJobVacancyWithFilter",
-          body
+        const response = await axios.get(
+          import.meta.env.VITE_API + "jobVacancy/",
+          {
+            headers: {
+              Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+            }
+          }
         );
+        console.log(response.data);
+        
         setVacancies(response.data);
       } catch (error) {
         console.log(error);
@@ -72,7 +149,7 @@ const HomePage: React.FC = () => {
           data-aos="fade-up"
           data-aos-once="true"
         >
-          <div className="text-[32px]">Welcome Back Rico!!</div>
+          <div className="text-[32px]">Welcome Back { decrypt(Cookies.get("name")) }!!</div>
           <div className="mt-[10px]">
             We're excited to help you find your next opportunity! Start your job
             search today by browsing our latest vacancies or updating your
@@ -175,21 +252,25 @@ const HomePage: React.FC = () => {
             miss your chance to apply!
           </div>
 
-          {vacancies.length < 1 ? (
+          {vacancies == null ? (
             <div className="text-center my-[100px]">
               There is no vacancy. Stay tune
             </div>
           ) : (
             <div className="grid grid-cols-5 mt-6 gap-10">
               {vacancies.map((vacancy, idx) => {
+                console.log(vacancy);
+                
                 return idx > 4 ? (
                   ""
                 ) : (
                   <JobCard
-                    Id={vacancy.jobVacancy.id}
-                    JobName={vacancy.jobVacancy.jobPosition}
-                    CompanyName={vacancy.jobVacancy.company.name}
-                    Image={vacancy.jobVacancy.company.logoUrl}
+                    Id={vacancy.id}
+                    JobName={vacancy.jobPosition}
+                    // CompanyName={vacancy.Company.Name}
+                    // Image={vacancy.Company.LogoUrl}
+                    CompanyName={vacancy.company.name}
+                    Image={vacancy.company.logourl}
                   />
                 );
               })}
@@ -221,12 +302,12 @@ const HomePage: React.FC = () => {
               {companies.map((company: CompanyCardProps, idx: number) => {
                 return (
                   <CompanyCard
-                    id={company.id}
-                    name={company.name}
-                    logoUrl={company.logoUrl}
-                    location={company.location}
+                    Id={company.Id}
+                    Name={company.Name}
+                    LogoUrl={company.LogoUrl}
+                    Location={company.Location}
                     VacancyCount={10}
-                    description={company.description}
+                    Description={company.Description}
                     key={idx}
                   />
                 );

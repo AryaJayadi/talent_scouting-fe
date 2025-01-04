@@ -17,14 +17,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }, [getToken, logout]);
 
   if (getToken() === undefined) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   } else {
     if (decrypt(getRole()) == "false") {
       return <Navigate to="/company/home" />;
     }
   }
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return isAuthenticated ? children : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;

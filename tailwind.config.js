@@ -71,6 +71,9 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      boxShadow: {
+        'top-md': '0 -4px 6px rgba(0, 0, 0, 0.1)', // Custom top shadow
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

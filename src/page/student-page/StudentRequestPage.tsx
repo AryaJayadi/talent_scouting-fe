@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Layout from "../layout/Layout";
 import AppliedRequest from "../component/AppliedRequest";
-import CompanyRequest from "../component/CompanyRequest";
 import axios from "axios";
 import { useToast } from "@/components/hooks/use-toast";
 import Cookies from "js-cookie";
 import { decrypt } from "../util/Utility.tsx";
 import Spinner from "../component/Spinner";
-import { StudentRequestProps } from "../props/RequestProps.ts";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,27 +14,48 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Link } from "react-router-dom";
+import Aos from "aos";
+import { JobVacancy } from "./HomePage.tsx";
+import { ReachOutResponse } from "../company-page/CompanyReachoutPage.tsx";
+import AppliedRequestStudent from "../component/CompanyRequestStudent.tsx";
+
+export interface Application {
+  jobVacancyId: string;
+  studentId: string;
+  status: string;
+  notes: string;
+  student: {
+    id: string;
+    gpa: number;
+    name: string
+    pictureUrl: string
+    major: string
+};
+  companyNote: string;
+  createdAt: string; // ISO 8601 formatted date
+  updatedAt: string; // ISO 8601 formatted date
+  job_vacancy: JobVacancy;
+}
+
 
 function StudentRequestPage() {
   const [active, setActive] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [requests, setRequests] = useState<StudentRequestProps[]>([]);
+  const [requests, setRequests] = useState<Application[]>([]);
+  const [reach, setReach] = useState<ReachOutResponse[]>([]);
   const { toast } = useToast();
   useEffect(() => {
     async function getRequestByStudentId() {
       setLoading(true);
       try {
-        const body = {
-          id: decrypt(Cookies.get("id")),
-        };
-        const response = await axios.post(
-          import.meta.env.VITE_API + "getJobApplyByStudentId",
-          body
+        const response = await axios.get(
+          import.meta.env.VITE_API + "jobApply/byStudentId/" + decrypt(Cookies.get("id"))
         );
+        console.log(response.data);
+        
         setRequests(response.data);
       } catch (error) {
         toast({
@@ -47,11 +66,33 @@ function StudentRequestPage() {
       }
       setLoading(false);
     }
+
+    async function getReachByStudentId() {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          import.meta.env.VITE_API + "reachOut/byStudentId/" + decrypt(Cookies.get("id"))
+        );
+        console.log(response.data);
+        
+        setReach(response.data)
+        
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: "Inform admin immediately!",
+        });
+      }
+      setLoading(false);
+    }
+    getReachByStudentId()
     getRequestByStudentId();
+    Aos.init({ duration: 500 });
   }, []);
   return (
     <Layout>
-      <div className="mt-10 mx-[10vw]">
+      <div data-aos="fade-up" data-aos-once="true" className="mt-10 mx-[10vw]">
         <div className="flex gap-10 border-b-[1px] border-black">
           <div
             style={active ? {} : { backgroundColor: "black", color: "white" }}
@@ -72,9 +113,20 @@ function StudentRequestPage() {
         <div>
           {active ? (
             <div>
-              <CompanyRequest />
-              <CompanyRequest />
-              <CompanyRequest />
+              {
+                reach.map((r) => {
+                  return <AppliedRequestStudent 
+                    description={r.company.description} 
+                    email={r.company.email} 
+                    id={r.company.id} 
+                    location={r.company.location} 
+                    logoUrl={r.company.logoUrl} 
+                    name={r.company.name} 
+                    key={r.company.id}
+                    message={r.message}
+                  />
+                })
+              }
             </div>
           ) : (
             <div>
@@ -82,8 +134,8 @@ function StudentRequestPage() {
                 <div className="flex justify-center">
                   <Spinner />
                 </div>
-              ) : requests.length < 1 ? (
-                <div className="text-center text-red-600">
+              ) : requests === null ? (
+                <div className="text-center text-red-600 mt-10">
                   You have no request
                 </div>
               ) : (
@@ -94,20 +146,19 @@ function StudentRequestPage() {
                     <AlertDialog key={idx}>
                       <AlertDialogTrigger asChild>
                         <AppliedRequest
-                          jobVacancy={req.jobVacancy}
+                          job_vacancy={req.job_vacancy}
                           notes={req.notes}
                           status={req.status}
                           student={req.student}
-                          jobApplyPK={req.jobApplyPK}
                           companyNote={req.companyNote}
                         />
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle className="text-center">
+                          {/* <AlertDialogTitle className="text-center">
                             Request {req.jobVacancy.jobPosition} at{" "}
                             {req.jobVacancy.company.name}
-                          </AlertDialogTitle>
+                          </AlertDialogTitle> */}
                           <AlertDialogDescription>
                             <div className="my-6 text-[black]">
                               <div className="mb-4">
@@ -132,20 +183,19 @@ function StudentRequestPage() {
                               <div className="mt-6 font-semibold">
                                 Company Notes:{" "}
                               </div>
-                              <div className="mt-2">
+                              
                                 {req.status === "Waiting"
-                                  ? "Wait for company"
+                                  ? <div className="mt-2 text-red-400">Wait for company</div>
                                   : req.companyNote === ""
-                                  ? "There is no notes from company"
-                                  : req.companyNote}
-                              </div>
+                                  ? <div className="mt-2">There is no notes from company</div>
+                                  : <div className="mt-2">{req.companyNote}</div>}
                             </div>
                           </AlertDialogDescription>
                         </AlertDialogHeader>
 
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <Link to={"/job-detail/" + req.jobVacancy.id}>
+                          <Link to={"/job-detail/" + req.jobVacancyId}>
                             <AlertDialogAction>
                               See Job Detail
                             </AlertDialogAction>

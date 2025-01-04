@@ -46,8 +46,8 @@ export interface SectionProps {
 }
 
 export interface DBSkillProps {
-  id: number;
-  skillName: string;
+  Id: number;
+  SkillName: string;
 }
 
 function NewVacancyPage() {
@@ -60,13 +60,33 @@ function NewVacancyPage() {
   };
 
   const handleAddSkill = async () => {
-    const body = {
-      skillName: newSkill,
-    };
-
-    await axios.post(import.meta.env.VITE_API + "addNewSkill", body);
-    setUpdate(!update);
-    setAlertDialogOpen(false);
+    
+    try {
+      const body = {
+        skillName: newSkill,
+      };
+  
+      await axios.post(import.meta.env.VITE_API + "skill/addNewSkill", body, {
+        headers: {
+          Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+        }
+      });
+      toast({
+        variant: "default",
+        title: "New Skill Added!",
+        description: "You can use the skill that you inserted!",
+      });
+      setUpdate(!update);
+      setAlertDialogOpen(false);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Add skill error",
+        // description: "You can use the skill that you inserted!",
+      });
+      
+    }
+    
   };
 
   const [update, setUpdate] = useState(false);
@@ -190,29 +210,55 @@ function NewVacancyPage() {
 
   const handlePublish = async () => {
     try {
+        const extractedSkills = skills.map(
+          ({ skillTitle, skillDescription }) => ({
+            skill_id: parseInt(skillTitle),
+            skill_detail: skillDescription,
+          })
+        );
+
+        const extractedResponsibility = responsibilities.map(
+          ({ responsibilityDetail }) => ({
+            responsibility_detail: responsibilityDetail
+          })
+        );
+
+        const extractedSection = sections.map(
+          ({ extrasTitle, extrasDescription }) => ({
+            extras_title: extrasTitle,
+            extras_description: extrasDescription,
+          })
+        );
+
       const vacancyBody = {
-        company: {
-          id: parseInt(decrypt(Cookies.get("id")) || "0"),
-        },
-        jobType: {
-          id: parseInt(jobType || "0"),
-        },
-        timeStamp: new Date(),
-        jobPosition: jobPosition,
-        endDateTime: selectedDate,
-        jobDescription: jobDescription,
+        company_id: decrypt(Cookies.get("id")),
+        job_type_id: parseInt(jobType || "0"),
+        // timeStamp: new Date(),
+        job_position: jobPosition,
+        end_date_time: selectedDate,
+        job_description: jobDescription,
         location: jobLocation,
-        salaryRange:
+        salary_range:
           "Rp " +
           new Intl.NumberFormat("id-ID").format(salaryStart || 0)?.toString() +
           " - Rp " +
           new Intl.NumberFormat("id-ID").format(salaryEnd || 0)?.toString(),
-        workTimeType: workTimeType,
+        work_time_type: workTimeType,
+        job_vacancy_skills: extractedSkills,
+        job_vacancy_responsibilities: extractedResponsibility,
+        extras_infos: extractedSection
       };
+      console.log(vacancyBody);
+      
 
       const vacancy = await axios.post(
-        import.meta.env.VITE_API + "addVacancy",
-        vacancyBody
+        import.meta.env.VITE_API + "jobVacancy/createJobVacancy",
+        vacancyBody,
+        {
+          headers: {
+            Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+          }
+        }
       );
       toast({
         variant: "default",
@@ -220,61 +266,14 @@ function NewVacancyPage() {
         description: "Your vacancy is published!",
       });
 
-      console.log(vacancy.data);
+      // console.log(vacancy.data);
 
-      const vacancyId = vacancy.data.id;
-      const extractedSkills = skills.map(
-        ({ skillTitle, skillDescription }) => ({
-          jobVacancySkillPK: {
-            jobVacancyId: vacancyId,
-            skillId: parseInt(skillTitle),
-          },
-          jobVacancy: {
-            id: vacancyId,
-          },
-          skill: {
-            id: parseInt(skillTitle),
-          },
-          skillDetail: skillDescription,
-        })
-      );
-
-      const extractedResponsibility = responsibilities.map(
-        ({ responsibilityDetail }) => ({
-          responsibilityDetail,
-          jobVacancy: {
-            id: vacancyId,
-          },
-        })
-      );
-
-      const extractedSection = sections.map(
-        ({ extrasTitle, extrasDescription }) => ({
-          jobVacancy: {
-            id: vacancyId,
-          },
-          extrasTitle,
-          extrasDescription,
-        })
-      );
-
-      await axios.post(
-        import.meta.env.VITE_API + "addJobResponsibilites",
-        extractedResponsibility
-      );
-
-      await axios.post(
-        import.meta.env.VITE_API + "addExtrasInfo",
-        extractedSection
-      );
-
-      await axios.post(
-        import.meta.env.VITE_API + "addJobVacancySkills",
-        extractedSkills
-      );
-
+      
+      
       nav("/company/vacancy");
     } catch (error) {
+      console.log(error);
+      
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -286,8 +285,14 @@ function NewVacancyPage() {
   useEffect(() => {
     async function getSkill() {
       const getSkill = await axios.get(
-        import.meta.env.VITE_API + "getAllSkill"
+        import.meta.env.VITE_API + "skill/getSkill", {
+          headers: {
+            Authorization: `Bearer ${decrypt(Cookies.get("token"))}`
+          }
+        }
       );
+      console.log(getSkill.data);
+      
       setDbSkills(getSkill.data);
     }
     getSkill();
@@ -301,297 +306,326 @@ function NewVacancyPage() {
         </div>
 
         <div className="flex flex-col items-center">
-          <div className="mx-[70px] max-w-[700px] w-full ">
-            <div className="my-4">
-              <label className="font-medium">Job Position</label>
-              <Input
-                className="mt-2 border-[#b1b1b1]"
-                placeholder="Job Position"
-                onChange={(e) => setJobPosition(e.target.value)}
-              />
-            </div>
+          <div className="mx-[70px] max-w-[1000px] w-full">
+            
 
-            <div className="my-4">
-              <label className="font-medium">Job Description</label>
-              <Textarea
-                className="mt-2 border-[#b1b1b1]"
-                placeholder="Job Description"
-                onChange={(e) => setJobDescription(e.target.value)}
-              />
-            </div>
+            <div className="border-[1px] shadow-md border-[#F2F2F2] px-14 py-4 rounded-md mt-10">
 
-            <div className="my-4">
-              <label className="font-medium">Job Location</label>
-              <Input
-                className="mt-2 border-[#b1b1b1]"
-                placeholder="Job Location"
-                onChange={(e) => setJobLocation(e.target.value)}
-              />
-            </div>
+              <div className="text-[14px] font-semibold">Basic Information</div>
 
-            <div className="flex items-center justify-between my-4 w-full">
-              <div className="w-[45%]">
-                <label className="font-medium">Salary Range (In IDR)</label>
+              <div className="my-4">
+                <label className="font-medium">Job Position</label>
                 <Input
-                  className="mt-2 border-[#b1b1b1] w-full"
-                  placeholder="Start Range"
-                  onChange={(e) => setSalaryStart(parseInt(e.target.value))}
+                  className="mt-2 border-[#b1b1b1]"
+                  placeholder="Job Position"
+                  onChange={(e) => setJobPosition(e.target.value)}
                 />
               </div>
 
-              <div className="text-[24px] mt-8 flex items-center h-full">
-                <div>-</div>
-              </div>
-
-              <div className="my-4 mt-[24px] w-[45%]">
-                <Input
-                  className="mt-6 border-[#b1b1b1] w-full"
-                  placeholder="End Range"
-                  onChange={(e) => setSalaryEnd(parseInt(e.target.value))}
+              <div className="my-4">
+                <label className="font-medium">Job Description</label>
+                <Textarea
+                  className="mt-2 border-[#b1b1b1]"
+                  placeholder="Job Description"
+                  onChange={(e) => setJobDescription(e.target.value)}
                 />
               </div>
-            </div>
-            <div className="my-4">
-              <div className="mb-2">
-                <label className="font-medium">Work Time Type</label>
+
+              <div className="my-4">
+                <div className="mb-2">
+                  <label className="font-medium">Work Time Type</label>
+                </div>
+                <Select onValueChange={(value) => setWorkTimeType(value)}>
+                  <SelectTrigger className="border-[#b1b1b1]">
+                    <SelectValue placeholder="Work Time Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Full Time">Full Time</SelectItem>
+                    <SelectItem value="Part Time">Part Time</SelectItem>
+                    <SelectItem value="Internship">Internship</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <Select onValueChange={(value) => setWorkTimeType(value)}>
-                <SelectTrigger className="border-[#b1b1b1]">
-                  <SelectValue placeholder="Work Time Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Full Time">Full Time</SelectItem>
-                  <SelectItem value="Part Time">Part Time</SelectItem>
-                  <SelectItem value="Internship">Internship</SelectItem>
-                </SelectContent>
-              </Select>
+
+              <div className="my-4">
+                <div className="mb-2">
+                  <label className="font-medium">Job Type</label>
+                </div>
+                <Select onValueChange={(value) => setJobType(value)}>
+                  <SelectTrigger className="border-[#b1b1b1]">
+                    <SelectValue placeholder="Job Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">Work From Office</SelectItem>
+                    <SelectItem value="2">Work From Home</SelectItem>
+                    <SelectItem value="3">Hybrid</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
-            <div className="my-4">
-              <div className="mb-2">
-                <label className="font-medium">Job Type</label>
+            <div className="border-[1px] shadow-md border-[#F2F2F2] px-14 py-4 rounded-md mt-16">
+            
+              <div className="text-[14px] font-semibold">Additional Information</div>
+              
+              <div className="my-4">
+                <label className="font-medium">Job Location</label>
+                <Input
+                  className="mt-2 border-[#b1b1b1]"
+                  placeholder="Job Location"
+                  onChange={(e) => setJobLocation(e.target.value)}
+                />
               </div>
-              <Select onValueChange={(value) => setJobType(value)}>
-                <SelectTrigger className="border-[#b1b1b1]">
-                  <SelectValue placeholder="Job Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">Work From Office</SelectItem>
-                  <SelectItem value="2">Work From Home</SelectItem>
-                  <SelectItem value="3">Hybrid</SelectItem>
-                </SelectContent>
-              </Select>
+
+              <div className="flex items-center justify-between my-4 w-full">
+                <div className="w-[45%]">
+                  <label className="font-medium">Salary Range (In IDR)</label>
+                  <Input
+                    className="mt-2 border-[#b1b1b1] w-full"
+                    placeholder="Start Range"
+                    onChange={(e) => setSalaryStart(parseInt(e.target.value))}
+                  />
+                </div>
+
+                <div className="text-[24px] mt-8 flex items-center h-full">
+                  <div>-</div>
+                </div>
+
+                <div className="my-4 mt-[24px] w-[45%]">
+                  <Input
+                    className="mt-6 border-[#b1b1b1] w-full"
+                    placeholder="End Range"
+                    onChange={(e) => setSalaryEnd(parseInt(e.target.value))}
+                  />
+                </div>
+              </div>
+              
+
+              <div className="my-4">
+                <div className="mb-2">
+                  <label className="font-medium ">End Date</label>
+                </div>
+                <CalendarForm onDateChange={setSelectedDate} />
+              </div>
             </div>
 
-            <div className="my-4">
-              <div className="mb-2">
-                <label className="font-medium ">End Date</label>
-              </div>
-              <CalendarForm onDateChange={setSelectedDate} />
-            </div>
+            <div className="border-[1px] shadow-md border-[#F2F2F2] px-14 py-4 rounded-md mt-16">
+              <div className="text-[14px] font-semibold">Requirement Information</div>
 
-            <div className="mb-6">
-              <label className="font-medium">Responsibility (Min 1)</label>
-              <div className="h-full">
-                {responsibilities.map((requirement, idx) => {
+              <div className="mb-6 mt-6">
+                <label className="font-medium">Responsibility (Min 1)</label>
+                <div className="h-full">
+                  {responsibilities.map((requirement, idx) => {
+                    return (
+                      <div className="flex h-full" key={requirement.idx}>
+                        <Input
+                          className="mt-2 border-[#b1b1b1]"
+                          placeholder="Responsibility"
+                          onChange={(e) =>
+                            handleInputChangeResponsibility(
+                              requirement.idx,
+                              e.target.value
+                            )
+                          }
+                        />
+                        <div className="h-current flex items-center ml-4 mt-2">
+                          <div
+                            className="justify-center text-white w-[25px] h-[25px] items-center rounded-md bg-[#ff5858] transition text-[20px] flex hover:cursor-pointer hover:bg-[#dd4545]"
+                            onClick={() => removeComponent(requirement.idx)}
+                          >
+                            -
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="w-full flex justify-center mt-6">
+                  <div
+                    onClick={addInput}
+                    className="flex text-[14px] p-2 font-semibold bg-[#4d8fb3] text-white border-0 justify-center items-center rounded-md border-[1px] border-[#b1b1b1] hover:cursor-pointer transition hover:bg-[#357ea4]"
+                  >
+                    + Add Responsibility
+                  </div>
+                </div>
+              </div>
+
+              <div className="my-4">
+                <div className="mb-2">
+                  <label className="font-medium">Skills</label>
+                </div>
+
+                <div className="text-[gray]">
+                  <div className="font-semibold">Example</div>
+                  <div className="mb-2">Skill title: Java Programming</div>
+                  <div className="mt-2 mb-4">
+                    Description: Proficient in Java programming with a strong
+                    understanding of object-oriented principles, data structures,
+                    and algorithms. Capable of developing robust, scalable, and
+                    maintainable code for various applications. Familiar with the
+                    latest Java versions and features.
+                  </div>
+                </div>
+
+                {skills.map((skill, idx) => {
                   return (
-                    <div className="flex h-full" key={requirement.idx}>
-                      <Input
-                        className="mt-2 border-[#b1b1b1]"
-                        placeholder="Responsibility"
-                        onChange={(e) =>
-                          handleInputChangeResponsibility(
-                            requirement.idx,
-                            e.target.value
-                          )
-                        }
-                      />
-                      <div className="h-current flex items-center ml-4 mt-2">
+                    <div className="my-4" key={skill.idx}>
+                      <div className="flex h-[40px] w-full justify-between items-center">
+                        <div className="font-medium">Skill</div>
                         <div
-                          className="justify-center text-white w-[25px] h-[25px] items-center rounded-md bg-[#ff5858] transition text-[20px] flex hover:cursor-pointer hover:bg-[#dd4545]"
-                          onClick={() => removeComponent(requirement.idx)}
+                          className="flex justify-center text-white w-[25px] h-[25px] items-center rounded-md bg-[#ff5858] text-[20px] hover:cursor-pointer hover:bg-[#dd4545]"
+                          onClick={() => removeSkillComponent(skill.idx)}
                         >
                           -
                         </div>
                       </div>
+
+                      <Select
+                        onValueChange={(skill) => {
+                          handleInputChangeSkillTitle(idx, skill);
+                        }}
+                      >
+                        <SelectTrigger className="border-[#b1b1b1] mt-2 border-[#b1b1b1]">
+                          <SelectValue placeholder="Skill Title" />
+                        </SelectTrigger>
+                        <SelectContent className="overflow-y-auto h-[250px]">
+                          {dbSkills.map((skill) => {
+                            return (
+                              <SelectItem
+                                value={skill?.Id.toString()}
+                                key={skill?.Id}
+                              >
+                                {skill.SkillName}
+                              </SelectItem>
+                            );
+                          })}
+                          <SelectItem value={"+ Other Skill"}>
+                            + Other Skill
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      <Textarea
+                        className="mt-4 border-[#b1b1b1]"
+                        placeholder="Skill Description"
+                        onChange={(e) =>
+                          handleInputChangeSkillDescription(idx, e.target.value)
+                        }
+                      ></Textarea>
                     </div>
                   );
                 })}
-              </div>
-              <div className="w-full flex justify-center mt-6">
-                <div
-                  onClick={addInput}
-                  className="flex text-[14px] p-2 font-semibold bg-[#4d8fb3] text-white border-0 justify-center items-center rounded-md border-[1px] border-[#b1b1b1] hover:cursor-pointer transition hover:bg-[#357ea4]"
-                >
-                  + Add Responsibility
+                <AlertDialog open={alertDialogOpen} key={idx}>
+                  <AlertDialogTrigger asChild></AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="text-center">
+                        Add New Skill Based On Your Requirements
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        <div className="my-6 text-[black]">
+                          <div>Skill</div>
+
+                          <div>
+                            <Input
+                              placeholder="New Skill"
+                              onChange={(e) => setNewSkill(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                      <AlertDialogCancel
+                        onClick={() => setAlertDialogOpen(false)}
+                      >
+                        Cancel
+                      </AlertDialogCancel>
+
+                      <AlertDialogAction onClick={handleAddSkill}>
+                        Add New Skill
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
+                <div className="w-full flex justify-center mt-6">
+                  <div
+                    onClick={addSkillInput}
+                    className="flex text-[14px] font-semibold bg-[#4d8fb3] text-white border-0 justify-center items-center rounded-md p-2 border-[1px] border-[#b1b1b1] transition hover:cursor-pointer hover:bg-[#357ea4]"
+                  >
+                    + Add Skill
+                  </div>
                 </div>
               </div>
+
+              
+
             </div>
 
-            <div className="my-4">
-              <div className="mb-2">
-                <label className="font-medium">Skills</label>
-              </div>
+            
+            <div className="border-[1px] shadow-md border-[#F2F2F2] px-14 py-4 rounded-md mt-16">
 
-              <div className="text-[gray]">
-                <div className="font-semibold">Example</div>
-                <div className="mb-2">Skill title: Java Programming</div>
-                <div className="mt-2 mb-4">
-                  Description: Proficient in Java programming with a strong
-                  understanding of object-oriented principles, data structures,
-                  and algorithms. Capable of developing robust, scalable, and
-                  maintainable code for various applications. Familiar with the
-                  latest Java versions and features.
-                </div>
-              </div>
-
-              {skills.map((skill, idx) => {
+              {sections.map((section, idx) => {
                 return (
-                  <div className="my-4" key={skill.idx}>
+                  <div className="my-4" key={section.idx}>
                     <div className="flex h-[40px] w-full justify-between items-center">
-                      <div className="font-medium">Skill</div>
+                      <div>New Section</div>
                       <div
-                        className="flex justify-center text-white w-[25px] h-[25px] items-center rounded-md bg-[#ff5858] text-[20px] hover:cursor-pointer hover:bg-[#dd4545]"
-                        onClick={() => removeSkillComponent(skill.idx)}
+                        className="justify-center text-white w-[25px] h-[25px] items-center rounded-md bg-[#ff5858] text-[20px] flex hover:cursor-pointer hover:bg-[#dd4545]"
+                        onClick={() => removeSectionComponent(section.idx)}
                       >
                         -
                       </div>
                     </div>
 
-                    <Select
-                      onValueChange={(skill) => {
-                        handleInputChangeSkillTitle(idx, skill);
-                      }}
-                    >
-                      <SelectTrigger className="border-[#b1b1b1] mt-2 border-[#b1b1b1]">
-                        <SelectValue placeholder="Skill Title" />
-                      </SelectTrigger>
-                      <SelectContent className="overflow-y-auto h-[250px]">
-                        {dbSkills.map((skill) => {
-                          return (
-                            <SelectItem
-                              value={skill.id.toString()}
-                              key={skill.id}
-                            >
-                              {skill.skillName}
-                            </SelectItem>
-                          );
-                        })}
-                        <SelectItem value={"+ Other Skill"}>
-                          + Other Skill
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input
+                      className="mt-2 border-[#b1b1b1]"
+                      placeholder="New Section Title"
+                      onChange={(e) =>
+                        handleInputChangeSectionTitle(idx, e.target.value)
+                      }
+                    />
 
                     <Textarea
                       className="mt-4 border-[#b1b1b1]"
-                      placeholder="Skill Description"
+                      placeholder="New Section Description"
                       onChange={(e) =>
-                        handleInputChangeSkillDescription(idx, e.target.value)
+                        handleInputChangeSectionDescription(idx, e.target.value)
                       }
                     ></Textarea>
                   </div>
                 );
               })}
-              <AlertDialog open={alertDialogOpen} key={idx}>
-                <AlertDialogTrigger asChild></AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="text-center">
-                      Add New Skill Based On Your Requirements
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      <div className="my-6 text-[black]">
-                        <div>Skill</div>
 
-                        <div>
-                          <Input
-                            placeholder="New Skill"
-                            onChange={(e) => setNewSkill(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
+              <div className="text-[gray]">
+                <div className="font-semibold">Section Example</div>
+                <div className="mb-2">Section title: Benefit</div>
+                <div className="mt-2 mb-4">
+                  Description: You will get Free Parking, Salary, Annual Bonus,
+                  and Health Assurance
+                </div>
+              </div>
 
-                  <AlertDialogFooter>
-                    <AlertDialogCancel
-                      onClick={() => setAlertDialogOpen(false)}
-                    >
-                      Cancel
-                    </AlertDialogCancel>
-
-                    <AlertDialogAction onClick={handleAddSkill}>
-                      Add New Skill
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-
-              <div className="w-full flex justify-center mt-6">
-                <div
-                  onClick={addSkillInput}
-                  className="flex text-[14px] font-semibold bg-[#4d8fb3] text-white border-0 justify-center items-center rounded-md p-2 border-[1px] border-[#b1b1b1] transition hover:cursor-pointer hover:bg-[#357ea4]"
+              <div className="flex justify-center my-10">
+                <Button
+                  className="font-semibold bg-[#4d8fb3] hover:bg-[#357ea4]"
+                  onClick={addSectionInput}
                 >
-                  + Add Skill
-                </div>
+                  + Add New Section
+                </Button>
               </div>
             </div>
 
-            {sections.map((section, idx) => {
-              return (
-                <div className="my-4" key={section.idx}>
-                  <div className="flex h-[40px] w-full justify-between items-center">
-                    <div>New Section</div>
-                    <div
-                      className="justify-center text-white w-[25px] h-[25px] items-center rounded-md bg-[#ff5858] text-[20px] flex hover:cursor-pointer hover:bg-[#dd4545]"
-                      onClick={() => removeSectionComponent(section.idx)}
-                    >
-                      -
-                    </div>
-                  </div>
 
-                  <Input
-                    className="mt-2 border-[#b1b1b1]"
-                    placeholder="New Section Title"
-                    onChange={(e) =>
-                      handleInputChangeSectionTitle(idx, e.target.value)
-                    }
-                  />
-
-                  <Textarea
-                    className="mt-4 border-[#b1b1b1]"
-                    placeholder="New Section Description"
-                    onChange={(e) =>
-                      handleInputChangeSectionDescription(idx, e.target.value)
-                    }
-                  ></Textarea>
-                </div>
-              );
-            })}
-
-            <div className="text-[gray]">
-              <div className="font-semibold">Section Example</div>
-              <div className="mb-2">Section title: Benefit</div>
-              <div className="mt-2 mb-4">
-                Description: You will get Free Parking, Salary, Annual Bonus,
-                and Health Assurance
-              </div>
-            </div>
-
-            <div className="flex justify-center my-10">
-              <Button
-                className="font-semibold bg-[#4d8fb3] hover:bg-[#357ea4]"
-                onClick={addSectionInput}
-              >
-                + Add New Section
-              </Button>
-            </div>
-
-            <div className="flex justify-center">
-              <Button onClick={handlePublish}>Publish</Button>
-            </div>
           </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 w-full">
+        <div className="flex justify-center shadow-top-md py-4 bg-white mt-10">
+          <Button onClick={handlePublish}>Publish</Button>
         </div>
       </div>
     </Layout>
