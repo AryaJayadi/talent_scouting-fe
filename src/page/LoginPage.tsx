@@ -8,6 +8,7 @@ import axios from "axios";
 import { encrypt } from "./util/Utility";
 import Cookies from "js-cookie";
 import { useAuth } from "./context/AuthContext";
+import MicrosoftLogo from "../assets/microsoft_logo.png";
 
 function LoginPage() {
   const nav = useNavigate();
@@ -147,7 +148,10 @@ function LoginPage() {
                 className="w-full bg-[#005581] mt-[15px] hover:bg-[#00344E]"
                 onClick={loginMicrosoft}
               >
-                Student Microsoft Login
+                <div className="flex items-center">
+                  <img src={MicrosoftLogo} className="w-6 mr-2" />
+                  <div>Student Microsoft Login</div>
+                </div>
               </Button>
             )}
 

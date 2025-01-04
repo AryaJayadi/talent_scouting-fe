@@ -12,8 +12,10 @@ import { CompanyVacancyWithApplyCountProps } from "../props/CompanyVacancyProps"
 import axios from "axios";
 import Spinner from "../component/Spinner";
 import { useToast } from "@/components/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const HomePage: React.FC = () => {
+  const nav = useNavigate();
   const [companies, setCompanies] = useState<CompanyCardProps[]>([]);
   const [vacancies, setVacancies] = useState<
     CompanyVacancyWithApplyCountProps[]
@@ -82,6 +84,7 @@ const HomePage: React.FC = () => {
             <Input
               placeholder={"Let's find a job for you"}
               className="text-black"
+              onClick={() => nav("/browse-job")}
             />
           </div>
         </div>
@@ -125,13 +128,13 @@ const HomePage: React.FC = () => {
             />
             <img
               src={
-                "https://img.freepik.com/free-vector/hand-drawn-cactus-logo-template_23-2149398900.jpg?w=2000&t=st=1661990015~exp=1661990615~hmac=466aebeda6573c752489cdbfe5c11ef1cbebf1ff984e8f62018952f83d9639f6"
+                "https://www.grand-indonesia.com/wp-content/uploads/2023/11/BLIBLI.jpg"
               }
               className="h-[150px] mx-4"
             />
             <img
               src={
-                "https://img.freepik.com/free-vector/hand-drawn-cactus-logo-template_23-2149398900.jpg?w=2000&t=st=1661990015~exp=1661990615~hmac=466aebeda6573c752489cdbfe5c11ef1cbebf1ff984e8f62018952f83d9639f6"
+                "https://th.bing.com/th/id/OIP.fqZ9-PPqcG_cm0k3JfoINQHaEK?w=290&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"
               }
               className="h-[150px] mx-4"
             />
@@ -147,13 +150,13 @@ const HomePage: React.FC = () => {
             />
             <img
               src={
-                "https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"
+                "https://th.bing.com/th/id/OIP.crQMHBUsc2j7Hp0DTjJsUwHaHa?rs=1&pid=ImgDetMain"
               }
               className="h-[150px] mx-4"
             />
             <img
               src={
-                "https://th.bing.com/th/id/R.ff70d9d943a71067cb9e0f061c078fd0?rik=YDbEo%2fzsssVmPA&riu=http%3a%2f%2f4.bp.blogspot.com%2f-HL8IH_ZHKvI%2fUl-kk_7AC_I%2fAAAAAAAAC6M%2fb7BWRYGdn8w%2fs1600%2fBCA-Bank-Logo-blue.png&ehk=7%2fTz85jERnSu1EVuPQi4qCQHtzNt%2bxTv%2fZiS0x4waYM%3d&risl=&pid=ImgRaw&r=0"
+                "https://purepng.com/public/uploads/large/purepng.com-microsoft-logo-iconlogobrand-logoiconslogos-251519939091wmudn.png"
               }
               className="h-[150px] mx-4"
             />
